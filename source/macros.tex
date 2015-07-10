@@ -248,6 +248,10 @@
 \newcommand{\numconst}[1]{\textsl{#1}\xspace}
 \newcommand{\logop}[1]{{\footnotesize #1}\xspace}
 
+\definecolor{mylightgray}{RGB}{220,220,220}
+\definecolor{mygray}{RGB}{128,128,128}
+\definecolor{mydarkgray}{RGB}{96,96,96}
+
 %%--------------------------------------------------
 %% Environments for code listings.
 
@@ -258,16 +262,16 @@
 
 \lstset{language=C++,
         basicstyle=\small\CodeStyle,
-        keywordstyle=,
-        stringstyle=,
+        keywordstyle=\color{blue},
+        stringstyle=\color{mydarkgray}\rmfamily,
         xleftmargin=1em,
         showstringspaces=false,
-        commentstyle=\itshape\rmfamily,
+        commentstyle=\itshape\rmfamily\color{mygray},
         columns=flexible,
         keepspaces=true,
         texcl=true}
 
-% Our usual abbreviation for 'listings'.  Comments are in 
+% Our usual abbreviation for 'listings'.  Comments are in
 % italics.  Arbitrary TeX commands can be used if they're 
 % surrounded by @ signs.
 \newcommand{\CodeBlockSetup}{
