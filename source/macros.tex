@@ -251,6 +251,9 @@
 \definecolor{mylightgray}{RGB}{220,220,220}
 \definecolor{mygray}{RGB}{128,128,128}
 \definecolor{mydarkgray}{RGB}{96,96,96}
+\definecolor{mydarkblue}{RGB}{0,0,204}
+\definecolor{mydarkred}{RGB}{204,0,0}
+\DeclareRobustCommand{\concept}[1]{{\small\textsc{#1}}}
 
 %%--------------------------------------------------
 %% Environments for code listings.
@@ -263,13 +266,32 @@
 \lstset{language=C++,
         basicstyle=\small\CodeStyle,
         keywordstyle=\color{blue},
-        stringstyle=\color{mydarkgray}\rmfamily,
+        stringstyle=\color{mydarkred}\rmfamily,
         xleftmargin=1em,
         showstringspaces=false,
         commentstyle=\itshape\rmfamily\color{mygray},
         columns=flexible,
         keepspaces=true,
-        texcl=true}
+        texcl=true,
+        morekeywords={alignas,alignof,char16_t,char32_t,concept,constexpr,decltype,noexcept,nullptr,requires,static_assert,thread_local},
+        literate={
+          {Allocator}{\concept{Allocator}}{9}
+          {BidirectionalIterator}{\concept{BidirectionalIterator}}{21}
+          {BinaryPredicate}{\concept{BinaryPredicate}}{15}
+          {Compare}{\concept{Compare}}{7}
+          {Container}{\concept{Container}}{9}
+          {Convertible}{\concept{Convertible}}{11}
+          {Copyable}{\concept{Copyable}}{8}
+          {CopyConstructible}{\concept{CopyConstructible}}{17}
+          {EqualityComparable}{\concept{EqualityComparable}}{18}
+          {ForwardIterator}{\concept{ForwardIterator}}{15}
+          {InputIterator}{\concept{InputIterator}}{13}
+          {Iterator}{\concept{Iterator}}{8}
+          {MoveConstructible}{\concept{MoveConstructible}}{17}
+          {OutputIterator}{\concept{OutputIterator}}{14}
+          {RandomAccessIterator}{\concept{RandomAccessIterator}}{20}
+        }
+}
 
 % Our usual abbreviation for 'listings'.  Comments are in
 % italics.  Arbitrary TeX commands can be used if they're 
