@@ -12,7 +12,7 @@ searching.
 
 \pnum
 The following subclauses describe a basic regular expression class template and its
-traits that can handle char-like template arguments,
+traits that can handle char-like~(\ref{strings.general}) template arguments,
 two specializations of this class template that handle sequences of \tcode{char} and \tcode{wchar_t},
 a class template that holds the
 result of a regular expression match, a series of algorithms that allow a character
@@ -84,15 +84,15 @@ been marked by parenthesis.
 
 \pnum
 This subclause defines requirements on classes representing regular
-expression traits.  \enternote The class template
+expression traits.  \begin{note} The class template
 \tcode{regex_traits}, defined in Clause~\ref{re.traits},
-satisfies these requirements.  \exitnote
+satisfies these requirements.  \end{note}
 
 \pnum
 The class template \tcode{basic_regex}, defined in
 Clause~\ref{re.regex}, needs a set of related types and
 functions to complete the definition of its semantics. These types
-and functions are provided as a set of member typedefs and functions
+and functions are provided as a set of member \grammarterm{typedef-name}{s} and functions
 in the template parameter \tcode{traits} used by the \tcode{basic_regex} class
 template. This subclause defines the semantics of these
 members.
@@ -189,7 +189,7 @@ and \tcode{loc} is an object of type \tcode{X::locale_type}.
   when character case is not considered
   then \tcode{v.transform_primary(G1, G2) < v.transform_primary(H1, H2)}.
    \indextext{regular expression traits!\idxcode{transform_primary}}%
-   \indextext{transform_primary@\tcode{transform_primaryl}!regular expression traits}%
+   \indextext{transform_primary@\tcode{transform_primary}!regular expression traits}%
   \\ \rowsep
 \tcode{v.lookup_collatename(F1, F2)}
   & \tcode{X::string_type}
@@ -229,8 +229,8 @@ and \tcode{loc} is an object of type \tcode{X::locale_type}.
   & \tcode{int}
   & Returns the value represented by the digit \textit{c} in base
     \textit{I} if the character \textit{c} is a valid digit in base \textit{I};
-  otherwise returns \tcode{-1}. \enternote The value of \textit{I} will only
-  be 8, 10, or 16. \exitnote
+  otherwise returns \tcode{-1}. \begin{note} The value of \textit{I} will only
+  be 8, 10, or 16. \end{note}
   \\ \rowsep
 \tcode{u.imbue(loc)}
   & \tcode{X::locale_type}
@@ -244,12 +244,12 @@ and \tcode{loc} is an object of type \tcode{X::locale_type}.
 \end{libreqtab3}
 
 \pnum
-\enternote
+\begin{note}
 Class template \tcode{regex_traits} satisfies the requirements for a
 regular expression traits class when it is specialized for
 \tcode{char} or \tcode{wchar_t}.  This class template is described in
 the header \tcode{<regex>}, and is described in Clause~\ref{re.traits}.
-\exitnote
+\end{note}
 
 \rSec1[re.syn]{Header \tcode{<regex>} synopsis}
 
@@ -276,8 +276,8 @@ namespace std {
   // \ref{re.regex}, class template basic_regex:
   template <class charT, class traits = regex_traits<charT> > class basic_regex;
 
-  typedef basic_regex<char>    regex;
-  typedef basic_regex<wchar_t> wregex;
+  using regex  = basic_regex<char>;
+  using wregex = basic_regex<wchar_t>;
 
   // \ref{re.regex.swap}, basic_regex swap:
   template <class charT, class traits>
@@ -287,10 +287,10 @@ namespace std {
   template <class BidirectionalIterator> 
     class sub_match;
 
-  typedef sub_match<const char*>             csub_match;
-  typedef sub_match<const wchar_t*>          wcsub_match;
-  typedef sub_match<string::const_iterator>  ssub_match;
-  typedef sub_match<wstring::const_iterator> wssub_match;
+  using csub_match  = sub_match<const char*>;
+  using wcsub_match = sub_match<const wchar_t*>;
+  using ssub_match  = sub_match<string::const_iterator>;
+  using wssub_match = sub_match<wstring::const_iterator>;
 
   // \ref{re.submatch.op}, sub_match non-member operators:
   template <class BiIter>
@@ -454,10 +454,10 @@ namespace std {
             class Allocator = allocator<sub_match<BidirectionalIterator> > >
     class match_results;
 
-  typedef match_results<const char*>             cmatch;
-  typedef match_results<const wchar_t*>          wcmatch;
-  typedef match_results<string::const_iterator>  smatch;
-  typedef match_results<wstring::const_iterator> wsmatch;
+  using cmatch  = match_results<const char*>;
+  using wcmatch = match_results<const wchar_t*>;
+  using smatch  = match_results<string::const_iterator>;
+  using wsmatch = match_results<wstring::const_iterator>;
 
   // match_results comparisons
   template <class BidirectionalIterator, class Allocator>
@@ -619,10 +619,10 @@ namespace std {
             class traits = regex_traits<charT> >
     class regex_iterator;
 
-  typedef regex_iterator<const char*>             cregex_iterator;
-  typedef regex_iterator<const wchar_t*>          wcregex_iterator;
-  typedef regex_iterator<string::const_iterator>  sregex_iterator;
-  typedef regex_iterator<wstring::const_iterator> wsregex_iterator;
+  using cregex_iterator  = regex_iterator<const char*>;
+  using wcregex_iterator = regex_iterator<const wchar_t*>;
+  using sregex_iterator  = regex_iterator<string::const_iterator>;
+  using wsregex_iterator = regex_iterator<wstring::const_iterator>;
 
   // \ref{re.tokiter}, class template regex_token_iterator:
   template <class BidirectionalIterator, 
@@ -631,10 +631,22 @@ namespace std {
             class traits = regex_traits<charT> >
     class regex_token_iterator;
 
-  typedef regex_token_iterator<const char*>             cregex_token_iterator;
-  typedef regex_token_iterator<const wchar_t*>          wcregex_token_iterator;
-  typedef regex_token_iterator<string::const_iterator>  sregex_token_iterator;
-  typedef regex_token_iterator<wstring::const_iterator> wsregex_token_iterator;
+  using cregex_token_iterator  = regex_token_iterator<const char*>;
+  using wcregex_token_iterator = regex_token_iterator<const wchar_t*>;
+  using sregex_token_iterator  = regex_token_iterator<string::const_iterator>;
+  using wsregex_token_iterator = regex_token_iterator<wstring::const_iterator>;
+
+  namespace pmr {
+    template <class BidirectionalIterator>
+      using match_results =
+        std::match_results<BidirectionalIterator,
+                           polymorphic_allocator<sub_match<BidirectionalIterator>>>;
+
+    using cmatch  = match_results<const char*>;
+    using wcmatch = match_results<const wchar_t*>;
+    using smatch  = match_results<string::const_iterator>;
+    using wsmatch = match_results<wstring::const_iterator>;
+  }
 }
 \end{codeblock}
 
@@ -653,7 +665,7 @@ constants of these types.
 \indexlibrary{\idxcode{regex_constants}!\idxcode{syntax_option_type}}%
 \begin{codeblock}
 namespace std::regex_constants {
-  typedef @\textit{T1}@ syntax_option_type;
+  using syntax_option_type = @\textit{T1}@;
   constexpr syntax_option_type icase = @\unspec@;
   constexpr syntax_option_type nosubs = @\unspec@;
   constexpr syntax_option_type optimize = @\unspec@;
@@ -679,7 +691,7 @@ namespace std::regex_constants {
 \indexlibrary{\idxcode{syntax_option_type}!\idxcode{awk}}%
 \indexlibrary{\idxcode{syntax_option_type}!\idxcode{grep}}%
 \indexlibrary{\idxcode{syntax_option_type}!\idxcode{egrep}}%
-The type \tcode{syntax_option_type} is an implementation-defined bitmask
+The type \tcode{syntax_option_type} is an \impldef{type of \tcode{syntax_option_type}} bitmask
 type~(\ref{bitmask.types}). Setting its elements has the effects listed in
 table~\ref{tab:re:syntaxoption}.  A valid value of type
 \tcode{syntax_option_type} shall have at most one of the grammar elements
@@ -786,7 +798,7 @@ option in POSIX.
 \indexlibrary{\idxcode{format_first_only}}%
 \begin{codeblock}
 namespace std::regex_constants {
-  typedef @\textit{T2}@ match_flag_type;
+  using match_flag_type = @\textit{T2}@;
   constexpr match_flag_type match_default = {};
   constexpr match_flag_type match_not_bol = @\unspec@;
   constexpr match_flag_type match_not_eol = @\unspec@;
@@ -805,8 +817,8 @@ namespace std::regex_constants {
 
 \pnum
 \indexlibrary{\idxcode{match_flag_type}}%
-The type \tcode{regex_constants::match_flag_type} is an implementation-defined bitmask
-type~(\ref{bitmask.types}).
+The type \tcode{regex_constants::match_flag_type} is an
+\impldef{type of \tcode{regex_constants::match_flag_type}} bitmask type~(\ref{bitmask.types}).
 The constants of that type, except for \tcode{match_default} and
 \tcode{format_default}, are bitmask elements. The \tcode{match_default} and
 \tcode{format_default} constants are empty bitmasks.
@@ -908,7 +920,7 @@ first occurrence of the regular expression shall be replaced.
 \indexlibrary{\idxcode{regex_constants}!\idxcode{error_type}}%
 \begin{codeblock}
 namespace std::regex_constants {
-  typedef @\textit{T3}@ error_type;
+  using error_type = @\textit{T3}@;
   constexpr error_type error_collate = @\unspec@;
   constexpr error_type error_ctype = @\unspec@;
   constexpr error_type error_escape = @\unspec@;
@@ -1038,10 +1050,10 @@ namespace std {
   template <class charT>
   struct regex_traits {
   public:
-     typedef charT                        char_type;
-     typedef std::basic_string<char_type> string_type;
-     typedef std::locale                  locale_type;
-     typedef @{\itshape bitmask_type}@                 char_class_type;
+     using char_type       = charT;
+     using string_type     = std::basic_string<char_type>;
+     using locale_type     = std::locale;
+     using char_class_type = @{\itshape bitmask_type}@;
 
      regex_traits();
      static std::size_t length(const char_type* p);
@@ -1074,10 +1086,9 @@ The specializations \tcode{regex_traits<char>} and
 \tcode{regex_traits<wchar_t>} shall be valid and shall satisfy the
 requirements for a regular expression traits class~(\ref{re.req}).
 
-\indexlibrary{\idxcode{regex_traits}!\idxcode{char_class_type}}%
-\indexlibrary{\idxcode{char_class_type}!\idxcode{regex_traits}}%
+\indexlibrarymember{regex_traits}{char_class_type}%
 \begin{itemdecl}
-typedef @\textit{bitmask_type}@                 char_class_type; 
+using char_class_type = @\textit{bitmask_type}@; 
 \end{itemdecl}
 
 \begin{itemdescr}
@@ -1087,28 +1098,25 @@ classification and is capable of holding an implementation specific
 set returned by \tcode{lookup_classname}.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{length}!\idxcode{regex_traits}}%
-\indexlibrary{\idxcode{regex_traits}!\idxcode{length}}%
+\indexlibrarymember{length}{regex_traits}%
 \begin{itemdecl}
 static std::size_t length(const char_type* p); 
 \end{itemdecl}
 
 \begin{itemdescr}
-\pnum\returns \tcode{char_traits<charT>::length(p);}
+\pnum\returns \tcode{char_traits<charT>::length(p)}.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{regex_traits}!\idxcode{translate}}%
-\indexlibrary{\idxcode{translate}!\idxcode{regex_traits}}%
+\indexlibrarymember{regex_traits}{translate}%
 \begin{itemdecl}
 charT translate(charT c) const; 
 \end{itemdecl}
 
 \begin{itemdescr}
-\pnum\returns \tcode{(c)}.
+\pnum\returns \tcode{c}.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{regex_traits}!\idxcode{translate_nocase}}%
-\indexlibrary{\idxcode{translate_nocase}!\idxcode{regex_traits}}%
+\indexlibrarymember{regex_traits}{translate_nocase}%
 \begin{itemdecl}
 charT translate_nocase(charT c) const; 
 \end{itemdecl}
@@ -1117,8 +1125,7 @@ charT translate_nocase(charT c) const;
 \pnum\returns  \tcode{use_facet<ctype<charT> >(getloc()).tolower(c)}.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{regex_traits}!\idxcode{transform}}%
-\indexlibrary{\idxcode{transform}!\idxcode{regex_traits}}%
+\indexlibrarymember{regex_traits}{transform}%
 \begin{itemdecl}
 template <class ForwardIterator>
   string_type transform(ForwardIterator first, ForwardIterator last) const; 
@@ -1126,6 +1133,7 @@ template <class ForwardIterator>
 
 \begin{itemdescr}
 \pnum\effects
+As if by:
 \begin{codeblock}
 string_type str(first, last);
 return use_facet<collate<charT> >(
@@ -1133,15 +1141,14 @@ return use_facet<collate<charT> >(
 \end{codeblock}
 \end{itemdescr}
 
-\indexlibrary{\idxcode{regex_traits}!\idxcode{transform_primary}}%
-\indexlibrary{\idxcode{transform_primary}!\idxcode{regex_traits}}%
+\indexlibrarymember{regex_traits}{transform_primary}%
 \begin{itemdecl}
 template <class ForwardIterator>
   string_type transform_primary(ForwardIterator first, ForwardIterator last) const; 
 \end{itemdecl}
 
 \begin{itemdescr}
-\pnum\effects  if \tcode{typeid(use_facet<collate<charT> >) 
+\pnum\effects If \tcode{typeid(use_facet<collate<charT> >) 
 == typeid(collate_byname<charT>)}
 and the form of the sort key returned
 by \tcode{collate_byname<charT> \colcol transform(first, last)} is known and
@@ -1149,8 +1156,7 @@ can be converted into a primary sort key then returns that key,
 otherwise returns an empty string.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{regex_traits}!\idxcode{lookup_collatename}}%
-\indexlibrary{\idxcode{lookup_collatename}!\idxcode{regex_traits}}%
+\indexlibrarymember{regex_traits}{lookup_collatename}%
 \begin{itemdecl}
 template <class ForwardIterator>
   string_type lookup_collatename(ForwardIterator first, ForwardIterator last) const; 
@@ -1164,8 +1170,7 @@ Returns an empty string if the character sequence is not a
 valid collating element.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{regex_traits}!\idxcode{lookup_classname}}%
-\indexlibrary{\idxcode{lookup_classname}!\idxcode{regex_traits}}%
+\indexlibrarymember{regex_traits}{lookup_classname}%
 \begin{itemdecl}
 template <class ForwardIterator>
   char_class_type lookup_classname(
@@ -1187,14 +1192,13 @@ the character sequence. If the name
 is not recognized then returns \tcode{char_class_type()}.
 
 \pnum
-\notes  For \tcode{regex_traits<char>}, at least the narrow character names
+\remarks  For \tcode{regex_traits<char>}, at least the narrow character names
 in Table~\ref{tab:re.traits.classnames} shall be recognized.
 For \tcode{regex_traits<wchar_t>}, at least the wide character names
 in Table~\ref{tab:re.traits.classnames} shall be recognized.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{regex_traits}!\idxcode{isctype}}%
-\indexlibrary{\idxcode{isctype}!\idxcode{regex_traits}}%
+\indexlibrarymember{regex_traits}{isctype}%
 \begin{itemdecl}
 bool isctype(charT c, char_class_type f) const; 
 \end{itemdecl}
@@ -1222,15 +1226,13 @@ if (ct.is(m, c)) {
 } else if (c == ct.widen('_')) {
   charT w[1] = { ct.widen('w') };
   char_class_type x = lookup_classname(w, w+1);
-  
   return (f&x) == x;
 } else {
   return false;
 } 
 \end{codeblock}
-\enterexample
+\begin{example}
 \begin{codeblock}
-
 regex_traits<char> t;
 string d("d");
 string u("upper");
@@ -1239,10 +1241,9 @@ f = t.lookup_classname(d.begin(), d.end());
 f |= t.lookup_classname(u.begin(), u.end());
 ctype_base::mask m = convert<char>(f); // \tcode{m == ctype_base::digit|ctype_base::upper}
 \end{codeblock}
-\exitexample
-\enterexample
+\end{example}
+\begin{example}
 \begin{codeblock}
-
 regex_traits<char> t;
 string w("w");
 regex_traits<char>::char_class_type f;
@@ -1251,24 +1252,23 @@ t.isctype('A', f); // returns \tcode{true}
 t.isctype('_', f); // returns \tcode{true}
 t.isctype(' ', f); // returns \tcode{false}
 \end{codeblock}
-\exitexample
+\end{example}
 
 \end{itemdescr}
 
-\indexlibrary{\idxcode{value}!\idxcode{regex_traits}}%
-\indexlibrary{\idxcode{regex_traits}!\idxcode{value}}%
+\indexlibrarymember{value}{regex_traits}%
 \begin{itemdecl}
 int value(charT ch, int radix) const;
 \end{itemdecl}
 
 \begin{itemdescr}
 \pnum
-\precondition  The value of \textit{radix} shall be 8, 10, or 16.
+\precondition  The value of \tcode{radix} shall be 8, 10, or 16.
 
 \pnum
-\returns  the value represented by the digit \textit{ch} in base
-\textit{radix} if the character \textit{ch} is a valid digit in base
-\textit{radix}; otherwise returns -1.
+\returns  the value represented by the digit \tcode{ch} in base
+\tcode{radix} if the character \tcode{ch} is a valid digit in base
+\tcode{radix}; otherwise returns -1.
 \end{itemdescr}
 
 \indexlibrary{\idxcode{locale}}%
@@ -1280,9 +1280,9 @@ locale_type imbue(locale_type loc);
 \begin{itemdescr}
 \pnum
 \effects  Imbues \tcode{this} with a copy of the
-locale \tcode{loc}. \enternote Calling \tcode{imbue} with a
+locale \tcode{loc}. \begin{note} Calling \tcode{imbue} with a
 different locale than the one currently in use invalidates all cached
-data held by \tcode{*this}. \exitnote
+data held by \tcode{*this}. \end{note}
 
 \pnum
 \returns  if no locale has been previously imbued then a copy of the
@@ -1342,9 +1342,9 @@ Objects of type specialization of \tcode{basic_regex} are responsible for
 converting the sequence of \tcode{charT} objects to an internal
 representation. It is not specified what form this representation
 takes, nor how it is accessed by algorithms that operate on regular
-expressions. \enternote Implementations will typically declare
+expressions. \begin{note} Implementations will typically declare
 some function templates as friends of \tcode{basic_regex} to achieve
-this \exitnote
+this \end{note}
 
 \pnum
 \indexlibrary{\idxcode{regex_error}}%
@@ -1359,11 +1359,11 @@ namespace std {
   class basic_regex {
   public:
     // types:
-    typedef          charT                                value_type;
-    typedef          traits                               traits_type;
-    typedef typename traits::string_type                  string_type;
-    typedef          regex_constants::syntax_option_type  flag_type;
-    typedef typename traits::locale_type                  locale_type;
+    using value_type  =          charT;
+    using traits_type =          traits;
+    using string_type = typename traits::string_type;
+    using flag_type   =          regex_constants::syntax_option_type;
+    using locale_type = typename traits::locale_type;
 
     // \ref{re.regex.const}, constants:
     static constexpr regex_constants::syntax_option_type
@@ -1473,7 +1473,6 @@ The static constant members are provided as synonyms for the constants
 declared in namespace \tcode{regex_constants}.
 
 \rSec2[re.regex.construct]{\tcode{basic_regex} constructors}
-\indexlibrary{\idxcode{basic_regex}!\idxcode{basic_regex}}%
 
 \indexlibrary{\idxcode{basic_regex}!constructor}%
 \begin{itemdecl}
@@ -1486,24 +1485,24 @@ basic_regex();
 does not match any character sequence.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{basic_regex}!\idxcode{basic_regex}}%
+\indexlibrary{\idxcode{basic_regex}!constructor}%
 \begin{itemdecl}
 explicit basic_regex(const charT* p, flag_type f = regex_constants::ECMAScript);
 \end{itemdecl}
 
 \begin{itemdescr}
 \pnum
-\requires  \textit{p} shall not be a null pointer. 
+\requires  \tcode{p} shall not be a null pointer. 
 
 \pnum
-\throws  \tcode{regex_error} if \textit{p} is not a valid regular expression. 
+\throws  \tcode{regex_error} if \tcode{p} is not a valid regular expression. 
 
 \pnum
 \effects  Constructs an object of class \tcode{basic_regex}; the object's
 internal finite state machine is constructed from the regular
 expression contained in the array of \tcode{charT} of length
 \tcode{char_traits<charT>::\brk{}length(p)} whose first element is
-designated by \textit{p}, and interpreted according to the flags \textit{f}.
+designated by \tcode{p}, and interpreted according to the flags \tcode{f}.
 
 \pnum\postconditions
 \tcode{flags()} returns \tcode{f}.  
@@ -1511,23 +1510,23 @@ designated by \textit{p}, and interpreted according to the flags \textit{f}.
 within the expression.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{basic_regex}!\idxcode{basic_regex}}%
+\indexlibrary{\idxcode{basic_regex}!constructor}%
 \begin{itemdecl}
 basic_regex(const charT* p, size_t len, flag_type f);
 \end{itemdecl}
 
 \begin{itemdescr}
 \pnum
-\requires  \textit{p} shall not be a null pointer.
+\requires  \tcode{p} shall not be a null pointer.
 
 \pnum
-\throws  \tcode{regex_error} if \textit{p} is not a valid regular expression. 
+\throws  \tcode{regex_error} if \tcode{p} is not a valid regular expression. 
 
 \pnum
 \effects  Constructs an object of class \tcode{basic_regex}; the object's
 internal finite state machine is constructed from the regular
 expression contained in the sequence of characters \range{p}{p+len}, and
-interpreted according the flags specified in \textit{f}. 
+interpreted according the flags specified in \tcode{f}. 
 
 \pnum\postconditions
 \tcode{flags()} returns \tcode{f}.  
@@ -1535,7 +1534,7 @@ interpreted according the flags specified in \textit{f}.
 within the expression.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{basic_regex}!\idxcode{basic_regex}}%
+\indexlibrary{\idxcode{basic_regex}!constructor}%
 \begin{itemdecl}
 basic_regex(const basic_regex& e); 
 \end{itemdecl}
@@ -1550,7 +1549,7 @@ the object \tcode{e}.
 \tcode{e.flags()} and \tcode{e.mark_count()}, respectively.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{basic_regex}!\idxcode{basic_regex}}%
+\indexlibrary{\idxcode{basic_regex}!constructor}%
 \begin{itemdecl}
 basic_regex(basic_regex&& e) noexcept;
 \end{itemdecl}
@@ -1565,7 +1564,7 @@ basic_regex(basic_regex&& e) noexcept;
 \tcode{e} is in a valid state with unspecified value.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{basic_regex}!\idxcode{basic_regex}}%
+\indexlibrary{\idxcode{basic_regex}!constructor}%
 \begin{itemdecl}
 template <class ST, class SA>
   explicit basic_regex(const basic_string<charT, ST, SA>& s,
@@ -1588,7 +1587,7 @@ flags specified in \tcode{f}.
 within the expression.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{basic_regex}!\idxcode{basic_regex}}%
+\indexlibrary{\idxcode{basic_regex}!constructor}%
 \begin{itemdecl}
 template <class ForwardIterator>
   basic_regex(ForwardIterator first, ForwardIterator last,
@@ -1625,30 +1624,36 @@ basic_regex(initializer_list<charT> il,
 
 \rSec2[re.regex.assign]{\tcode{basic_regex} assign}
 
-\indexlibrary{\idxcode{basic_regex}!\idxcode{operator=}}%
-\indexlibrary{\idxcode{operator=}!\idxcode{basic_regex}}%
+\indexlibrarymember{basic_regex}{operator=}%
 \begin{itemdecl}
 basic_regex& operator=(const basic_regex& e); 
 \end{itemdecl}
 
 \begin{itemdescr}
 \pnum
-\effects  returns \tcode{assign(e)}.
+\effects Copies \tcode{e} into \tcode{*this} and returns \tcode{*this}.
+
+\pnum\postconditions
+\tcode{flags()} and \tcode{mark_count()} return
+\tcode{e.flags()} and \tcode{e.mark_count()}, respectively.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{basic_regex}!\idxcode{operator=}}%
-\indexlibrary{\idxcode{operator=}!\idxcode{basic_regex}}%
+\indexlibrarymember{basic_regex}{operator=}%
 \begin{itemdecl}
 basic_regex& operator=(basic_regex&& e) noexcept;
 \end{itemdecl}
 
 \begin{itemdescr}
 \pnum
-\effects  returns \tcode{assign(std::move(e))}.
+\effects Move assigns from \tcode{e} into \tcode{*this} and returns \tcode{*this}.
+
+\pnum
+\postconditions \tcode{flags()} and \tcode{mark_count()} return the values that
+\tcode{e.flags()} and \tcode{e.mark_count()}, respectively, had before assignment.
+\tcode{e} is in a valid state with unspecified value.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{basic_regex}!\idxcode{operator=}}%
-\indexlibrary{\idxcode{operator=}!\idxcode{basic_regex}}%
+\indexlibrarymember{basic_regex}{operator=}%
 \begin{itemdecl}
 basic_regex& operator=(const charT* ptr); 
 \end{itemdecl}
@@ -1658,22 +1663,20 @@ basic_regex& operator=(const charT* ptr);
 \requires  \tcode{ptr} shall not be a null pointer. 
 
 \pnum
-\effects  returns \tcode{assign(ptr)}.
+\effects Returns \tcode{assign(ptr)}.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{basic_regex}!\idxcode{operator=}}%
-\indexlibrary{\idxcode{operator=}!\idxcode{basic_regex}}%
+\indexlibrarymember{basic_regex}{operator=}%
 \begin{itemdecl}
 basic_regex& operator=(initializer_list<charT> il);
 \end{itemdecl}
 
 \begin{itemdescr}
 \pnum
-\effects  returns \tcode{assign(il.begin(), il.end())}.
+\effects Returns \tcode{assign(il.begin(), il.end())}.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{basic_regex}!\idxcode{operator=}}%
-\indexlibrary{\idxcode{operator=}!\idxcode{basic_regex}}%
+\indexlibrarymember{basic_regex}{operator=}%
 \begin{itemdecl}
 template <class ST, class SA>
   basic_regex& operator=(const basic_string<charT, ST, SA>& p); 
@@ -1681,42 +1684,36 @@ template <class ST, class SA>
 
 \begin{itemdescr}
 \pnum
-\effects  returns \tcode{assign(p)}.
+\effects Returns \tcode{assign(p)}.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{basic_regex}!\idxcode{assign}}%
-\indexlibrary{\idxcode{assign}!\idxcode{basic_regex}}%
+\indexlibrarymember{basic_regex}{assign}%
 \begin{itemdecl}
 basic_regex& assign(const basic_regex& that); 
 \end{itemdecl}
 
 \begin{itemdescr}
 \pnum
-\effects  copies \tcode{that} into \tcode{*this} and returns \tcode{*this}.
+\effects  Equivalent to \tcode{*this = that}.
 
-\pnum\postconditions
-\tcode{flags()} and \tcode{mark_count()} return
-\tcode{that.flags()} and \tcode{that.mark_count()}, respectively.
+\pnum
+\returns  \tcode{*this}.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{basic_regex}!\idxcode{assign}}%
-\indexlibrary{\idxcode{assign}!\idxcode{basic_regex}}%
+\indexlibrarymember{basic_regex}{assign}%
 \begin{itemdecl}
 basic_regex& assign(basic_regex&& that) noexcept;
 \end{itemdecl}
 
 \begin{itemdescr}
 \pnum
-\effects  move assigns from \tcode{that} into \tcode{*this} and returns \tcode{*this}.
+\effects  Equivalent to \tcode{*this = std::move(that)}.
 
 \pnum
-\postconditions \tcode{flags()} and \tcode{mark_count()} return the values that
-\tcode{that.flags()} and \tcode{that.mark_count()}, respectively, had before assignment.
-\tcode{that} is in a valid state with unspecified value.
+\returns  \tcode{*this}.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{basic_regex}!\idxcode{assign}}%
-\indexlibrary{\idxcode{assign}!\idxcode{basic_regex}}%
+\indexlibrarymember{basic_regex}{assign}%
 \begin{itemdecl}
 basic_regex& assign(const charT* ptr, flag_type f = regex_constants::ECMAScript); 
 \end{itemdecl}
@@ -1726,8 +1723,7 @@ basic_regex& assign(const charT* ptr, flag_type f = regex_constants::ECMAScript)
 \returns  \tcode{assign(string_type(ptr), f)}.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{basic_regex}!\idxcode{assign}}%
-\indexlibrary{\idxcode{assign}!\idxcode{basic_regex}}%
+\indexlibrarymember{basic_regex}{assign}%
 \begin{itemdecl}
 basic_regex& assign(const charT* ptr, size_t len,
   flag_type f = regex_constants::ECMAScript);
@@ -1738,8 +1734,7 @@ basic_regex& assign(const charT* ptr, size_t len,
 \returns \tcode{assign(string_type(ptr, len), f)}.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{basic_regex}!\idxcode{assign}}%
-\indexlibrary{\idxcode{assign}!\idxcode{basic_regex}}%
+\indexlibrarymember{basic_regex}{assign}%
 \begin{itemdecl}
 template <class string_traits, class A>
   basic_regex& assign(const basic_string<charT, string_traits, A>& s,
@@ -1765,8 +1760,7 @@ If no exception is thrown,
 returns the number of marked sub-expressions within the expression.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{basic_regex}!\idxcode{assign}}%
-\indexlibrary{\idxcode{assign}!\idxcode{basic_regex}}%
+\indexlibrarymember{basic_regex}{assign}%
 \begin{itemdecl}
 template <class InputIterator>
   basic_regex& assign(InputIterator first, InputIterator last,
@@ -1782,8 +1776,7 @@ Iterator~(\ref{input.iterators}).
 \returns  \tcode{assign(string_type(first, last), f)}.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{assign}!\idxcode{basic_regex}}%
-\indexlibrary{\idxcode{basic_regex}!\idxcode{assign}}%
+\indexlibrarymember{assign}{basic_regex}%
 \begin{itemdecl}
 basic_regex& assign(initializer_list<charT> il,
                     flag_type f = regex_constants::ECMAScript);
@@ -1800,8 +1793,7 @@ basic_regex& assign(initializer_list<charT> il,
 
 \rSec2[re.regex.operations]{\tcode{basic_regex} constant operations}
 
-\indexlibrary{\idxcode{mark_count}!\idxcode{basic_regex}}%
-\indexlibrary{\idxcode{basic_regex}!\idxcode{mark_count}}%
+\indexlibrarymember{mark_count}{basic_regex}%
 \begin{itemdecl}
 unsigned mark_count() const; 
 \end{itemdecl}
@@ -1812,8 +1804,7 @@ unsigned mark_count() const;
 regular expression.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{flag_type}!\idxcode{basic_regex}}%
-\indexlibrary{\idxcode{basic_regex}!\idxcode{flag_type}}%
+\indexlibrarymember{flag_type}{basic_regex}%
 \begin{itemdecl}
 flag_type flags() const; 
 \end{itemdecl}
@@ -1828,38 +1819,34 @@ to \tcode{assign}.
 \rSec2[re.regex.locale]{\tcode{basic_regex} locale}%
 \indexlibrary{\idxcode{locale}}
 
-\indexlibrary{\idxcode{imbue}!\idxcode{basic_regex}}%
-\indexlibrary{\idxcode{basic_regex}!\idxcode{imbue}}%
+\indexlibrarymember{imbue}{basic_regex}%
 \begin{itemdecl}
 locale_type imbue(locale_type loc);
 \end{itemdecl}
 
 \begin{itemdescr}
 \pnum\effects  Returns the result of \tcode{traits_inst.imbue(loc)} where
-\tcode{traits_inst} is a (default initialized) instance of the template
+\tcode{traits_inst} is a (default-initialized) instance of the template
 type argument \tcode{traits} stored within the object.  After a call
 to \tcode{imbue} the \tcode{basic_regex} object does not match any
 character sequence.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{getloc}!\idxcode{basic_regex}}%
-\indexlibrary{\idxcode{basic_regex}!\idxcode{getloc}}%
+\indexlibrarymember{getloc}{basic_regex}%
 \begin{itemdecl}
 locale_type getloc() const; 
 \end{itemdecl}
 
 \begin{itemdescr}
 \pnum\effects  Returns the result of \tcode{traits_inst.getloc()} where
-\tcode{traits_inst} is a (default initialized) instance of the template
+\tcode{traits_inst} is a (default-initialized) instance of the template
 parameter \tcode{traits} stored within the object.
 \end{itemdescr}
 
 \rSec2[re.regex.swap]{\tcode{basic_regex} swap}
-\indexlibrary{\idxcode{basic_regex}!\idxcode{swap}}%
-\indexlibrary{\idxcode{swap}!\idxcode{basic_regex}}%
+\indexlibrarymember{basic_regex}{swap}%
 
-\indexlibrary{\idxcode{swap}!\idxcode{basic_regex}}%
-\indexlibrary{\idxcode{basic_regex}!\idxcode{swap}}%
+\indexlibrarymember{swap}{basic_regex}%
 \begin{itemdecl}
 void swap(basic_regex& e); 
 \end{itemdecl}
@@ -1877,8 +1864,7 @@ was in \tcode{*this}.
 \rSec2[re.regex.nonmemb]{\tcode{basic_regex} non-member functions}
 
 \rSec3[re.regex.nmswap]{\tcode{basic_regex} non-member swap}
-\indexlibrary{\idxcode{basic_regex}!\idxcode{swap}}%
-\indexlibrary{\idxcode{swap}!\idxcode{basic_regex}}%
+\indexlibrarymember{basic_regex}{swap}%
 \begin{itemdecl}
 template <class charT, class traits>
   void swap(basic_regex<charT, traits>& lhs, basic_regex<charT, traits>& rhs); 
@@ -1899,12 +1885,12 @@ namespace std {
   template <class BidirectionalIterator>
   class sub_match : public std::pair<BidirectionalIterator, BidirectionalIterator> {
   public:
-     typedef typename iterator_traits<BidirectionalIterator>::
-       value_type                                               value_type;
-     typedef typename iterator_traits<BidirectionalIterator>::
-       difference_type                                          difference_type;
-     typedef BidirectionalIterator                              iterator;
-     typedef basic_string<value_type>                           string_type;
+     using value_type      =
+             typename iterator_traits<BidirectionalIterator>::value_type;
+     using difference_type =
+             typename iterator_traits<BidirectionalIterator>::difference_type;
+     using iterator        = BidirectionalIterator;
+     using string_type     = basic_string<value_type>;
 
      bool matched;
 
@@ -1935,8 +1921,7 @@ constexpr sub_match();
 \tcode{matched}.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{sub_match}!\idxcode{length}}%
-\indexlibrary{\idxcode{length}!\idxcode{sub_match}}%
+\indexlibrarymember{sub_match}{length}%
 \begin{itemdecl}
 difference_type length() const;
 \end{itemdecl}
@@ -1945,8 +1930,7 @@ difference_type length() const;
 \pnum\returns  \tcode{(matched ? distance(first, second) : 0)}.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{operator basic_string}!\idxcode{sub_match}}%
-\indexlibrary{\idxcode{sub_match}!\idxcode{operator basic_string}}%
+\indexlibrarymember{operator basic_string}{sub_match}%
 \begin{itemdecl}
 operator string_type() const;
 \end{itemdecl}
@@ -1955,8 +1939,7 @@ operator string_type() const;
 \pnum\returns \tcode{matched ? string_type(first, second) : string_type()}.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{sub_match}!\idxcode{str}}%
-\indexlibrary{\idxcode{str}!\idxcode{sub_match}}%
+\indexlibrarymember{sub_match}{str}%
 \begin{itemdecl}
 string_type str() const;
 \end{itemdecl}
@@ -1965,8 +1948,7 @@ string_type str() const;
 \pnum\returns  \tcode{matched ? string_type(first, second) : string_type()}.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{sub_match}!\idxcode{compare}}%
-\indexlibrary{\idxcode{compare}!\idxcode{sub_match}}%
+\indexlibrarymember{sub_match}{compare}%
 \begin{itemdecl}
 int compare(const sub_match& s) const;
 \end{itemdecl}
@@ -1975,8 +1957,7 @@ int compare(const sub_match& s) const;
 \pnum\returns  \tcode{str().compare(s.str())}.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{sub_match}!\idxcode{compare}}%
-\indexlibrary{\idxcode{compare}!\idxcode{sub_match}}%
+\indexlibrarymember{sub_match}{compare}%
 \begin{itemdecl}
 int compare(const string_type& s) const;
 \end{itemdecl}
@@ -1985,8 +1966,7 @@ int compare(const string_type& s) const;
 \pnum\returns  \tcode{str().compare(s)}.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{sub_match}!\idxcode{compare}}%
-\indexlibrary{\idxcode{compare}!\idxcode{sub_match}}%
+\indexlibrarymember{sub_match}{compare}%
 \begin{itemdecl}
 int compare(const value_type* s) const;
 \end{itemdecl}
@@ -1997,8 +1977,7 @@ int compare(const value_type* s) const;
 
 \rSec2[re.submatch.op]{\tcode{sub_match} non-member operators}
 
-\indexlibrary{\idxcode{sub_match}!\idxcode{operator==}}%
-\indexlibrary{\idxcode{operator==}!\idxcode{sub_match}}%
+\indexlibrarymember{sub_match}{operator==}%
 \begin{itemdecl}
 template <class BiIter>
   bool operator==(const sub_match<BiIter>& lhs, const sub_match<BiIter>& rhs); 
@@ -2008,8 +1987,7 @@ template <class BiIter>
 \pnum\returns  \tcode{lhs.compare(rhs) == 0}.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{sub_match}!\idxcode{operator"!=}}%
-\indexlibrary{\idxcode{operator"!=}!\idxcode{sub_match}}%
+\indexlibrarymember{sub_match}{operator"!=}%
 \begin{itemdecl}
 template <class BiIter>
   bool operator!=(const sub_match<BiIter>& lhs, const sub_match<BiIter>& rhs); 
@@ -2019,8 +1997,7 @@ template <class BiIter>
 \pnum\returns \tcode{lhs.compare(rhs) != 0}.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{sub_match}!\idxcode{operator<}}%
-\indexlibrary{\idxcode{operator<}!\idxcode{sub_match}}%
+\indexlibrarymember{sub_match}{operator<}%
 \begin{itemdecl}
 template <class BiIter>
   bool operator<(const sub_match<BiIter>& lhs, const sub_match<BiIter>& rhs); 
@@ -2030,8 +2007,7 @@ template <class BiIter>
 \pnum\returns  \tcode{lhs.compare(rhs) < 0}.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{sub_match}!\idxcode{operator<=}}%
-\indexlibrary{\idxcode{operator<=}!\idxcode{sub_match}}%
+\indexlibrarymember{sub_match}{operator<=}%
 \begin{itemdecl}
 template <class BiIter>
   bool operator<=(const sub_match<BiIter>& lhs, const sub_match<BiIter>& rhs); 
@@ -2041,8 +2017,7 @@ template <class BiIter>
 \pnum\returns  \tcode{lhs.compare(rhs) <= 0}.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{sub_match}!\idxcode{operator>=}}%
-\indexlibrary{\idxcode{operator>=}!\idxcode{sub_match}}%
+\indexlibrarymember{sub_match}{operator>=}%
 \begin{itemdecl}
 template <class BiIter>
   bool operator>=(const sub_match<BiIter>& lhs, const sub_match<BiIter>& rhs); 
@@ -2052,8 +2027,7 @@ template <class BiIter>
 \pnum\returns  \tcode{lhs.compare(rhs) >= 0}.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{sub_match}!\idxcode{operator>}}%
-\indexlibrary{\idxcode{operator>}!\idxcode{sub_match}}%
+\indexlibrarymember{sub_match}{operator>}%
 \begin{itemdecl}
 template <class BiIter>
   bool operator>(const sub_match<BiIter>& lhs, const sub_match<BiIter>& rhs); 
@@ -2063,8 +2037,7 @@ template <class BiIter>
 \pnum\returns  \tcode{lhs.compare(rhs) > 0}.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{sub_match}!\idxcode{operator==}}%
-\indexlibrary{\idxcode{operator==}!\idxcode{sub_match}}%
+\indexlibrarymember{sub_match}{operator==}%
 \begin{itemdecl}
 template <class BiIter, class ST, class SA>
   bool operator==(
@@ -2077,8 +2050,7 @@ template <class BiIter, class ST, class SA>
 \pnum\returns  \tcode{rhs.compare(typename sub_match<BiIter>::string_type(lhs.data(), lhs.size())) == 0}.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{sub_match}!\idxcode{operator"!=}}%
-\indexlibrary{\idxcode{operator"!=}!\idxcode{sub_match}}%
+\indexlibrarymember{sub_match}{operator"!=}%
 \begin{itemdecl}
 template <class BiIter, class ST, class SA>
   bool operator!=(
@@ -2091,8 +2063,7 @@ template <class BiIter, class ST, class SA>
 \pnum\returns  \tcode{!(lhs == rhs)}.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{sub_match}!\idxcode{operator<}}%
-\indexlibrary{\idxcode{operator<}!\idxcode{sub_match}}%
+\indexlibrarymember{sub_match}{operator<}%
 \begin{itemdecl}
 template <class BiIter, class ST, class SA>
   bool operator<(
@@ -2105,8 +2076,7 @@ template <class BiIter, class ST, class SA>
 \pnum\returns  \tcode{rhs.compare(typename sub_match<BiIter>::string_type(lhs.data(), lhs.size())) > 0}.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{sub_match}!\idxcode{operator>}}%
-\indexlibrary{\idxcode{operator>}!\idxcode{sub_match}}%
+\indexlibrarymember{sub_match}{operator>}%
 \begin{itemdecl}
 template <class BiIter, class ST, class SA>
   bool operator>(
@@ -2119,8 +2089,7 @@ template <class BiIter, class ST, class SA>
 \pnum\returns  \tcode{rhs < lhs}.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{sub_match}!\idxcode{operator>=}}%
-\indexlibrary{\idxcode{operator>=}!\idxcode{sub_match}}%
+\indexlibrarymember{sub_match}{operator>=}%
 \begin{itemdecl}
 template <class BiIter, class ST, class SA>
   bool operator>=(
@@ -2133,8 +2102,7 @@ template <class BiIter, class ST, class SA>
 \pnum\returns  \tcode{!(lhs < rhs)}.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{sub_match}!\idxcode{operator<=}}%
-\indexlibrary{\idxcode{operator<=}!\idxcode{sub_match}}%
+\indexlibrarymember{sub_match}{operator<=}%
 \begin{itemdecl}
 template <class BiIter, class ST, class SA>
   bool operator<=(
@@ -2147,8 +2115,7 @@ template <class BiIter, class ST, class SA>
 \pnum\returns  \tcode{!(rhs < lhs)}.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{operator==}!\idxcode{sub_match}}%
-\indexlibrary{\idxcode{sub_match}!\idxcode{operator==}}%
+\indexlibrarymember{operator==}{sub_match}%
 \begin{itemdecl}
 template <class BiIter, class ST, class SA>
   bool operator==(const sub_match<BiIter>& lhs,
@@ -2186,8 +2153,7 @@ template <class BiIter, class ST, class SA>
 \pnum\returns  \tcode{lhs.compare(typename sub_match<BiIter>::string_type(rhs.data(), rhs.size())) < 0}.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{operator>}!\idxcode{sub_match}}%
-\indexlibrary{\idxcode{sub_match}!\idxcode{operator>}}%
+\indexlibrarymember{operator>}{sub_match}%
 \begin{itemdecl}
 template <class BiIter, class ST, class SA>
   bool operator>(const sub_match<BiIter>& lhs,
@@ -2199,8 +2165,7 @@ template <class BiIter, class ST, class SA>
 \pnum\returns  \tcode{rhs < lhs}.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{operator>=}!\idxcode{sub_match}}%
-\indexlibrary{\idxcode{sub_match}!\idxcode{operator>=}}%
+\indexlibrarymember{operator>=}{sub_match}%
 \begin{itemdecl}
 template <class BiIter, class ST, class SA>
   bool operator>=(const sub_match<BiIter>& lhs,
@@ -2212,8 +2177,7 @@ template <class BiIter, class ST, class SA>
 \pnum\returns  \tcode{!(lhs < rhs)}.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{operator<=}!\idxcode{sub_match}}%
-\indexlibrary{\idxcode{sub_match}!\idxcode{operator<=}}%
+\indexlibrarymember{operator<=}{sub_match}%
 \begin{itemdecl}
 template <class BiIter, class ST, class SA>
   bool operator<=(const sub_match<BiIter>& lhs,
@@ -2225,8 +2189,7 @@ template <class BiIter, class ST, class SA>
 \pnum\returns  \tcode{!(rhs < lhs)}.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{sub_match}!\idxcode{operator==}}%
-\indexlibrary{\idxcode{operator==}!\idxcode{sub_match}}%
+\indexlibrarymember{sub_match}{operator==}%
 \begin{itemdecl}
 template <class BiIter> 
   bool operator==(typename iterator_traits<BiIter>::value_type const* lhs, 
@@ -2237,8 +2200,7 @@ template <class BiIter>
 \pnum\returns  \tcode{rhs.compare(lhs) == 0}.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{sub_match}!\idxcode{operator"!=}}%
-\indexlibrary{\idxcode{operator"!=}!\idxcode{sub_match}}%
+\indexlibrarymember{sub_match}{operator"!=}%
 \begin{itemdecl}
 template <class BiIter> 
   bool operator!=(typename iterator_traits<BiIter>::value_type const* lhs, 
@@ -2249,8 +2211,7 @@ template <class BiIter>
 \pnum\returns  \tcode{!(lhs == rhs)}.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{sub_match}!\idxcode{operator<}}%
-\indexlibrary{\idxcode{operator<}!\idxcode{sub_match}}%
+\indexlibrarymember{sub_match}{operator<}%
 \begin{itemdecl}
 template <class BiIter> 
   bool operator<(typename iterator_traits<BiIter>::value_type const* lhs, 
@@ -2261,8 +2222,7 @@ template <class BiIter>
 \pnum\returns  \tcode{rhs.compare(lhs) > 0}.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{sub_match}!\idxcode{operator>}}%
-\indexlibrary{\idxcode{operator>}!\idxcode{sub_match}}%
+\indexlibrarymember{sub_match}{operator>}%
 \begin{itemdecl}
 template <class BiIter> 
   bool operator>(typename iterator_traits<BiIter>::value_type const* lhs, 
@@ -2273,8 +2233,7 @@ template <class BiIter>
 \pnum\returns  \tcode{rhs < lhs}.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{sub_match}!\idxcode{operator>=}}%
-\indexlibrary{\idxcode{operator>=}!\idxcode{sub_match}}%
+\indexlibrarymember{sub_match}{operator>=}%
 \begin{itemdecl}
 template <class BiIter> 
   bool operator>=(typename iterator_traits<BiIter>::value_type const* lhs, 
@@ -2285,8 +2244,7 @@ template <class BiIter>
 \pnum\returns  \tcode{!(lhs < rhs)}.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{sub_match}!\idxcode{operator<=}}%
-\indexlibrary{\idxcode{operator<=}!\idxcode{sub_match}}%
+\indexlibrarymember{sub_match}{operator<=}%
 \begin{itemdecl}
 template <class BiIter> 
   bool operator<=(typename iterator_traits<BiIter>::value_type const* lhs, 
@@ -2297,8 +2255,7 @@ template <class BiIter>
 \pnum\returns  \tcode{!(rhs < lhs)}.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{sub_match}!\idxcode{operator==}}%
-\indexlibrary{\idxcode{operator==}!\idxcode{sub_match}}%
+\indexlibrarymember{sub_match}{operator==}%
 \begin{itemdecl}
 template <class BiIter> 
   bool operator==(const sub_match<BiIter>& lhs, 
@@ -2309,8 +2266,7 @@ template <class BiIter>
 \pnum\returns  \tcode{lhs.compare(rhs) == 0}.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{sub_match}!\idxcode{operator"!=}}%
-\indexlibrary{\idxcode{operator"!=}!\idxcode{sub_match}}%
+\indexlibrarymember{sub_match}{operator"!=}%
 \begin{itemdecl}
 template <class BiIter> 
   bool operator!=(const sub_match<BiIter>& lhs, 
@@ -2321,8 +2277,7 @@ template <class BiIter>
 \pnum\returns  \tcode{!(lhs == rhs)}.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{sub_match}!\idxcode{operator<}}%
-\indexlibrary{\idxcode{operator<}!\idxcode{sub_match}}%
+\indexlibrarymember{sub_match}{operator<}%
 \begin{itemdecl}
 template <class BiIter> 
   bool operator<(const sub_match<BiIter>& lhs, 
@@ -2333,8 +2288,7 @@ template <class BiIter>
 \pnum\returns  \tcode{lhs.compare(rhs) < 0}.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{sub_match}!\idxcode{operator>}}%
-\indexlibrary{\idxcode{operator>}!\idxcode{sub_match}}%
+\indexlibrarymember{sub_match}{operator>}%
 \begin{itemdecl}
 template <class BiIter> 
   bool operator>(const sub_match<BiIter>& lhs, 
@@ -2345,8 +2299,7 @@ template <class BiIter>
 \pnum\returns  \tcode{rhs < lhs}.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{sub_match}!\idxcode{operator>=}}%
-\indexlibrary{\idxcode{operator>=}!\idxcode{sub_match}}%
+\indexlibrarymember{sub_match}{operator>=}%
 \begin{itemdecl}
 template <class BiIter> 
   bool operator>=(const sub_match<BiIter>& lhs, 
@@ -2357,8 +2310,7 @@ template <class BiIter>
 \pnum\returns  \tcode{!(lhs < rhs)}.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{sub_match}!\idxcode{operator<=}}%
-\indexlibrary{\idxcode{operator<=}!\idxcode{sub_match}}%
+\indexlibrarymember{sub_match}{operator<=}%
 \begin{itemdecl}
 template <class BiIter> 
   bool operator<=(const sub_match<BiIter>& lhs, 
@@ -2370,8 +2322,7 @@ template <class BiIter>
 \returns  \tcode{!(rhs < lhs)}.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{sub_match}!\idxcode{operator==}}%
-\indexlibrary{\idxcode{operator==}!\idxcode{sub_match}}%
+\indexlibrarymember{sub_match}{operator==}%
 \begin{itemdecl}
 template <class BiIter> 
   bool operator==(typename iterator_traits<BiIter>::value_type const& lhs, 
@@ -2383,8 +2334,7 @@ template <class BiIter>
 \returns \tcode{rhs.compare(typename sub_match<BiIter>::string_type(1, lhs)) == 0}.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{sub_match}!\idxcode{operator"!=}}%
-\indexlibrary{\idxcode{operator"!=}!\idxcode{sub_match}}%
+\indexlibrarymember{sub_match}{operator"!=}%
 \begin{itemdecl}
 template <class BiIter> 
   bool operator!=(typename iterator_traits<BiIter>::value_type const& lhs, 
@@ -2396,8 +2346,7 @@ template <class BiIter>
 \returns \tcode{!(lhs == rhs)}.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{sub_match}!\idxcode{operator<}}%
-\indexlibrary{\idxcode{operator<}!\idxcode{sub_match}}%
+\indexlibrarymember{sub_match}{operator<}%
 \begin{itemdecl}
 template <class BiIter> 
   bool operator<(typename iterator_traits<BiIter>::value_type const& lhs, 
@@ -2409,8 +2358,7 @@ template <class BiIter>
 \returns \tcode{rhs.compare(typename sub_match<BiIter>::string_type(1, lhs)) > 0}.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{sub_match}!\idxcode{operator>}}%
-\indexlibrary{\idxcode{operator>}!\idxcode{sub_match}}%
+\indexlibrarymember{sub_match}{operator>}%
 \begin{itemdecl}
 template <class BiIter> 
   bool operator>(typename iterator_traits<BiIter>::value_type const& lhs, 
@@ -2422,8 +2370,7 @@ template <class BiIter>
 \returns \tcode{rhs < lhs}.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{sub_match}!\idxcode{operator>=}}%
-\indexlibrary{\idxcode{operator>=}!\idxcode{sub_match}}%
+\indexlibrarymember{sub_match}{operator>=}%
 \begin{itemdecl}
 template <class BiIter> 
   bool operator>=(typename iterator_traits<BiIter>::value_type const& lhs, 
@@ -2435,8 +2382,7 @@ template <class BiIter>
 \returns \tcode{!(lhs < rhs)}.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{sub_match}!\idxcode{operator<=}}%
-\indexlibrary{\idxcode{operator<=}!\idxcode{sub_match}}%
+\indexlibrarymember{sub_match}{operator<=}%
 \begin{itemdecl}
 template <class BiIter> 
   bool operator<=(typename iterator_traits<BiIter>::value_type const& lhs, 
@@ -2448,8 +2394,7 @@ template <class BiIter>
 \returns \tcode{!(rhs < lhs)}.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{sub_match}!\idxcode{operator==}}%
-\indexlibrary{\idxcode{operator==}!\idxcode{sub_match}}%
+\indexlibrarymember{sub_match}{operator==}%
 \begin{itemdecl}
 template <class BiIter> 
   bool operator==(const sub_match<BiIter>& lhs, 
@@ -2461,8 +2406,7 @@ template <class BiIter>
 \returns \tcode{lhs.compare(typename sub_match<BiIter>::string_type(1, rhs)) == 0}.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{sub_match}!\idxcode{operator"!=}}%
-\indexlibrary{\idxcode{operator"!=}!\idxcode{sub_match}}%
+\indexlibrarymember{sub_match}{operator"!=}%
 \begin{itemdecl}
 template <class BiIter> 
   bool operator!=(const sub_match<BiIter>& lhs, 
@@ -2474,8 +2418,7 @@ template <class BiIter>
 \returns \tcode{!(lhs == rhs)}.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{sub_match}!\idxcode{operator<}}%
-\indexlibrary{\idxcode{operator<}!\idxcode{sub_match}}%
+\indexlibrarymember{sub_match}{operator<}%
 \begin{itemdecl}
 template <class BiIter> 
   bool operator<(const sub_match<BiIter>& lhs, 
@@ -2487,8 +2430,7 @@ template <class BiIter>
 \returns \tcode{lhs.compare(typename sub_match<BiIter>::string_type(1, rhs)) < 0}.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{sub_match}!\idxcode{operator>}}%
-\indexlibrary{\idxcode{operator>}!\idxcode{sub_match}}%
+\indexlibrarymember{sub_match}{operator>}%
 \begin{itemdecl}
 template <class BiIter> 
   bool operator>(const sub_match<BiIter>& lhs, 
@@ -2500,8 +2442,7 @@ template <class BiIter>
 \returns \tcode{rhs < lhs}.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{sub_match}!\idxcode{operator>=}}%
-\indexlibrary{\idxcode{operator>=}!\idxcode{sub_match}}%
+\indexlibrarymember{sub_match}{operator>=}%
 \begin{itemdecl}
 template <class BiIter> 
   bool operator>=(const sub_match<BiIter>& lhs, 
@@ -2513,8 +2454,7 @@ template <class BiIter>
 \returns \tcode{!(lhs < rhs)}.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{sub_match}!\idxcode{operator<=}}%
-\indexlibrary{\idxcode{operator<=}!\idxcode{sub_match}}%
+\indexlibrarymember{sub_match}{operator<=}%
 \begin{itemdecl}
 template <class BiIter> 
   bool operator<=(const sub_match<BiIter>& lhs, 
@@ -2527,8 +2467,7 @@ template <class BiIter>
 \end{itemdescr}
 
 \indexlibrary{\idxcode{basic_ostream}}%
-\indexlibrary{\idxcode{sub_match}!\idxcode{operator<<}}%
-\indexlibrary{\idxcode{operator<<}!\idxcode{sub_match}}%
+\indexlibrarymember{sub_match}{operator\shl}%
 \begin{itemdecl}
 template <class charT, class ST, class BiIter>
   basic_ostream<charT, ST>&
@@ -2551,9 +2490,10 @@ by the member functions of class template \tcode{match_results}.
 \indextext{requirements!container}%
 \indextext{requirements!sequence}%
 \indextext{\idxcode{match_results}!as sequence}%
-The class template \tcode{match_results} shall satisfy the requirements of an
+The class template \tcode{match_results} satisfies the requirements of an
 allocator-aware container and of a sequence container, as specified
-in~\ref{sequence.reqmts}, except that only operations defined for const-qualified
+in \ref{container.requirements.general} and \ref{sequence.reqmts} respectively,
+except that only operations defined for const-qualified
 sequence containers are supported.
 
 \pnum
@@ -2575,9 +2515,9 @@ members \tcode{first} and \tcode{second} denote the range of characters
 \range{first}{second} which formed that
 match. Otherwise \tcode{matched} is false, and members \tcode{first}
 and \tcode{second} point to the end of the sequence 
-that was searched. \enternote The \tcode{sub_match} objects representing
+that was searched. \begin{note} The \tcode{sub_match} objects representing
 different sub-expressions that did not participate in a regular expression
-match need not be distinct.\exitnote
+match need not be distinct.\end{note}
 
 \begin{codeblock}
 namespace std {
@@ -2585,18 +2525,18 @@ namespace std {
             class Allocator = allocator<sub_match<BidirectionalIterator>>>
   class match_results {
   public: 
-     typedef sub_match<BidirectionalIterator>                       value_type;
-     typedef const value_type&                                      const_reference;
-     typedef value_type&                                            reference;
-     typedef @{\impdef}@                                 const_iterator;
-     typedef const_iterator                                         iterator;
-     typedef typename
-      iterator_traits<BidirectionalIterator>::difference_type       difference_type;
-     typedef typename allocator_traits<Allocator>::size_type        size_type;
-     typedef Allocator                                              allocator_type;
-     typedef typename iterator_traits<BidirectionalIterator>::
-       value_type                                                   char_type;
-     typedef basic_string<char_type>                                string_type;
+     using value_type      = sub_match<BidirectionalIterator>;
+     using const_reference = const value_type&;
+     using reference       = value_type&;
+     using const_iterator  = @{\impdef}@;
+     using iterator        = const_iterator;
+     using difference_type =
+             typename iterator_traits<BidirectionalIterator>::difference_type;
+     using size_type       = typename allocator_traits<Allocator>::size_type;
+     using allocator_type  = Allocator;
+     using char_type       =
+             typename iterator_traits<BidirectionalIterator>::value_type;
+     using string_type     = basic_string<char_type>;
 
      // \ref{re.results.const}, construct/copy/destroy:
      explicit match_results(const Allocator& a = Allocator());
@@ -2665,7 +2605,7 @@ In all \tcode{match_results} constructors, a copy of the \tcode{Allocator} argum
 shall be used for any memory allocation performed by the constructor
 or member functions during the lifetime of the object.
 
-\indexlibrary{\idxcode{match_results}!\idxcode{match_results}}%
+\indexlibrary{\idxcode{match_results}!constructor}%
 \begin{itemdecl}
 match_results(const Allocator& a = Allocator()); 
 \end{itemdecl}
@@ -2680,7 +2620,7 @@ match_results(const Allocator& a = Allocator());
 \tcode{size()} returns \tcode{0}.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{match_results}!\idxcode{match_results}}%
+\indexlibrary{\idxcode{match_results}!constructor}%
 \begin{itemdecl}
 match_results(const match_results& m); 
 \end{itemdecl}
@@ -2691,14 +2631,14 @@ match_results(const match_results& m);
 copy of \tcode{m}.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{match_results}!\idxcode{match_results}}%
+\indexlibrary{\idxcode{match_results}!constructor}%
 \begin{itemdecl}
 match_results(match_results&& m) noexcept;
 \end{itemdecl}
 
 \begin{itemdescr}
 \pnum
-\effects\ Move-constructs an object of class \tcode{match_results} from \tcode{m}
+\effects\ Move constructs an object of class \tcode{match_results} from \tcode{m}
 satisfying the same postconditions as Table~\ref{tab:re:results:assign}. Additionally,
 the stored \tcode{Allocator} value is move constructed from \tcode{m.get_allocator()}.
 
@@ -2706,8 +2646,7 @@ the stored \tcode{Allocator} value is move constructed from \tcode{m.get_allocat
 \throws Nothing.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{match_results}!\idxcode{operator=}}%
-\indexlibrary{\idxcode{operator=}!\idxcode{match_results}}%
+\indexlibrarymember{match_results}{operator=}%
 \begin{itemdecl}
 match_results& operator=(const match_results& m); 
 \end{itemdecl}
@@ -2718,8 +2657,7 @@ match_results& operator=(const match_results& m);
 function are indicated in Table~\ref{tab:re:results:assign}.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{match_results}!\idxcode{operator=}}%
-\indexlibrary{\idxcode{operator=}!\idxcode{match_results}}%
+\indexlibrarymember{match_results}{operator=}%
 \begin{itemdecl}
 match_results& operator=(match_results&& m);
 \end{itemdecl}
@@ -2745,8 +2683,7 @@ are indicated in Table~\ref{tab:re:results:assign}.
 
 \rSec2[re.results.state]{\tcode{match_results} state}
 
-\indexlibrary{\idxcode{match_results}!\idxcode{state}}%
-\indexlibrary{\idxcode{state}!\idxcode{match_results}}%
+\indexlibrarymember{match_results}{state}%
 \begin{itemdecl}
 bool ready() const;
 \end{itemdecl}
@@ -2759,8 +2696,7 @@ bool ready() const;
 
 \rSec2[re.results.size]{\tcode{match_results} size}
 
-\indexlibrary{\idxcode{match_results}!\idxcode{size}}%
-\indexlibrary{\idxcode{size}!\idxcode{match_results}}%
+\indexlibrarymember{match_results}{size}%
 \begin{itemdecl}
 size_type size() const; 
 \end{itemdecl}
@@ -2769,15 +2705,14 @@ size_type size() const;
 \pnum\returns  One plus the number of marked sub-expressions in the
 regular expression that was matched if \tcode{*this} represents the
 result of a successful match.  Otherwise returns \tcode{0}.
-\enternote The state of a \tcode{match_results} object can be modified
+\begin{note} The state of a \tcode{match_results} object can be modified
 only by passing that object to \tcode{regex_match} or \tcode{regex_search}.
 Sections~\ref{re.alg.match} and~\ref{re.alg.search} specify the
 effects of those algorithms on their \tcode{match_results} arguments.
-\exitnote
+\end{note}
 \end{itemdescr}
 
-\indexlibrary{\idxcode{match_results}!\idxcode{max_size}}%
-\indexlibrary{\idxcode{max_size}!\idxcode{match_results}}%
+\indexlibrarymember{match_results}{max_size}%
 \begin{itemdecl}
 size_type max_size() const;
 \end{itemdecl}
@@ -2787,8 +2722,7 @@ size_type max_size() const;
 stored in \tcode{*this}.
 \end{itemdescr} 
 
-\indexlibrary{\idxcode{match_results}!\idxcode{empty}}%
-\indexlibrary{\idxcode{empty}!\idxcode{match_results}}%
+\indexlibrarymember{match_results}{empty}%
 \begin{itemdecl}
 bool empty() const;
 \end{itemdecl}
@@ -2799,8 +2733,7 @@ bool empty() const;
 
 \rSec2[re.results.acc]{\tcode{match_results} element access}
 
-\indexlibrary{\idxcode{length}!\idxcode{match_results}}%
-\indexlibrary{\idxcode{match_results}!\idxcode{length}}%
+\indexlibrarymember{length}{match_results}%
 \begin{itemdecl}
 difference_type length(size_type sub = 0) const;
 \end{itemdecl}
@@ -2813,8 +2746,7 @@ difference_type length(size_type sub = 0) const;
 \returns  \tcode{(*this)[sub].length()}.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{position}!\idxcode{match_results}}%
-\indexlibrary{\idxcode{match_results}!\idxcode{position}}%
+\indexlibrarymember{position}{match_results}%
 \begin{itemdecl}
 difference_type position(size_type sub = 0) const;
 \end{itemdecl}
@@ -2828,8 +2760,7 @@ difference_type position(size_type sub = 0) const;
 to \tcode{(*this)[sub].first}.
 \end{itemdescr} 
 
-\indexlibrary{\idxcode{match_results}!\idxcode{str}}%
-\indexlibrary{\idxcode{str}!\idxcode{match_results}}%
+\indexlibrarymember{match_results}{str}%
 \begin{itemdecl}
 string_type str(size_type sub = 0) const;
 \end{itemdecl}
@@ -2842,8 +2773,7 @@ string_type str(size_type sub = 0) const;
 \returns  \tcode{string_type((*this)[sub])}.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{match_results}!\idxcode{operator[]}}%
-\indexlibrary{\idxcode{operator[]}!\idxcode{match_results}}%
+\indexlibrarymember{match_results}{operator[]}%
 \begin{itemdecl}
 const_reference operator[](size_type n) const;
 \end{itemdecl}
@@ -2861,8 +2791,7 @@ character sequence that matched the whole regular expression. If
 unmatched sub-expression.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{match_results}!\idxcode{prefix}}%
-\indexlibrary{\idxcode{prefix}!\idxcode{match_results}}%
+\indexlibrarymember{match_results}{prefix}%
 \begin{itemdecl}
 const_reference prefix() const;
 \end{itemdecl}
@@ -2877,8 +2806,7 @@ character sequence from the start of the string being
 matched/searched to the start of the match found.  
 \end{itemdescr}
 
-\indexlibrary{\idxcode{match_results}!\idxcode{suffix}}%
-\indexlibrary{\idxcode{suffix}!\idxcode{match_results}}%
+\indexlibrarymember{match_results}{suffix}%
 \begin{itemdecl}
 const_reference suffix() const;
 \end{itemdecl}
@@ -2893,8 +2821,7 @@ character sequence from the end of the match found to the end of the
 string being matched/searched.  
 \end{itemdescr}
 
-\indexlibrary{\idxcode{match_results}!\idxcode{begin}}%
-\indexlibrary{\idxcode{begin}!\idxcode{match_results}}%
+\indexlibrarymember{match_results}{begin}%
 \begin{itemdecl}
 const_iterator begin() const;
 const_iterator cbegin() const;
@@ -2905,8 +2832,7 @@ const_iterator cbegin() const;
 sub-expressions stored in \tcode{*this}.
 \end{itemdescr}  
 
-\indexlibrary{\idxcode{match_results}!\idxcode{end}}%
-\indexlibrary{\idxcode{end}!\idxcode{match_results}}%
+\indexlibrarymember{match_results}{end}%
 \begin{itemdecl}
 const_iterator end() const;
 const_iterator cend() const;
@@ -2919,8 +2845,7 @@ sub-expressions stored in \tcode{*this}.
 
 \rSec2[re.results.form]{\tcode{match_results} formatting}
 
-\indexlibrary{\idxcode{match_results}!\idxcode{format}}%
-\indexlibrary{\idxcode{format}!\idxcode{match_results}}%
+\indexlibrarymember{match_results}{format}%
 \begin{itemdecl}
 template <class OutputIter>
   OutputIter format(OutputIter out,
@@ -2931,7 +2856,7 @@ template <class OutputIter>
 
 \begin{itemdescr}
 \pnum
-\requires\ ready() == true and \tcode{OutputIter} shall satisfy the requirements for an
+\requires\ \tcode{ready() == true} and \tcode{OutputIter} shall satisfy the requirements for an
 Output Iterator~(\ref{output.iterators}).
 
 \pnum
@@ -2946,8 +2871,7 @@ specifiers and escape sequences are recognized.
 \returns\ \tcode{out}.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{match_results}!\idxcode{format}}%
-\indexlibrary{\idxcode{format}!\idxcode{match_results}}%
+\indexlibrarymember{match_results}{format}%
 \begin{itemdecl}
 template <class OutputIter, class ST, class SA>
   OutputIter format(OutputIter out,
@@ -2958,12 +2882,13 @@ template <class OutputIter, class ST, class SA>
 
 \begin{itemdescr}
 \pnum
-\effects Equivalent to \tcode{return format(out, fmt.data(),}
-\tcode{fmt.data() + fmt.size(), flags)}.
+\effects Equivalent to:
+\begin{codeblock}
+return format(out, fmt.data(), fmt.data() + fmt.size(), flags);
+\end{codeblock}
 \end{itemdescr}
 
-\indexlibrary{\idxcode{match_results}!\idxcode{format}}%
-\indexlibrary{\idxcode{format}!\idxcode{match_results}}%
+\indexlibrarymember{match_results}{format}%
 \begin{itemdecl}
 template <class ST, class SA>
   basic_string<char_type, ST, SA>
@@ -2979,14 +2904,16 @@ template <class ST, class SA>
 \pnum
 \effects
 Constructs an empty string \tcode{result} of type \tcode{basic_string<char_type, ST, SA>} and
-calls \tcode{format(back_inserter(result), fmt, flags)}.
+calls:
+\begin{codeblock}
+format(back_inserter(result), fmt, flags);
+\end{codeblock}
 
 \pnum
 \returns\ \tcode{result}.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{match_results}!\idxcode{format}}%
-\indexlibrary{\idxcode{format}!\idxcode{match_results}}%
+\indexlibrarymember{match_results}{format}%
 \begin{itemdecl}
 string_type
   format(const char_type* fmt,
@@ -3000,18 +2927,19 @@ string_type
 
 \pnum
 \effects\ Constructs an empty string \tcode{result} of type \tcode{string_type} and
-calls\linebreak \tcode{format(back_inserter(result), fmt, fmt +
-char_traits<char_type>::length(fmt), flags)}.
+calls:
+\begin{codeblock}
+format(back_inserter(result),
+       fmt, fmt + char_traits<char_type>::length(fmt), flags);
+\end{codeblock}
 
 \pnum
 \returns\ \tcode{result}.
 \end{itemdescr}
 
 \rSec2[re.results.all]{\tcode{match_results} allocator}%
-\indexlibrary{allocator}
 
-\indexlibrary{\idxcode{get_allocator}!\idxcode{match_results}}%
-\indexlibrary{\idxcode{match_results}!\idxcode{get_allocator}}%
+\indexlibrarymember{get_allocator}{match_results}%
 \begin{itemdecl}
 allocator_type get_allocator() const;
 \end{itemdecl}
@@ -3024,8 +2952,7 @@ allocator has been replaced, a copy of the most recent replacement.
 
 \rSec2[re.results.swap]{\tcode{match_results} swap}
 
-\indexlibrary{\idxcode{match_results}!\idxcode{swap}}%
-\indexlibrary{\idxcode{swap}!\idxcode{match_results}}%
+\indexlibrarymember{match_results}{swap}%
 \begin{itemdecl}
 void swap(match_results& that); 
 \end{itemdecl}
@@ -3040,20 +2967,18 @@ sequence of matched sub-expressions that were in \tcode{*this}.
 \pnum\complexity Constant time. 
 \end{itemdescr}
 
-\indexlibrary{\idxcode{match_results}!\idxcode{swap}}%
-\indexlibrary{\idxcode{swap}!\idxcode{match_results}}%
+\indexlibrarymember{match_results}{swap}%
 \begin{itemdecl}
 template <class BidirectionalIterator, class Allocator>
   void swap(match_results<BidirectionalIterator, Allocator>& m1,
             match_results<BidirectionalIterator, Allocator>& m2);
 \end{itemdecl}
 
-\pnum\effects \tcode{m1.swap(m2)}.
+\pnum\effects As if by \tcode{m1.swap(m2)}.
 
 \rSec2[re.results.nonmember]{\tcode{match_results} non-member functions}
 
-\indexlibrary{\idxcode{operator==}!\idxcode{match_results}}%
-\indexlibrary{\idxcode{match_results}!\idxcode{operator==}}%
+\indexlibrarymember{operator==}{match_results}%
 \begin{itemdecl}
 template <class BidirectionalIterator, class Allocator>
 bool operator==(const match_results<BidirectionalIterator, Allocator>& m1,
@@ -3084,7 +3009,7 @@ other is not. If both match results are ready, returns \tcode{true} only if:
 \tcode{m1.suffix() == m2.suffix()}.
 \end{itemize}
 \end{itemize}
-\enternote The algorithm \tcode{equal} is defined in Clause~\ref{algorithms}. \exitnote
+\begin{note} The algorithm \tcode{equal} is defined in Clause~\ref{algorithms}. \end{note}
 \end{itemdescr}
 
 \indexlibrary{\idxcode{operator"!=}!\idxcode{match_results}}%
@@ -3130,8 +3055,20 @@ of a Bidirectional Iterator ~(\ref{bidirectional.iterators}).
 regular expression \tcode{e}, and all of the character
 sequence \range{first}{last}. The parameter \tcode{flags} is
 used to control how the expression is matched against the character
-sequence. Returns \tcode{true} if such a match exists, \tcode{false}
+sequence. When determining if there is a match, only potential matches
+that match the entire character sequence are considered.
+Returns \tcode{true} if such a match exists, \tcode{false}
 otherwise.
+\begin{example}
+\begin{codeblock}
+std::regex re("Get|GetValue");
+std::cmatch m;
+regex_search("GetValue", m, re);	// returns true, and m[0] contains "Get"
+regex_match ("GetValue", m, re);	// returns true, and m[0] contains "GetValue"
+regex_search("GetValues", m, re);	// returns true, and m[0] contains "Get"
+regex_match ("GetValues", m, re);	// returns false
+\end{codeblock}
+\end{example}
 
 \pnum
 \postconditions
@@ -3222,8 +3159,8 @@ template <class BidirectionalIterator, class charT, class traits>
 \pnum
 \effects  Behaves ``as if'' by constructing an instance of
 \tcode{match_results<BidirectionalIterator> what}, and then 
-returning the result of \tcode{regex_match(first, last, what, e,
-flags)}.
+returning the result of
+\tcode{regex_match(first, last, what, e, flags)}.
 \end{itemdescr}
 
 \indexlibrary{\idxcode{regex_match}}%
@@ -3428,7 +3365,7 @@ template <class BidirectionalIterator, class charT, class traits>
 \begin{itemdescr}
 \pnum
 \effects  Behaves ``as if'' by constructing an object \tcode{what}
-of type \tcode{match_results<BidirectionalIterator>} and then returning
+of type \tcode{match_results<BidirectionalIterator>}, and then returning
 the result of \tcode{regex_search(first, last, what, e, flags)}.
 \end{itemdescr}
 
@@ -3443,8 +3380,7 @@ template <class charT, class traits>
 
 \begin{itemdescr}
 \pnum
-\returns  \tcode{regex_search(str, str + char_traits<charT>::length(str), 
-e, flags)}
+\returns \tcode{regex_search(str, str + char_traits<charT>::length(str), e, flags)}.
 \end{itemdescr}
 
 \indexlibrary{\idxcode{regex_search}}%
@@ -3498,8 +3434,8 @@ and uses \tcode{i} to enumerate through all
 of the matches \tcode{m} of type \tcode{match_results<BidirectionalIterator>} 
 that occur within the sequence \range{first}{last}.
 If no such
-matches are found and \tcode{!(flags \&
-regex_constants::format_no_copy)} then calls
+matches are found and
+\tcode{!(flags \& regex_constants::format_no_copy)}, then calls
 \begin{codeblock}
 out = std::copy(first, last, out)
 \end{codeblock}
@@ -3529,7 +3465,7 @@ out = std::copy(last_m.suffix().first, last_m.suffix().second, out)
 \end{codeblock}
 where \tcode{last_m} is a copy of the last match
 found. If \tcode{flags \& regex_constants::format_first_only} 
-is non-zero then only the first match found is replaced.
+is non-zero, then only the first match found is replaced.
 
 \pnum\returns  \tcode{out}.
 \end{itemdescr}
@@ -3554,9 +3490,10 @@ template <class traits, class charT, class ST, class SA>
 
 \begin{itemdescr}
 \pnum\effects  Constructs an empty string \tcode{result} of
-type \tcode{basic_string<charT, ST, SA>} and calls 
-\tcode{regex_replace(back_inserter(result), s.begin(), s.end(), e, fmt,
-flags)}.
+type \tcode{basic_string<charT, ST, SA>} and calls: 
+\begin{codeblock}
+regex_replace(back_inserter(result), s.begin(), s.end(), e, fmt, flags);
+\end{codeblock}
 
 \pnum
 \returns\ \tcode{result}.
@@ -3583,10 +3520,11 @@ template <class traits, class charT>
 \begin{itemdescr}
 \pnum
 \effects  Constructs an empty string \tcode{result} of
-type \tcode{basic_string<charT>} and calls 
-\tcode{regex_replace(}
-\tcode{back_inserter(result), s, s + char_traits<charT>::length(s), e, fmt,
-flags)}.
+type \tcode{basic_string<charT>} and calls: 
+\begin{codeblock}
+regex_replace(back_inserter(result),
+              s, s + char_traits<charT>::length(s), e, fmt, flags);
+\end{codeblock}
 
 \pnum
 \returns\ \tcode{result}.
@@ -3629,13 +3567,13 @@ namespace std {
               class traits = regex_traits<charT> >
   class regex_iterator {
   public:
-     typedef basic_regex<charT, traits>           regex_type;
-     typedef match_results<BidirectionalIterator> value_type;
-     typedef std::ptrdiff_t                       difference_type;
-     typedef const value_type*                    pointer;
-     typedef const value_type&                    reference;
-     typedef std::forward_iterator_tag            iterator_category;
-   
+     using regex_type        = basic_regex<charT, traits>;
+     using iterator_category = std::forward_iterator_tag;
+     using value_type        = match_results<BidirectionalIterator>;
+     using difference_type   = std::ptrdiff_t;
+     using pointer           = const value_type*;
+     using reference         = const value_type&;
+
      regex_iterator();
      regex_iterator(BidirectionalIterator a, BidirectionalIterator b, 
                     const regex_type& re, 
@@ -3667,14 +3605,14 @@ namespace std {
 \indextext{\idxcode{regex_iterator}!end-of-sequence}%
 An object of type \tcode{regex_iterator} that is not an end-of-sequence iterator
 holds a \textit{zero-length match} if \tcode{match[0].matched == true} and
-\tcode{match[0].first == match[0].second}. \enternote For
+\tcode{match[0].first == match[0].second}. \begin{note} For
 example, this can occur when the part of the regular expression that
 matched consists only of an assertion (such as \verb|'^'|, \verb|'$'|, 
-\tcode{'$\backslash$b'}, \tcode{'$\backslash$B'}). \exitnote
+\tcode{'$\backslash$b'}, \tcode{'$\backslash$B'}). \end{note}
 
 \rSec3[re.regiter.cnstr]{\tcode{regex_iterator} constructors}
 
-\indexlibrary{\idxcode{regex_iterator}!\idxcode{regex_iterator}}%
+\indexlibrary{\idxcode{regex_iterator}!constructor}%
 \begin{itemdecl}
 regex_iterator(); 
 \end{itemdecl}
@@ -3683,7 +3621,7 @@ regex_iterator();
 \pnum\effects  Constructs an end-of-sequence iterator.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{regex_iterator}!\idxcode{regex_iterator}}%
+\indexlibrary{\idxcode{regex_iterator}!constructor}%
 \begin{itemdecl}
 regex_iterator(BidirectionalIterator a, BidirectionalIterator b, 
                const regex_type& re, 
@@ -3701,8 +3639,7 @@ iterator.
 
 \rSec3[re.regiter.comp]{\tcode{regex_iterator} comparisons}
 
-\indexlibrary{\idxcode{regex_iterator}!\idxcode{operator==}}%
-\indexlibrary{\idxcode{operator==}!\idxcode{regex_iterator}}%
+\indexlibrarymember{regex_iterator}{operator==}%
 \begin{itemdecl}
 bool operator==(const regex_iterator& right) const;
 \end{itemdecl}
@@ -3721,8 +3658,7 @@ iterators or if the following conditions all hold:
 otherwise \tcode{false}.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{regex_iterator}!\idxcode{operator"!=}}%
-\indexlibrary{\idxcode{operator"!=}!\idxcode{regex_iterator}}%
+\indexlibrarymember{regex_iterator}{operator"!=}%
 \begin{itemdecl}
 bool operator!=(const regex_iterator& right) const;
 \end{itemdecl}
@@ -3733,8 +3669,7 @@ bool operator!=(const regex_iterator& right) const;
 
 \rSec3[re.regiter.deref]{\tcode{regex_iterator} indirection}
 
-\indexlibrary{\idxcode{regex_iterator}!\idxcode{operator*}}%
-\indexlibrary{\idxcode{operator*}!\idxcode{regex_iterator}}%
+\indexlibrarymember{regex_iterator}{operator*}%
 \begin{itemdecl}
 const value_type& operator*() const;
 \end{itemdecl}
@@ -3743,8 +3678,7 @@ const value_type& operator*() const;
 \pnum\returns  \tcode{match}.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{operator->}!\idxcode{regex_iterator}}%
-\indexlibrary{\idxcode{regex_iterator}!\idxcode{operator->}}%
+\indexlibrarymember{operator->}{regex_iterator}%
 \begin{itemdecl}
 const value_type* operator->() const;
 \end{itemdecl}
@@ -3755,8 +3689,7 @@ const value_type* operator->() const;
 
 \rSec3[re.regiter.incr]{\tcode{regex_iterator} increment}
 
-\indexlibrary{\idxcode{regex_iterator}!\idxcode{operator++}}%
-\indexlibrary{\idxcode{operator++}!\idxcode{regex_iterator}}%
+\indexlibrarymember{regex_iterator}{operator++}%
 \indexlibrary{\idxcode{regex_iterator}!increment}%
 \begin{itemdecl}
 regex_iterator& operator++(); 
@@ -3797,29 +3730,29 @@ In all cases in which the call to \tcode{regex_search} returns \tcode{true},
 shall return \tcode{distance(begin, match[i].\brk{}first)}.
 
 \pnum
-\enternote This means that \tcode{match.position(i)} gives the
+\begin{note} This means that \tcode{match.position(i)} gives the
 offset from the beginning of the target sequence, which is often not
 the same as the offset from the sequence passed in the call
-to \tcode{regex_search}. \exitnote
+to \tcode{regex_search}. \end{note}
 
 \pnum
 It is unspecified how the implementation makes these adjustments.
 
 \pnum
-\enternote This means that a compiler may call an
+\begin{note} This means that a compiler may call an
 implementation-specific search function, in which case a user-defined
 specialization of \tcode{regex_search} will not be
-called. \exitnote
+called. \end{note}
 \end{itemdescr}
 
-\indexlibrary{\idxcode{regex_iterator}!\idxcode{operator++}}%
-\indexlibrary{\idxcode{operator++}!\idxcode{regex_iterator}}%
+\indexlibrarymember{regex_iterator}{operator++}%
 \begin{itemdecl}
 regex_iterator operator++(int); 
 \end{itemdecl}
 
 \begin{itemdescr}
 \pnum\effects
+As if by:
 \begin{codeblock}
 regex_iterator tmp = *this;
 ++(*this);
@@ -3879,8 +3812,7 @@ is not defined. For any other iterator value a \tcode{const
 sub_match<BidirectionalIterator>*} is returned.
 
 \pnum
-\indexlibrary{\idxcode{regex_token_iterator}!\idxcode{operator==}}%
-\indexlibrary{\idxcode{operator==}!\idxcode{regex_token_iterator}}%
+\indexlibrarymember{regex_token_iterator}{operator==}%
 It is impossible to store things
 into \tcode{regex_token_iterator}s. Two end-of-sequence iterators are always
 equal. An end-of-sequence iterator is not equal to a
@@ -3895,12 +3827,12 @@ namespace std {
               class traits = regex_traits<charT> >
   class regex_token_iterator  {
   public:
-    typedef basic_regex<charT, traits>       regex_type;
-    typedef sub_match<BidirectionalIterator> value_type;
-    typedef std::ptrdiff_t                   difference_type;
-    typedef const value_type*                pointer;
-    typedef const value_type&                reference;
-    typedef std::forward_iterator_tag        iterator_category;
+    using regex_type        = basic_regex<charT, traits>;
+    using iterator_category = std::forward_iterator_tag;
+    using value_type        = sub_match<BidirectionalIterator>;
+    using difference_type   = std::ptrdiff_t;
+    using pointer           = const value_type*;
+    using reference         = const value_type&;
 
     regex_token_iterator();
     regex_token_iterator(BidirectionalIterator a, BidirectionalIterator b, 
@@ -3954,13 +3886,13 @@ namespace std {
     regex_token_iterator& operator++();
     regex_token_iterator operator++(int);
   private:
-    typedef
-      regex_iterator<BidirectionalIterator, charT, traits> position_iterator; // \expos
-    position_iterator position;                                               // \expos
-    const value_type* result;                                                 // \expos
-    value_type suffix;                                                        // \expos
-    std::size_t N;                                                            // \expos
-    std::vector<int> subs;                                                    // \expos
+    using position_iterator =
+          regex_iterator<BidirectionalIterator, charT, traits>; // \expos
+    position_iterator position;                                 // \expos
+    const value_type* result;                                   // \expos
+    value_type suffix;                                          // \expos
+    std::size_t N;                                              // \expos
+    std::vector<int> subs;                                      // \expos
   };
 }
 \end{codeblock}
@@ -3976,10 +3908,10 @@ final sequence, and \tcode{suffix.second} points to the end of the
 final sequence. 
 
 \pnum
-\enternote For a suffix iterator, data
+\begin{note} For a suffix iterator, data
 member \tcode{suffix.first} is the same as the end of the last match
 found, and \tcode{suffix\brk.second} is the same as the end of the target
-sequence \exitnote
+sequence \end{note}
 
 \pnum
 The \textit{current match} is \tcode{(*position).prefix()} if \tcode{subs[N] == -1}, or
@@ -3987,7 +3919,7 @@ The \textit{current match} is \tcode{(*position).prefix()} if \tcode{subs[N] == 
 
 \rSec3[re.tokiter.cnstr]{\tcode{regex_token_iterator} constructors}
 
-\indexlibrary{\idxcode{regex_token_iterator}!\idxcode{regex_token_iterator}}%
+\indexlibrary{\idxcode{regex_token_iterator}!constructor}%
 \begin{itemdecl}
 regex_token_iterator(); 
 \end{itemdecl}
@@ -3997,7 +3929,7 @@ regex_token_iterator();
 \effects  Constructs the end-of-sequence iterator.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{regex_token_iterator}!\idxcode{regex_token_iterator}}%
+\indexlibrary{\idxcode{regex_token_iterator}!constructor}%
 \begin{itemdecl}
 regex_token_iterator(BidirectionalIterator a, BidirectionalIterator b, 
                     const regex_type& re, 
@@ -4050,8 +3982,7 @@ sets \tcode{*this} to an end-of-sequence iterator.
 
 \rSec3[re.tokiter.comp]{\tcode{regex_token_iterator} comparisons}
 
-\indexlibrary{\idxcode{regex_token_iterator}!\idxcode{operator==}}%
-\indexlibrary{\idxcode{operator==}!\idxcode{regex_token_iterator}}%
+\indexlibrarymember{regex_token_iterator}{operator==}%
 \begin{itemdecl}
 bool operator==(const regex_token_iterator& right) const;
 \end{itemdecl}
@@ -4065,8 +3996,7 @@ iterator or a suffix iterator. Otherwise returns \tcode{true} if \tcode{position
 \tcode{N == right.N}, and \tcode{subs == right.subs}. Otherwise returns \tcode{false}.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{regex_token_iterator}!\idxcode{operator"!=}}%
-\indexlibrary{\idxcode{operator"!=}!\idxcode{regex_token_iterator}}%
+\indexlibrarymember{regex_token_iterator}{operator"!=}%
 \begin{itemdecl}
 bool operator!=(const regex_token_iterator& right) const;
 \end{itemdecl}
@@ -4077,8 +4007,7 @@ bool operator!=(const regex_token_iterator& right) const;
 
 \rSec3[re.tokiter.deref]{\tcode{regex_token_iterator} indirection}
 
-\indexlibrary{\idxcode{regex_token_iterator}!\idxcode{operator*}}%
-\indexlibrary{\idxcode{operator*}!\idxcode{regex_token_iterator}}%
+\indexlibrarymember{regex_token_iterator}{operator*}%
 \begin{itemdecl}
 const value_type& operator*() const;
 \end{itemdecl}
@@ -4088,8 +4017,7 @@ const value_type& operator*() const;
 \end{itemdescr}
 
 
-\indexlibrary{\idxcode{operator->}!\idxcode{regex_token_iterator}}%
-\indexlibrary{\idxcode{regex_token_iterator}!\idxcode{operator->}}%
+\indexlibrarymember{operator->}{regex_token_iterator}%
 \begin{itemdecl}
 const value_type* operator->() const;
 \end{itemdecl}
@@ -4101,8 +4029,7 @@ const value_type* operator->() const;
 
 \rSec3[re.tokiter.incr]{\tcode{regex_token_iterator} increment}
 
-\indexlibrary{\idxcode{regex_token_iterator}!\idxcode{operator++}}%
-\indexlibrary{\idxcode{operator++}!\idxcode{regex_token_iterator}}%
+\indexlibrarymember{regex_token_iterator}{operator++}%
 \begin{itemdecl}
 regex_token_iterator& operator++(); 
 \end{itemdecl}
@@ -4135,11 +4062,10 @@ suffix iterator that points to the range \range{prev->suffix().first}{prev->suff
 \pnum
 Otherwise, sets \tcode{*this} to an end-of-sequence iterator.
 
-\returns  \tcode{*this}
+\pnum\returns  \tcode{*this}
 \end{itemdescr}
 
-\indexlibrary{\idxcode{regex_token_iterator}!\idxcode{operator++}}%
-\indexlibrary{\idxcode{operator++}!\idxcode{regex_token_iterator}}%
+\indexlibrarymember{regex_token_iterator}{operator++}%
 \begin{itemdecl}
 regex_token_iterator& operator++(int); 
 \end{itemdecl}
@@ -4168,7 +4094,7 @@ Objects of type specialization of \tcode{basic_regex} store within themselves a
 default-constructed instance of their \tcode{traits} template parameter, henceforth
 referred to as \tcode{traits_inst}. This \tcode{traits_inst} object is used to support localization
 of the regular expression; \tcode{basic_regex} member functions shall not call
-any locale dependent C or C++ API, including the formatted string input functions.
+any locale dependent C or \Cpp API, including the formatted string input functions.
 Instead they shall call the appropriate traits member function to achieve the required effect.
 
 \pnum
@@ -4277,9 +4203,9 @@ exception object of type \tcode{regex_error}.
 \indexlibrary{\idxcode{regex_error}}%
 If the \textit{CV} of a \textit{UnicodeEscapeSequence} is greater than the largest
 value that can be held in an object of type \tcode{charT} the translator shall
-throw an exception object of type \tcode{regex_error}. \enternote
+throw an exception object of type \tcode{regex_error}. \begin{note}
 This means that values of the form \tcode{"uxxxx"} that do not fit in
-a character are invalid.  \exitnote
+a character are invalid.  \end{note}
 
 \pnum
 Where the regular expression grammar requires the conversion of a sequence of characters
@@ -4348,7 +4274,7 @@ class is conducted by first converting the collating element and the equivalence
 class to sort keys using \tcode{traits::transform_primary}, and then comparing the sort
 keys for equality.
 \indextext{regular expression traits!\idxcode{transform_primary}}%
-\indextext{transform_primary@\tcode{transform_primaryl}!regular expression traits}%
+\indextext{transform_primary@\tcode{transform_primary}!regular expression traits}%
 
 \item During matching of a regular expression finite state machine against a sequence
 of characters, a character \tcode{c} is a member of a character class designated by an

@@ -11,7 +11,7 @@ Get involved:
 
 - `How to submit an editorial issue <https://github.com/cplusplus/draft/wiki/How-to-submit-an-editorial-issue>`_
 - `How to tell if an issue is editorial <https://github.com/cplusplus/draft/wiki/How-to-tell-if-an-issue-is-editorial>`_
-- `How to submit a new issue/defect report <http://isocpp.org/std/submit-a-library-issue>`_ for non-editorial issues
+- `How to submit a new issue/defect report <https://isocpp.org/std/submit-issue>`_ for non-editorial issues
 
 More information about the C++ standard can be found at `isocpp.org <http://isocpp.org/std>`_.
 
@@ -51,6 +51,7 @@ If you can't use latexmk or make for some reason, you can run LaTeX manually ins
 #. run ``makeindex libraryindex``
 #. run ``makeindex grammarindex``
 #. run ``makeindex impldefindex``
+#. run ``makeindex -s basic.gst -o xrefindex.gls xrefindex.glo``
 #. run ``pdflatex std`` twice more.
 
 Generated input files
@@ -63,16 +64,6 @@ To regenerate figures from .dot files, run::
 For example::
 
    dot -ofigstreampos.pdf -Tpdf figstreampos.dot
-
-To regenerate the grammar appendix, run the following from the source
-directory::
-
-   ../tools/makegram
-
-To regenerate the cross-references appendix, run the following from
-the source directory::
-
-   ../tools/makexref
 
 ----------------
 Acknowledgements

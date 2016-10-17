@@ -115,8 +115,15 @@ suitably adjusted to ensure static type safety.
 
 \pnum
 The descriptions of many library functions rely on the C standard library for
-the signatures and semantics of those functions. In all such cases, any use of
-the \tcode{restrict} qualifier shall be omitted.
+the semantics of those functions.
+In some cases,
+the signatures specified in this International Standard
+may be different from the signatures in the C standard library,
+and additional overloads may be declared in this International Standard,
+but the behavior and the preconditions
+(including any preconditions implied by the use of an
+ISO C \tcode{restrict} qualifier)
+are the same unless otherwise stated.
 
 \rSec1[definitions]{Definitions}
 
@@ -124,24 +131,21 @@ the \tcode{restrict} qualifier shall be omitted.
 \indexdefn{stream!arbitrary-positional}%
 a stream (described in Clause~\ref{input.output}) that can seek to any integral position within
 the length of the stream\\
-\enternote Every arbitrary-positional stream is also a repositional stream. \exitnote
+\begin{note} Every arbitrary-positional stream is also a repositional stream. \end{note}
 
 \definition{block}{defns.block}
 \indexdefn{block}%
-place a thread in the blocked state
-
-\definition{blocked thread}{defns.blocked}
-\indexdefn{thread, blocked}%
-a thread that is waiting for some condition (other than the availability of a processor) to be
-satisfied before it can continue execution\footnote{This definition is taken from POSIX.}
+a thread of execution that blocks is waiting for some condition (other than
+for the implementation to execute its execution steps) to be satisfied before
+it can continue execution past the blocking operation
 
 \definition{character}{defns.character}
 \indexdefn{character}%
-<Clauses~\ref{strings}, \ref{localization}, \ref{input.output}, and~\ref{re}>
+\defncontext{Clauses~\ref{strings}, \ref{localization}, \ref{input.output}, and~\ref{re}}
 any object which,
 when treated sequentially,
 can represent text\\
-\enternote
+\begin{note}
 The term does not mean only
 \tcode{char},
 \tcode{char16_t},
@@ -151,18 +155,18 @@ and
 objects,
 but any value that can be represented by a type
 that provides the definitions specified in these Clauses.
-\exitnote
+\end{note}
 
 \definition{character container type}{defns.character.container}
 \indexdefn{type!character container}%
 a class or a type used to
 represent a
 \term{character}\\
-\enternote
+\begin{note}
 It is used for one of the template parameters of the string,
 iostream, and regular expression class templates.
 A character container type is a POD~(\ref{basic.types}) type.
-\exitnote
+\end{note}
 
 \definition{comparison function}{defns.comparison}
 \indexdefn{function!comparison}%
@@ -173,7 +177,7 @@ relational~(\ref{expr.rel}) operators
 \indexdefn{component}%
 a group of library entities directly related as members, parameters, or
 return types\\
-\enternote
+\begin{note}
 For example, the class template
 \tcode{basic_string}
 and the non-member
@@ -181,7 +185,14 @@ function templates
 that operate on
 strings are referred to as the
 \term{string component}.
-\exitnote
+\end{note}
+
+\definition{constant subexpression}{defns.const.subexpr}
+\indexdefn{constant subexpression}%
+an expression whose evaluation as subexpression of a
+\grammarterm{conditional-expression}
+\tcode{CE}~(\ref{expr.cond}) would not prevent \tcode{CE}
+from being a core constant expression~(\ref{expr.const})
 
 \definition{deadlock}{defns.deadlock}
 \indexdefn{deadlock}%
@@ -190,14 +201,14 @@ blocked waiting for one or more of the others to satisfy some condition
 
 \definition{default behavior}{defns.default.behavior.impl}
 \indexdefn{behavior!default}%
-<implementation>
+\defncontext{implementation}
 any specific behavior provided by the implementation,
 within the scope of the
 \term{required behavior}
 
 \definition{default behavior}{defns.default.behavior.func}
 \indexdefn{behavior!default}%
-<specification>
+\defncontext{specification}
 a description of
 \term{replacement function}
 and
@@ -209,16 +220,16 @@ semantics
 a
 \term{non-reserved function}
 whose definition may be provided by a \Cpp program\\
-\enternote
+\begin{note}
 A \Cpp program may designate a handler function at various points in its execution by
 supplying a pointer to the function when calling any of the library functions that install
 handler functions (Clause~\ref{language.support}).
-\exitnote
+\end{note}
 
 \definition{iostream class templates}{defns.iostream.templates}
 templates, defined in Clause~\ref{input.output},
 that take two template arguments\\
-\enternote
+\begin{note}
 The arguments are named
 \tcode{charT}
 and
@@ -232,7 +243,7 @@ is a class which defines additional characteristics and functions
 of the character type represented by
 \tcode{charT}
 necessary to implement the iostream class templates.
-\exitnote
+\end{note}
 
 \definition{modifier function}{defns.modifier}
 \indexdefn{function!modifier}%
@@ -240,21 +251,13 @@ a class member function~(\ref{class.mfct}) other than a constructor,
 assignment operator, or destructor
 that alters the state of an object of the class
 
-\definition{move construction}{defns.move.constr}
-\indexdefn{construction!move}%
-direct-initialization of an object of some type with an rvalue of the same type
-
 \definition{move assignment}{defns.move.assign}
 \indexdefn{assignment!move}%
 assignment of an rvalue of some object type to a modifiable lvalue of the same type
 
-\definition{object state}{defns.obj.state}
-\indexdefn{state!object}%
-the current value of all non-static class members of an object~(\ref{class.mem})\\
-\enternote
-The state of an object can be obtained by using one or more
-\term{observer functions}.
-\exitnote
+\definition{move construction}{defns.move.constr}
+\indexdefn{construction!move}%
+direct-initialization of an object of some type with an rvalue of the same type
 
 \definition{NTCTS}{defns.ntcts}
 \indexdefn{NTCTS}%
@@ -265,33 +268,41 @@ that precede the terminating null character type
 value
 \tcode{charT()}
 
+\definition{object state}{defns.obj.state}
+\indexdefn{state!object}%
+the current value of all non-static class members of an object~(\ref{class.mem})\\
+\begin{note}
+The state of an object can be obtained by using one or more
+\term{observer functions}.
+\end{note}
+
 \definition{observer function}{defns.observer}
 \indexdefn{function!observer}%
 a class member function~(\ref{class.mfct}) that accesses the state of an object of the class 
 but does not alter that state\\
-\enternote
+\begin{note}
 Observer functions are specified as
 \tcode{const}
 member functions~(\ref{class.this}).
-\exitnote
+\end{note}
 
 \definition{referenceable type}{defns.referenceable}
 \indexdefn{type!referenceable}
 An object type, a function type that does not have cv-qualifiers or a
 \grammarterm{ref-qualifier}, or a reference type.
-\enternote The term describes a type to which a reference can be created,
-including reference types. \exitnote
+\begin{note} The term describes a type to which a reference can be created,
+including reference types. \end{note}
 
 \definition{replacement function}{defns.replacement}
 \indexdefn{function!replacement}%
 a
 \term{non-reserved function}
 whose definition is provided by a \Cpp program\\
-\enternote
+\begin{note}
 Only one definition for such a function is in effect for the duration of the program's
 execution, as the result of creating the program~(\ref{lex.phases}) and resolving the
 definitions of all translation units~(\ref{basic.link}).
-\exitnote
+\end{note}
 
 \definition{repositional stream}{defns.repositional.stream}
 \indexdefn{stream!repositional}%
@@ -307,50 +318,50 @@ and
 semantics
 applicable to both the behavior provided by the implementation and
 the behavior of any such function definition in the program\\
-\enternote
+\begin{note}
 If such a function defined in a \Cpp program fails to meet the required
 behavior when it executes, the behavior is undefined.%
 \indextext{undefined}
-\exitnote
+\end{note}
 
 \definition{reserved function}{defns.reserved.function}
 \indexdefn{function!reserved}%
 a function, specified as part of the \Cpp standard library, that must be defined by the
 implementation\\
-\enternote
+\begin{note}
 If a \Cpp program provides a definition for any reserved function, the results are undefined.%
 \indextext{undefined}
-\exitnote
+\end{note}
 
 \definition{stable algorithm}{defns.stable}
 \indexdefn{algorithm!stable}%
 \indexdefn{stable algorithm}%
 an algorithm that preserves, as appropriate to the particular algorithm, the order
 of elements\\
-\enternote Requirements for stable algorithms are given in~\ref{algorithm.stable}. \exitnote
+\begin{note} Requirements for stable algorithms are given in~\ref{algorithm.stable}. \end{note}
 
 \definition{traits class}{defns.traits}
 \indexdefn{traits}%
 a class that encapsulates a set of types and functions necessary for class templates and
 function templates to manipulate objects of types for which they are instantiated\\
-\enternote
+\begin{note}
 Traits classes defined in Clauses~\ref{strings}, \ref{localization} and~\ref{input.output} are
 \term{character traits}, which provide the character handling support needed by the string and
 iostream classes.
-\exitnote
+\end{note}
 
 \definition{unblock}{defns.unblock}
 \indexdefn{unblock}%
-place a thread in the unblocked state
+satisfy a condition that one or more blocked threads of execution are waiting for
 
 \definition{valid but unspecified state}{defns.valid}
 \indexdefn{valid but unspecified state}%
 an object state that is not specified except that the object's invariants are
 met and operations on the object behave as specified for its type\\
-\enterexample If an object \tcode{x} of type \tcode{std::vector<int>} is in a
+\begin{example} If an object \tcode{x} of type \tcode{std::vector<int>} is in a
 valid but unspecified state, \tcode{x.empty()} can be called unconditionally,
 and \tcode{x.front()} can be called only if \tcode{x.empty()} returns
-\tcode{false}. \exitexample
+\tcode{false}. \end{example}
 
 \rSec1[defns.additional]{Additional definitions}
 
@@ -379,7 +390,7 @@ there will be no ``Requirements'' subclause.}
 \item Summary
 \item Requirements
 \item Detailed specifications
-\item References to the Standard C library
+\item References to the C standard library
 \end{itemize}
 
 \rSec3[structure.summary]{Summary}
@@ -492,7 +503,7 @@ preconditions, there will be no ``Requires'' paragraph.}
 \item \returns a description of the value(s) returned by the function
 \item \throws any exceptions thrown by the function, and the conditions that would cause the exception
 \item \complexity the time and/or space complexity of the function
-\item \notes additional semantic constraints on the function
+\item \remarks additional semantic constraints on the function
 \item \errors the error conditions for error codes reported by the function.
 \item \realnotes non-normative comments about the function
 \end{itemize}
@@ -503,7 +514,7 @@ Whenever the \effects element specifies that the semantics of some function
 interpreted as follows. If \tcode{F}'s semantics specifies a \requires element, then
 that requirement is logically imposed prior to the \techterm{equivalent-to} semantics.
 Next, the semantics of the code sequence are determined by the \requires, \effects,
-\postconditions, \returns, \throws, \complexity, \notes, \errors, and \realnotes
+\sync, \postconditions, \returns, \throws, \complexity, \remarks, \errors, and \realnotes
 specified for the function invocations contained in the code sequence. The value
 returned from \tcode{F} is specified by \tcode{F}'s \returns element, or if \tcode{F}
 has no \returns element, a non-\tcode{void} return from \tcode{F} is specified by the
@@ -546,8 +557,7 @@ constants~(\ref{syserr}).
 
 \pnum
 Paragraphs labeled ``\xref'' contain cross-references to the relevant portions
-of this International Standard and the ISO C standard,
-which is incorporated into this International Standard by reference.
+of this International Standard and the ISO C standard.
 
 \rSec2[conventions]{Other conventions}
 \indextext{conventions}%
@@ -719,8 +729,7 @@ A
 is any of the 26 lowercase or 26
 \indextext{lowercase}%
 \indextext{uppercase}%
-uppercase letters in the basic execution character set.\footnote{Note that
-this definition differs from the definition in ISO C 7.1.1.}
+uppercase letters in the basic execution character set.
 \item
 The
 \term{decimal-point character}
@@ -860,8 +869,8 @@ signatures, or for virtual destructors that can be generated by default.
 For the sake of exposition, the library clauses sometimes annotate
 constructors with \EXPLICIT{}. Such a constructor is conditionally declared
 as either explicit or non-explicit~(\ref{class.conv.ctor}).
-\enternote This is typically implemented by declaring two such constructors,
-of which at most one participates in overload resolution. \exitnote
+\begin{note} This is typically implemented by declaring two such constructors,
+of which at most one participates in overload resolution. \end{note}
 
 \rSec3[objects.within.classes]{Private members}
 
@@ -874,11 +883,10 @@ semantics of the member functions specified in Clauses~\ref{\firstlibchapter}
 through~\ref{\lastlibchapter} and Annex~\ref{depr}.
 
 \pnum
-Objects of certain classes are sometimes required by the external specifications of
-their classes to store data, apparently in member objects. For the sake of exposition,
+For the sake of exposition,
 some subclauses provide representative declarations, and semantic requirements, for
-private member objects of classes that meet the external specifications of the classes.
-The declarations for such member objects and the definitions of related member types are
+private members of classes that meet the external specifications of the classes.
+The declarations for such members are
 followed by a comment that ends with \expos, as in:
 
 \begin{codeblock}
@@ -959,86 +967,108 @@ file names~(\ref{cpp.include}). }
 
 \pnum
 The \Cpp standard library provides
-53
+61
 \term{\Cpp library headers},
 \indextext{header!C++ library}%
 as shown in Table~\ref{tab:cpp.library.headers}.
 
 \begin{floattable}{\Cpp library headers}{tab:cpp.library.headers}
-{lllll}
+{llll}
 \topline
-
 \tcode{<algorithm>} &
-\tcode{<fstream>} &
-\tcode{<list>} &
-\tcode{<regex>} &
-\tcode{<tuple>} \\
+\tcode{<future>} &
+\tcode{<numeric>} &
+\tcode{<strstream>} \\
+
+\tcode{<any>} &
+\tcode{<initializer_list>} &
+\tcode{<optional>} &
+\tcode{<system_error>} \\
 
 \tcode{<array>} &
-\tcode{<functional>} &
-\tcode{<locale>} &
-\tcode{<scoped_allocator>} &
-\tcode{<type_traits>} \\
+\tcode{<iomanip>} &
+\tcode{<ostream>} &
+\tcode{<thread>} \\
 
 \tcode{<atomic>} &
-\tcode{<future>} &
-\tcode{<map>} &
-\tcode{<set>} &
-\tcode{<typeindex>} \\
+\tcode{<ios>} &
+\tcode{<queue>} &
+\tcode{<tuple>} \\
 
 \tcode{<bitset>} &
-\tcode{<initializer_list>} &
-\tcode{<memory>} &
-\tcode{<sstream>} &
-\tcode{<typeinfo>} \\
+\tcode{<iosfwd>} &
+\tcode{<random>} &
+\tcode{<type_traits>} \\
 
 \tcode{<chrono>} &
-\tcode{<iomanip>} &
-\tcode{<mutex>} &
-\tcode{<stack>} &
-\tcode{<unordered_map>} \\
+\tcode{<iostream>} &
+\tcode{<ratio>} &
+\tcode{<typeindex>} \\
 
 \tcode{<codecvt>} &
-\tcode{<ios>} &
-\tcode{<new>} &
-\tcode{<stdexcept>} &
-\tcode{<unordered_set>} \\
+\tcode{<istream>} &
+\tcode{<regex>} &
+\tcode{<typeinfo>} \\
 
 \tcode{<complex>} &
-\tcode{<iosfwd>} &
-\tcode{<numeric>} &
-\tcode{<streambuf>} &
-\tcode{<utility>} \\
+\tcode{<iterator>} &
+\tcode{<scoped_allocator>} &
+\tcode{<unordered_map>} \\
 
 \tcode{<condition_variable>} &
-\tcode{<iostream>} &
-\tcode{<ostream>} &
-\tcode{<string>} &
-\tcode{<valarray>} \\
+\tcode{<limits>} &
+\tcode{<set>} &
+\tcode{<unordered_set>} \\
 
 \tcode{<deque>} &
-\tcode{<istream>} &
-\tcode{<queue>} &
-\tcode{<strstream>} &
-\tcode{<vector>} \\
+\tcode{<list>} &
+\tcode{<shared_mutex>} &
+\tcode{<utility>} \\
 
 \tcode{<exception>} &
-\tcode{<iterator>} &
-\tcode{<random>} &
-\tcode{<system_error>} & \\
+\tcode{<locale>} &
+\tcode{<sstream>} &
+\tcode{<valarray>} \\
+
+\tcode{<execution>} &
+\tcode{<map>} &
+\tcode{<stack>} &
+\tcode{<variant>} \\
+
+\tcode{<filesystem>} &
+\tcode{<memory>} &
+\tcode{<stdexcept>} &
+\tcode{<vector>} \\
 
 \tcode{<forward_list>} &
-\tcode{<limits>} &
-\tcode{<ratio>} &
-\tcode{<thread>} & \\
+\tcode{<memory_resource>} &
+\tcode{<streambuf>} &
+\\
 
+\tcode{<fstream>} &
+\tcode{<mutex>} &
+\tcode{<string>} &
+\\
+
+\tcode{<functional>} &
+\tcode{<new>} &
+\tcode{<string_view>} &
+\\
 \end{floattable}
 
 
 \pnum
-The facilities of the C standard Library are provided in 26
+The facilities of the C standard library are provided in 26
 \indextext{library!C standard}%
-additional headers, as shown in Table~\ref{tab:cpp.c.headers}.
+additional headers, as shown in Table~\ref{tab:cpp.c.headers}.%
+\footnote{It is intentional that there is no \Cpp header
+for any of these C headers:
+\indextext{\idxhdr{stdatomic.h}}%
+\indextext{\idxhdr{stdnoreturn.h}}%
+\indextext{\idxhdr{threads.h}}%
+\tcode{<stdatomic.h>},
+\tcode{<stdnoreturn.h>},
+\tcode{<threads.h>}.}
 
 \begin{floattable}{\Cpp headers for C library facilities}{tab:cpp.c.headers}
 {lllll}
@@ -1080,23 +1110,25 @@ additional headers, as shown in Table~\ref{tab:cpp.c.headers}.
 \end{floattable}
 
 \pnum
-Except as noted in Clauses~\ref{\firstlibchapter} through~\ref{\lastlibchapter}
-and Annex~\ref{depr}, the contents of each header \tcode{c\textit{name}} shall
-be the same as that of the corresponding header \tcode{\textit{name}.h}, as
-specified in the C standard library~(\ref{intro.refs}) or the C Unicode TR, as
-appropriate, as if by inclusion. In the \Cpp standard library, however, the
+Except as noted in Clauses~\ref{library} through~\ref{\lastlibchapter}
+and Annex~\ref{depr}, the contents of each header \tcode{c\placeholder{name}} is
+the same as that of the corresponding header \tcode{\placeholder{name}.h} as
+specified in the C standard library~(\ref{intro.refs}).
+In the \Cpp standard library, however, the
 declarations (except for names which are defined as macros in C) are within
-namespace scope~(\ref{basic.scope.namespace}) of the namespace \tcode{std.} It
-is unspecified whether these names are first declared within the global
-namespace scope and are then injected into namespace \tcode{std} by explicit
+namespace scope~(\ref{basic.scope.namespace}) of the namespace \tcode{std}.
+It is unspecified whether these names (including any overloads added in
+Clauses~\ref{\firstlibchapter} through~\ref{\lastlibchapter} and Annex~\ref{depr})
+are first declared within the global namespace scope
+and are then injected into namespace \tcode{std} by explicit
 \grammarterm{using-declaration}{s}~(\ref{namespace.udecl}).
 
 \pnum
 Names which are defined as macros in C shall be defined as macros in the \Cpp
 standard library, even if C grants license for implementation as functions.
-\enternote The names defined as macros in C include the following:
+\begin{note} The names defined as macros in C include the following:
 \tcode{assert}, \tcode{offsetof}, \tcode{setjmp}, \tcode{va_arg},
-\tcode{va_end}, and \tcode{va_start}. \exitnote
+\tcode{va_end}, and \tcode{va_start}. \end{note}
 
 \pnum
 Names that are defined as functions in C shall be defined as functions in the
@@ -1112,11 +1144,127 @@ standard header \tcode{<iso646.h>} or \tcode{<ciso646>} has no effect.}
 
 \pnum
 \ref{depr.c.headers}, C standard library headers, describes the effects of using
-the \tcode{\textit{name}.h} (C header) form in a \Cpp program.\footnote{ The
+the \tcode{\placeholder{name}.h} (C header) form in a \Cpp program.\footnote{ The
 \tcode{".h"} headers dump all their names into the global namespace, whereas the
 newer forms keep their names in namespace \tcode{std}. Therefore, the newer
 forms are the preferred forms for all uses except for \Cpp programs which are
 intended to be strictly compatible with C. }
+
+\pnum
+Annex K of the C standard describes a large number of functions,
+with associated types and macros,
+which ``promote safer, more secure programming''
+than many of the traditional C library functions.
+The names of the functions have a suffix of \tcode{_s};
+most of them provide the same service
+as the C library function with the unsuffixed name,
+but generally take an additional argument
+whose value is the size of the result array.
+If any \Cpp header is included,
+it is \impldef{whether functions from Annex K of the C standard library
+are declared when \Cpp headers are included}
+whether any of these names
+is declared in the global namespace.
+(None of them is declared in namespace \tcode{std}.)
+
+\pnum
+Table~\ref{tab:c.annex.k.names} lists the Annex K names
+that may be declared in some header.
+These names are also subject to the restrictions of~\ref{macro.names}.
+
+\begin{floattable}{C standard Annex K names}{tab:c.annex.k.names}
+{lllll}
+\topline
+\tcode{abort_handler_s} &
+\tcode{ignore_handler_s} &
+\tcode{snwprintf_s} &
+\tcode{tmpnam_s} &
+\tcode{wcrtomb_s} \\
+
+\tcode{asctime_s} &
+\tcode{L_tmpnam_s} &
+\tcode{sprintf_s} &
+\tcode{vfprintf_s} &
+\tcode{wcscat_s} \\
+
+\tcode{bsearch_s} &
+\tcode{localtime_s} &
+\tcode{sscanf_s} &
+\tcode{vfscanf_s} &
+\tcode{wcscpy_s} \\
+
+\tcode{constraint_handler_t} &
+\tcode{mbsrtowcs_s} &
+\tcode{strcat_s} &
+\tcode{vfwprintf_s} &
+\tcode{wcsncat_s} \\
+
+\tcode{ctime_s} &
+\tcode{mbstowcs_s} &
+\tcode{strcpy_s} &
+\tcode{vfwscanf_s} &
+\tcode{wcsncpy_s} \\
+
+\tcode{errno_t} &
+\tcode{memcpy_s} &
+\tcode{strerror_s} &
+\tcode{vprintf_s} &
+\tcode{wcsnlen_s} \\
+
+\tcode{fopen_s} &
+\tcode{memmove_s} &
+\tcode{strerrorlen_s} &
+\tcode{vscanf_s} &
+\tcode{wcsrtombs_s} \\
+
+\tcode{fprintf_s} &
+\tcode{memset_s} &
+\tcode{strlen_s} &
+\tcode{vsnprintf_s} &
+\tcode{wcstok_s} \\
+
+\tcode{freopen_s} &
+\tcode{printf_s} &
+\tcode{strncat_s} &
+\tcode{vsnwprintf_s} &
+\tcode{wcstombs_s} \\
+
+\tcode{fscanf_s} &
+\tcode{qsort_s} &
+\tcode{strncpy_s} &
+\tcode{vsprintf_s} &
+\tcode{wctomb_s} \\
+
+\tcode{fwprintf_s} &
+\tcode{RSIZE_MAX} &
+\tcode{strtok_s} &
+\tcode{vsscanf_s} &
+\tcode{wmemcpy_s} \\
+
+\tcode{fwscanf_s} &
+\tcode{rsize_t} &
+\tcode{swprintf_s} &
+\tcode{vswprintf_s} &
+\tcode{wmemmove_s} \\
+
+\tcode{getenv_s} &
+\tcode{scanf_s} &
+\tcode{swscanf_s} &
+\tcode{vswscanf_s} &
+\tcode{wprintf_s} \\
+
+\tcode{gets_s} &
+\tcode{set_constraint_handler_s} &
+\tcode{tmpfile_s} &
+\tcode{vwprintf_s} &
+\tcode{wscanf_s} \\
+
+\tcode{gmtime_s} &
+\tcode{snprintf_s} &
+\tcode{TMP_MAX_S} &
+\tcode{vwscanf_s} &
+\\
+\end{floattable}
 
 \rSec3[compliance]{Freestanding implementations}
 
@@ -1203,7 +1351,7 @@ depends each time on the lexically
 current definition of
 \indextext{\idxcode{NDEBUG}}%
 \indexlibrary{\idxcode{NDEBUG}}%
-\tcode{NDEBUG}.\footnote{This is the same as the Standard C library.}
+\tcode{NDEBUG}.\footnote{This is the same as the C standard library.}
 
 \pnum
 A translation unit shall include a header only outside of any
@@ -1231,11 +1379,11 @@ external linkage has
 or
 \indextext{\idxcode{extern ""C++""}}%
 \tcode{extern "C++"}
-linkage is \impldef{linkage of names from Standard C library}. It is recommended that an
+linkage is \impldef{linkage of names from C standard library}. It is recommended that an
 implementation use
 \tcode{extern "C++"}
 linkage for this purpose.\footnote{The only reliable way to declare an object or
-function signature from the Standard C library is by including the header that
+function signature from the C standard library is by including the header that
 declares it, notwithstanding the latitude granted in 7.1.4 of the C
 Standard.}
 
@@ -1268,7 +1416,7 @@ allocators.
 \pnum
 The template definitions in the \Cpp standard library
 refer to various named requirements whose details are set out in
-tables~\ref{equalitycomparable}--\ref{destructible}.
+tables~\ref{tab:equalitycomparable}--\ref{tab:destructible}.
 In these tables, \tcode{T} is an object or reference type to be
 supplied by a \Cpp program instantiating a template;
 \tcode{a},
@@ -1323,7 +1471,7 @@ convertible to \tcode{bool} &
 Expression        &     Post-condition  \\ \capsep
 \tcode{T t;}      &     object \tcode{t} is default-initialized   \\ \rowsep
 \tcode{T u\{\};}    &     object \tcode{u} is value-initialized or aggregate-initialized \\ \rowsep
-\tcode{T()}\br\tcode{T\{\}}  &  a temporary object of type \tcode{T} is value-initialized
+\tcode{T()}\br\tcode{T\{\}}  &  an object of type \tcode{T} is value-initialized
                                 or aggregate-initialized \\
 \end{concepttable}
 
@@ -1337,9 +1485,9 @@ Expression          &   Post-condition  \\ \capsep
   \tcode{T(rv)} is equivalent to the value of \tcode{rv} before the construction \\ \rowsep
 \multicolumn{2}{|p{5.3in}|}{
   \tcode{rv}'s state is unspecified
-  \enternote \tcode{rv} must still meet the requirements of the library
+  \begin{note} \tcode{rv} must still meet the requirements of the library
   component that is using it. The operations listed in those requirements must
-  work as specified whether \tcode{rv} has been moved from or not. \exitnote}\\
+  work as specified whether \tcode{rv} has been moved from or not. \end{note}}\\
 \end{concepttable}
 
 \indextext{requirements!\idxcode{CopyConstructible}}%
@@ -1361,9 +1509,9 @@ Expression      &   Return type &   Return value    &   Post-condition  \\ \caps
   to the value of \tcode{rv} before the assignment\\ \rowsep
 \multicolumn{4}{|p{5.3in}|}{
   \tcode{rv}'s state is unspecified.
-  \enternote\ \tcode{rv} must still meet the requirements of the library
+  \begin{note}\ \tcode{rv} must still meet the requirements of the library
   component that is using it. The operations listed in those requirements must
-  work as specified whether \tcode{rv} has been moved from or not. \exitnote}\\
+  work as specified whether \tcode{rv} has been moved from or not. \end{note}}\\
 \end{concepttable}
 
 \indextext{requirements!\idxcode{CopyAssignable}}%
@@ -1416,15 +1564,15 @@ resolution~(\ref{over.match}) on a candidate set that includes:
 \item the lookup set produced by argument-dependent lookup~(\ref{basic.lookup.argdep}).
 \end{itemize}
 
-\enternote If \tcode{T} and \tcode{U} are both fundamental types or arrays of
+\begin{note} If \tcode{T} and \tcode{U} are both fundamental types or arrays of
 fundamental types and the declarations from the header \tcode{<utility>} are in
 scope, the overall lookup set described above is equivalent to that of the
 qualified name lookup applied to the expression \tcode{std::swap(t, u)} or
-\tcode{std::swap(u, t)} as appropriate. \exitnote
+\tcode{std::swap(u, t)} as appropriate. \end{note}
 
-\enternote It is unspecified whether a library component that has a swappable
+\begin{note} It is unspecified whether a library component that has a swappable
 requirement includes the header \tcode{<utility>} to ensure an appropriate
-evaluation context. \exitnote
+evaluation context. \end{note}
 
 \pnum
 An rvalue or lvalue \tcode{t} is \defn{swappable} if and only if \tcode{t} is
@@ -1437,7 +1585,7 @@ for any dereferenceable object
 \tcode{x} of type \tcode{X},
 \tcode{*x} is swappable.
 
-\enterexample User code can ensure that the evaluation of \tcode{swap} calls
+\begin{example} User code can ensure that the evaluation of \tcode{swap} calls
 is performed in an appropriate context under the various conditions as follows:
 \begin{codeblock}
 #include <utility>
@@ -1479,7 +1627,7 @@ int main() {
   assert(a1.m == -5 && a2.m == 5);
 }
 \end{codeblock}
-\exitexample
+\end{example}
 
 \rSec3[nullablepointer.requirements]{\tcode{NullablePointer} requirements}
 
@@ -1494,7 +1642,7 @@ and \tcode{Destructible},
 
 \item lvalues of type \tcode{P} are swappable~(\ref{swappable.requirements}),
 
-\item the expressions shown in Table~\ref{nullablepointer} are
+\item the expressions shown in Table~\ref{tab:nullablepointer} are
 valid and have the indicated semantics, and
 
 \item \tcode{P} satisfies all the other requirements of this subclause.
@@ -1503,8 +1651,8 @@ valid and have the indicated semantics, and
 \pnum
 A value-initialized object of type \tcode{P} produces the null value of the type.
 The null value shall be equivalent only to itself. A default-initialized object
-of type \tcode{P} may have an indeterminate value. \enternote Operations involving
-indeterminate values may cause undefined behavior. \exitnote
+of type \tcode{P} may have an indeterminate value. \begin{note} Operations involving
+indeterminate values may cause undefined behavior. \end{note}
 
 \pnum
 An object \tcode{p} of type \tcode{P} can be contextually converted to
@@ -1516,7 +1664,7 @@ No operation which is part of the \tcode{NullablePointer} requirements shall exi
 via an exception.
 
 \pnum
-In Table~\ref{nullablepointer}, \tcode{u} denotes an identifier, \tcode{t}
+In Table~\ref{tab:nullablepointer}, \tcode{u} denotes an identifier, \tcode{t}
 denotes a non-\tcode{const} lvalue of type \tcode{P}, \tcode{a} and \tcode{b}
 denote values of type (possibly \tcode{const}) \tcode{P}, and \tcode{np} denotes
 a value of type (possibly \tcode{const}) \tcode{std::nullptr_t}.
@@ -1569,13 +1717,13 @@ A type \tcode{H} meets the \tcode{Hash} requirements if:
 \item it is a function object type~(\ref{function.objects}),
 \item it satisfies the requirements of \tcode{CopyConstructible} and
   \tcode{Destructible}~(\ref{utility.arg.requirements}), and
-\item the expressions shown in Table~\ref{hash}
+\item the expressions shown in Table~\ref{tab:hash}
 are valid and have the indicated semantics.
 \end{itemize}
 
 \pnum
 Given \tcode{Key} is an argument type for function objects of type \tcode{H}, in
-Table~\ref{hash} \tcode{h} is a value of type (possibly \tcode{const}) \tcode{H},
+Table~\ref{tab:hash} \tcode{h} is a value of type (possibly \tcode{const}) \tcode{H},
 \tcode{u} is an lvalue of type \tcode{Key}, and \tcode{k} is a value of a type convertible to
 (possibly \tcode{const}) \tcode{Key}.
 
@@ -1586,12 +1734,12 @@ Expression        &     Return type     &       Requirement \\ \capsep
 \tcode{h(k)}      &
   \tcode{size_t}  &
   The value returned shall depend only on the argument \tcode{k} for the duration of
-  the program. \enternote Thus all evaluations of the expression \tcode{h(k)} with the
+  the program. \begin{note} Thus all evaluations of the expression \tcode{h(k)} with the
   same value for \tcode{k} yield the same result for a given execution of the program.
-  \exitnote \enternote For two different
+  \end{note} \begin{note} For two different
   values \tcode{t1} and \tcode{t2}, the probability that \tcode{h(t1)} and \tcode{h(t2)}
   compare equal should be very small, approaching \tcode{1.0 / numeric_limits<size_t>::max()}.
-  \exitnote \\ \rowsep
+  \end{note} \\ \rowsep
 \tcode{h(u)}      &
   \tcode{size_t}  &
   Shall not modify \tcode{u}. \\
@@ -1640,7 +1788,7 @@ and \tcode{std::forward}, respectively.
 \hline
 \lhdr{Variable} &   \rhdr{Definition}   \\  \capsep
 \endhead
-\tcode{T, U, C}    &   any non-const object type~(\ref{basic.types})       \\ \rowsep
+\tcode{T, U, C}    &   any \cv-unqualified object type~(\ref{basic.types})       \\ \rowsep
 \tcode{X}       &   an Allocator class for type \tcode{T}   \\ \rowsep
 \tcode{Y}       &   the corresponding Allocator class for type \tcode{U}    \\ \rowsep
 \tcode{XX}      &   the type \tcode{allocator_traits<X>}    \\ \rowsep
@@ -1657,7 +1805,7 @@ obtained by conversion from a value \tcode{p}.          \\ \rowsep
   conversion from a value \tcode{p}  \\ \rowsep
 \tcode{x}       &   a value of type \tcode{XX::const_void_pointer} obtained by
   conversion from a value \tcode{q} or a value \tcode{w}  \\ \rowsep
-\tcode{y}       &   a value of type \tcode{XX:const_void_pointer} obtained by
+\tcode{y}       &   a value of type \tcode{XX::const_void_pointer} obtained by
 conversion from a result value of \tcode{YY::allocate}, or else a value of
 type (possibly \tcode{const}) \tcode{std::nullptr_t}. \\ \rowsep
 \tcode{n}       &   a value of type \tcode{XX::size_type}.   \\ \rowsep
@@ -1742,9 +1890,9 @@ type (possibly \tcode{const}) \tcode{std::nullptr_t}. \\ \rowsep
 \tcode{a.allocate(n)}   &   \tcode{X::pointer}  &
 Memory is allocated for \tcode{n} objects of type \tcode{T} but objects
 are not constructed. \tcode{allocate} may raise an appropriate exception.\footnotemark
-\enternote
+\begin{note}
 If \tcode{n == 0}, the return value is unspecified.
-\exitnote              &  \\ \rowsep
+\end{note}              &  \\ \rowsep
 
 \tcode{a.allocate(n, y)}    &
   \tcode{X::pointer}        &
@@ -1754,15 +1902,16 @@ If \tcode{n == 0}, the return value is unspecified.
 
 \tcode{a.deallocate(p,n)}   &
   (not used)                &
-  All \tcode{n T} objects in the area pointed to by \tcode{p} shall be
-    destroyed prior to this call. \tcode{n} shall match the value passed to
-    \tcode{allocate} to obtain this memory. Does not throw exceptions.
-    \enternote \tcode{p} shall not be singular.\exitnote   &  \\ \rowsep
+  \textit{pre:} \tcode{p} shall be a value returned by an earlier call
+  to \tcode{allocate} that has not been invalidated by
+  an intervening call to \tcode{deallocate}. \tcode{n} shall
+  match the value passed to \tcode{allocate} to obtain this memory.
+  \throws Nothing.          &  \\ \rowsep
 
 \tcode{a.max_size()}        &
   \tcode{X::size_type}      &
   the largest value that can meaningfully be passed to \tcode{X::allocate()}  &
-  \tcode{numeric_limits<size_type>::max()}  \\ \rowsep
+  \tcode{numeric_limits<size_type>::max()/\brk{}sizeof(value_type)}  \\ \rowsep
 
 \tcode{a1 == a2}            &
   \tcode{bool}              &
@@ -1786,23 +1935,23 @@ If \tcode{n == 0}, the return value is unspecified.
 \tcode{X u = a;}           &
                             &
   Shall not exit via an exception.\br
-  post: \tcode{a1 == a}     & \\ \rowsep
+  post: \tcode{u == a}     & \\ \rowsep
 
 \tcode{X u(b);}             &
                             &
   Shall not exit via an exception.\br
-  post: \tcode{Y(a) == b}, \tcode{a == X(b)} &  \\ \rowsep
+  post: \tcode{Y(u) == b}, \tcode{u == X(b)} &  \\ \rowsep
 
-\tcode{X u(move(a));}      \br
-\tcode{X u = move(a);}     &
+\tcode{X u(std::move(a));}  \br
+\tcode{X u = std::move(a);} &
                             &
   Shall not exit via an exception.\br
-  post: \tcode{a1} equals the prior value of \tcode{a}. & \\ \rowsep
+  post: \tcode{u} is equal to the prior value of \tcode{a}. & \\ \rowsep
 
-\tcode{X u(move(b));}       &
+\tcode{X u(std::move(b));}  &
                             &
   Shall not exit via an exception.\br
-  post: \tcode{a} equals the prior value of \tcode{X(b)}. & \\ \rowsep
+  post: \tcode{u} is equal to the prior value of \tcode{X(b)}. & \\ \rowsep
 
 \tcode{a.construct(c, args)}&
   (not used)                &
@@ -1857,12 +2006,12 @@ free list.}
 
 \pnum
 Note A: The member class template \tcode{rebind} in the table above is
-effectively a typedef template. \enternote In general, if
+effectively a typedef template. \begin{note} In general, if
 the name \tcode{Allocator} is bound to \tcode{SomeAllocator<T>}, then
 \tcode{Allocator::rebind<U>::other} is the same type as
 \tcode{SomeAllocator<U>}, where
 \tcode{SomeAllocator<T>::value_type} is \tcode{T} and
-\tcode{SomeAllocator<U>::\brk{}value_type} is \tcode{U}. \exitnote If
+\tcode{SomeAllocator<U>::\brk{}value_type} is \tcode{U}. \end{note} If
 \tcode{Allocator} is a class template instantiation of the form
 \tcode{SomeAllocator<T, Args>}, where \tcode{Args} is zero or more type
 arguments, and \tcode{Allocator} does not supply a \tcode{rebind} member
@@ -1938,7 +2087,7 @@ arguments for which its \tcode{construct} or \tcode{destroy} members may be
 called. If a type cannot be used with a particular allocator, the allocator
 class or the call to \tcode{construct} or \tcode{destroy} may fail to instantiate.
 
-\enterexample the following is an allocator class template supporting the minimal
+\begin{example} the following is an allocator class template supporting the minimal
 interface that satisfies the requirements of
 Table~\ref{tab:utilities.allocator.requirements}:
 
@@ -1959,15 +2108,15 @@ bool operator==(const SimpleAllocator<T>&, const SimpleAllocator<U>&);
 template <class T, class U>
 bool operator!=(const SimpleAllocator<T>&, const SimpleAllocator<U>&);
 \end{codeblock}
-\exitexample
+\end{example}
 
 \pnum
 If the alignment associated with a specific over-aligned type is not
 supported by an allocator, instantiation of the allocator for that type may
 fail. The allocator also may silently ignore the requested alignment.
-\enternote Additionally, the member function \tcode{allocate}
+\begin{note} Additionally, the member function \tcode{allocate}
 for that type may fail by throwing an object of type
-\tcode{std::bad_alloc}.\exitnote
+\tcode{std::bad_alloc}.\end{note}
 
 \rSec4[allocator.requirements.completeness]{Allocator completeness requirements}
 
@@ -2045,6 +2194,17 @@ or to a namespace within namespace
 unless otherwise specified. The namespace \tcode{posix} is reserved for use by
 ISO/IEC 9945 and other POSIX standards.
 
+\rSec4[namespace.future]{Namespaces for future standardization}
+
+\pnum
+Top level namespaces with a name starting with \tcode{std} and
+followed by a non-empty sequence of digits
+are reserved for future standardization.
+The behavior of a \Cpp program is undefined if
+it adds declarations or definitions to such a namespace.
+\begin{example} The top level namespace \tcode{std2} is reserved
+for use by future revisions of this standard. \end{example}
+
 \rSec3[reserved.names]{Reserved names}%
 \indextext{name!reserved}
 
@@ -2061,6 +2221,35 @@ If a program declares or defines a name in a context where it is
 reserved, other than as explicitly allowed by this Clause, its behavior is
 undefined.%
 \indextext{undefined}
+
+\rSec4[zombie.names]{Zombie names}%
+\indextext{name!zombie}%
+\indextext{living dead!name of}%
+\indextext{brains!names that want to eat your}%
+
+\pnum
+In namespace \tcode{std}, the following names are reserved for previous standardization:
+\indexlibrary{\idxcode{auto_ptr}!zombie} \tcode{auto_ptr},
+\indexlibrary{\idxcode{binary_function}!zombie} \tcode{binary_function},
+\indexlibrary{\idxcode{bind1st}!zombie} \tcode{bind1st},
+\indexlibrary{\idxcode{bind2nd}!zombie} \tcode{bind2nd},
+\indexlibrary{\idxcode{binder1st}!zombie} \tcode{binder1st},
+\indexlibrary{\idxcode{binder2nd}!zombie} \tcode{binder2nd},
+\indexlibrary{\idxcode{const_mem_fun1_ref_t}!zombie} \tcode{const_mem_fun1_ref_t},
+\indexlibrary{\idxcode{const_mem_fun1_t}!zombie} \tcode{const_mem_fun1_t},
+\indexlibrary{\idxcode{const_mem_fun_ref_t}!zombie} \tcode{const_mem_fun_ref_t},
+\indexlibrary{\idxcode{const_mem_fun_t}!zombie} \tcode{const_mem_fun_t},
+\indexlibrary{\idxcode{mem_fun1_ref_t}!zombie} \tcode{mem_fun1_ref_t},
+\indexlibrary{\idxcode{mem_fun1_t}!zombie} \tcode{mem_fun1_t},
+\indexlibrary{\idxcode{mem_fun_ref_t}!zombie} \tcode{mem_fun_ref_t},
+\indexlibrary{\idxcode{mem_fun_ref}!zombie} \tcode{mem_fun_ref},
+\indexlibrary{\idxcode{mem_fun_t}!zombie} \tcode{mem_fun_t},
+\indexlibrary{\idxcode{mem_fun}!zombie} \tcode{mem_fun},
+\indexlibrary{\idxcode{pointer_to_binary_function}!zombie} \tcode{pointer_to_binary_function},
+\indexlibrary{\idxcode{pointer_to_unary_function}!zombie} \tcode{pointer_to_unary_function},
+\indexlibrary{\idxcode{ptr_fun}!zombie} \tcode{ptr_fun},
+\indexlibrary{\idxcode{random_shuffle}!zombie} \tcode{random_shuffle},
+and \indexlibrary{\idxcode{unary_function}!zombie} \tcode{unary_function}.
 
 \rSec4[macro.names]{Macro names}
 
@@ -2120,17 +2309,17 @@ declared or defined in
 \tcode{<cstdarg>}.}
 
 \pnum
-Each name from the Standard C library declared with external linkage
+Each name from the C standard library declared with external linkage
 \indextext{linkage!external}%
 is reserved to the implementation for use as a name with
 \indextext{header!C}%
 \indextext{\idxcode{extern ""C""}}%
 \tcode{extern "C"}
 linkage,
-both in namespace std and in the global namespace.
+both in namespace \tcode{std} and in the global namespace.
 
 \pnum
-Each function signature from the Standard C library declared with
+Each function signature from the C standard library declared with
 \indextext{linkage!external}%
 external linkage
 is reserved to the implementation for use as
@@ -2161,7 +2350,7 @@ or as a name of namespace scope in the global namespace.
 \rSec4[extern.types]{Types}
 
 \pnum
-For each type T from the Standard C library,\footnote{These types are
+For each type T from the C standard library,\footnote{These types are
 \tcode{clock_t},
 \tcode{div_t},
 \tcode{FILE},
@@ -2197,7 +2386,6 @@ Literal suffix identifiers ~(\ref{over.literal}) that do not start with an under
 
 \pnum
 If a file with a name
-\indextext{implementation-defined}%
 equivalent to the derived file name for one of the \Cpp standard library headers
 is not provided as part of the implementation, and a file with that name
 is placed in any of the standard places for a source file to be included~(\ref{cpp.include}),
@@ -2228,44 +2416,46 @@ however, certain of these function descriptions also apply to replacement functi
 in the program~(\ref{definitions}).
 
 \pnum
-A \Cpp program may provide the definition for any of twelve
+A \Cpp program may provide the definition for any of the following
 dynamic memory allocation function signatures declared in header
 \tcode{<new>}~(\ref{basic.stc.dynamic}, \ref{support.dynamic}):
 
-\begin{itemize}
-\item
-\indextext{\idxcode{new}!\idxcode{operator}}%
+\indextext{\idxcode{new}!\idxcode{operator}!replaceable}%
 \indexlibrary{\idxcode{new}!\idxcode{operator}}%
-\tcode{operator new(std::size_t)}
-\item
-\tcode{operator new(std::size_t, const std::nothrow_t\&)}
-\item
-\indextext{\idxcode{new}!\idxcode{operator}}%
+\begin{codeblock}
+operator new(std::size_t)
+operator new(std::size_t, std::align_val_t)
+operator new(std::size_t, const std::nothrow_t&)
+operator new(std::size_t, std::align_val_t, const std::nothrow_t&)
+\end{codeblock}%
+\indextext{\idxcode{delete}!\idxcode{operator}!replaceable}%
+\indexlibrary{\idxcode{delete}!\idxcode{operator}}%
+\begin{codeblock}
+operator delete(void*)
+operator delete(void*, std::size_t)
+operator delete(void*, std::align_val_t)
+operator delete(void*, std::size_t, std::align_val_t)
+operator delete(void*, const std::nothrow_t&)
+operator delete(void*, std::align_val_t, const std::nothrow_t&)
+\end{codeblock}%
+\indextext{\idxcode{new}!\idxcode{operator}!replaceable}%
 \indexlibrary{\idxcode{new}!\idxcode{operator}}%
-\tcode{operator new[](std::size_t)}
-\item
-\tcode{operator new[](std::size_t, const std::nothrow_t\&)}
-\item
-\indextext{\idxcode{delete}!\idxcode{operator}}%
+\begin{codeblock}
+operator new[](std::size_t)
+operator new[](std::size_t, std::align_val_t)
+operator new[](std::size_t, const std::nothrow_t&)
+operator new[](std::size_t, std::align_val_t, const std::nothrow_t&)
+\end{codeblock}%
+\indextext{\idxcode{delete}!\idxcode{operator}!replaceable}%
 \indexlibrary{\idxcode{delete}!\idxcode{operator}}%
-\tcode{operator delete(void*)}
-\item
-\tcode{operator delete(void*, const std::nothrow_t\&)}
-\item
-\indextext{\idxcode{delete}!\idxcode{operator}}%
-\indexlibrary{\idxcode{delete}!\idxcode{operator}}%
-\tcode{operator delete[](void*)}
-\item
-\tcode{operator delete[](void*, const std::nothrow_t\&)}
-\item
-\tcode{operator delete(void*, std::size_t)}
-\item
-\tcode{operator delete(void*, std::size_t, const std::nothrow_t\&)}
-\item
-\tcode{operator delete[](void*, std::size_t)}
-\item
-\tcode{operator delete[](void*, std::size_t, const std::nothrow_t\&)}
-\end{itemize}
+\begin{codeblock}
+operator delete[](void*)
+operator delete[](void*, std::size_t)
+operator delete[](void*, std::align_val_t)
+operator delete[](void*, std::size_t, std::align_val_t)
+operator delete[](void*, const std::nothrow_t&)
+operator delete[](void*, std::align_val_t, const std::nothrow_t&)
+\end{codeblock}
 
 \pnum
 The program's definitions are used instead of the default versions supplied by
@@ -2405,33 +2595,35 @@ pointer did point to the first element of such an array) are in fact valid.
 \item
 If a function argument binds to an rvalue reference parameter, the implementation may
 assume that this parameter is a unique reference to this argument.
-\enternote
+\begin{note}
 If the parameter is a generic parameter of the form \tcode{T\&\&} and an lvalue of type
 \tcode{A} is bound, the argument binds to an lvalue reference~(\ref{temp.deduct.call})
-and thus is not covered by the previous sentence. \exitnote \enternote If a program casts
+and thus is not covered by the previous sentence. \end{note} \begin{note} If a program casts
 an lvalue to an xvalue while passing that lvalue to a library function (e.g. by calling the function
-with the argument \tcode{move(x)}), the program
+with the argument \tcode{std::move(x)}), the program
 is effectively asking that function to treat that lvalue as a temporary. The implementation
 is free to optimize away aliasing checks which might be needed if the argument was
-an lvalue. \exitnote
+an lvalue. \end{note}
 \end{itemize}
 
-\rSec3[res.on.objects]{Shared objects and the library}
+\rSec3[res.on.objects]{Library object access}
 
 \pnum
 The behavior of a program is undefined if calls to standard library functions from different
 threads may introduce a data race. The conditions under which this may occur are specified
-in~\ref{res.on.data.races}. \enternote Modifying an object of a standard library type that is
+in~\ref{res.on.data.races}. \begin{note} Modifying an object of a standard library type that is
 shared between threads risks undefined behavior unless objects of that type are explicitly
-specified as being sharable without data races or the user supplies a locking mechanism. \exitnote
+specified as being sharable without data races or the user supplies a locking mechanism. \end{note}
 
 \pnum
-\enternote In particular, the program is required to ensure that completion
-of the constructor of any object of a class type defined in the standard library
-happens before any other member function invocation on that object and, unless
-otherwise specified, to ensure that completion of any member function invocation
-other than destruction on such an object happens before destruction of that object.
-This applies even to objects such as mutexes intended for thread synchronization. \exitnote
+If an object of a standard library type is accessed, and
+the beginning of the object's lifetime~(\ref{basic.life})
+does not happen before the access, or
+the access does not happen before the end of the object's lifetime,
+the behavior is undefined unless otherwise specified.
+\begin{note}
+This applies even to objects such as mutexes intended for thread synchronization.
+\end{note}
 
 \rSec3[res.on.required]{Requires paragraph}
 
@@ -2452,7 +2644,7 @@ This section describes the constraints upon, and latitude of, implementations of
 
 \pnum
 An implementation's use of headers is discussed in~\ref{res.on.headers}, its use
-of macros in~\ref{res.on.macro.definitions}, global functions
+of macros in~\ref{res.on.macro.definitions}, non-member functions
 in~\ref{global.functions}, member functions in~\ref{member.functions}, data race
 avoidance in~\ref{res.on.data.races}, access specifiers
 in~\ref{protection.within.classes}, class derivation in~\ref{derivation}, and
@@ -2473,15 +2665,15 @@ Every such entity shall be defined such that any header that defines it may be
 included after any other header that also defines it~(\ref{basic.def.odr}).
 
 \pnum
-The C standard headers (\ref{depr.c.headers})
-shall include only their corresponding \Cpp standard header, as described in~\ref{headers}.
+The C standard library headers (\ref{depr.c.headers})
+shall include only their corresponding \Cpp standard library header,
+as described in~\ref{headers}.
 
 \rSec3[res.on.macro.definitions]{Restrictions on macro definitions}
 \indextext{restriction}%
 
 \pnum
 The names and global function signatures described in~\ref{contents} are
-\indextext{function!global}%
 reserved to the implementation.
 \indextext{argument}%
 \indextext{header!C}%
@@ -2495,32 +2687,32 @@ Clause as expanding to integral constant expressions are also suitable for use
 in \tcode{\#if}\indextext{\idxcode{\#if}} preprocessing directives, unless
 explicitly stated otherwise.
 
-\rSec3[global.functions]{Global and non-member functions}
+\rSec3[global.functions]{Non-member functions}
 
 \pnum
-It is unspecified whether any global
-or non-member
+It is unspecified whether any
+non-member
 functions in the \Cpp standard library are defined as
 \tcode{inline}~(\ref{dcl.fct.spec}).
 
 \pnum
-\indextext{function!global}A call to a global or non-member function signature
+A call to a non-member function signature
 described in Clauses~\ref{\firstlibchapter} through~\ref{\lastlibchapter} and
 Annex~\ref{depr} shall behave as if the implementation declared no additional
-global or non-member function signatures.\footnote{A valid \Cpp program always
-calls the expected library global or non-member function. An implementation may
-also define additional global or non-member functions that would otherwise not
+non-member function signatures.\footnote{A valid \Cpp program always
+calls the expected library non-member function. An implementation may
+also define additional non-member functions that would otherwise not
 be called by a valid \Cpp program.}
 
 \pnum
-An implementation shall not declare a global or non-member function signature
+An implementation shall not declare a non-member function signature
 with additional default arguments.
 
 \pnum
-Unless otherwise specified, global and non-member functions in the standard
+Unless otherwise specified, non-member functions in the standard
 library shall not use functions from another namespace which are found through
 \term{argument-dependent name lookup}~(\ref{basic.lookup.argdep}).
-\enternote
+\begin{note}
 The phrase ``unless otherwise specified'' is intended to allow
 argument-dependent lookup
 in cases like that of
@@ -2533,7 +2725,7 @@ if (@\textit{delim}@ != 0)
   *@\textit{out_stream}@ << @\textit{delim}@;
 return *this;
 \end{codeblock}
-\exitnote
+\end{note}
 
 \rSec3[member.functions]{Member functions}
 
@@ -2542,34 +2734,17 @@ It is unspecified whether any member functions in the \Cpp standard library are 
 \tcode{inline}~(\ref{dcl.fct.spec}).
 
 \pnum
-An implementation may declare additional
-non-virtual member function signatures within a
-\indextext{function!virtual member}%
-class:
-
-\begin{itemize}
-\item
-by adding arguments with default values to a member function signature;%
-\indextext{argument}%
-\indextext{function!global}\footnote{Hence, the address of a member function of a class in the \Cpp standard
-library has an unspecified type.\indextext{address~of~member~function!unspecified}}
-\enternote An implementation may not add arguments with default values to virtual,
-global, or non-member functions.\exitnote
-\item
-by replacing a member function signature with default values by two
-or more member function signatures with equivalent behavior; and
-\item
-by adding a member function signature for a member function name.
-\end{itemize}
-
-\pnum
-A call to a member function signature described in the \Cpp standard library
-behaves as if the implementation declares no additional member
-function signatures.\footnote{A valid \Cpp program always calls the expected library
-member function, or one with equivalent behavior.
-An implementation may also
-define additional member functions that would otherwise not be called by a
-valid \Cpp program.}
+For a non-virtual member function described in the \Cpp standard library,
+an implementation may declare a different set of member function signatures,
+provided that any call to the member function that would select
+an overload from the set of declarations described in this standard
+behaves as if that overload were selected.
+\begin{note}
+For instance, an implementation may add parameters with default values,
+or replace a member function with default arguments
+with two or more member functions with equivalent behavior,
+or add additional signatures for a member function name.
+\end{note}
 
 \rSec3[constexpr.functions]{\tcode{constexpr} functions and constructors}
 
@@ -2630,9 +2805,9 @@ unless the objects are accessed directly or indirectly via the function's non-co
 arguments, including \tcode{this}.
 
 \pnum
-\enternote This means, for example, that implementations can't use a static object for
+\begin{note} This means, for example, that implementations can't use a static object for
 internal purposes without synchronization because it could cause a data race even in
-programs that do not explicitly share objects between threads. \exitnote
+programs that do not explicitly share objects between threads. \end{note}
 
 \pnum
 A \Cpp standard library function shall not access objects indirectly accessible via its
@@ -2642,8 +2817,8 @@ required by its specification on those container elements.
 \pnum
 Operations on iterators obtained by calling a standard library container or string
 member function may access the underlying container, but shall not modify it.
-\enternote In particular, container operations that invalidate iterators conflict
-with operations on iterators associated with that container. \exitnote
+\begin{note} In particular, container operations that invalidate iterators conflict
+with operations on iterators associated with that container. \end{note}
 
 \pnum
 Implementations may share their own internal objects between threads if the objects are
@@ -2655,9 +2830,9 @@ solely within the current thread if those operations have effects that are
 visible~(\ref{intro.multithread}) to users.
 
 \pnum
-\enternote This allows implementations to parallelize operations if there are no visible
+\begin{note} This allows implementations to parallelize operations if there are no visible
 \indextext{side effects}%
-side effects. \exitnote
+side effects. \end{note}
 
 \rSec3[protection.within.classes]{Protection within classes}
 
@@ -2667,7 +2842,7 @@ It is unspecified whether any function signature or class described in
 Clauses~\ref{\firstlibchapter} through~\ref{\lastlibchapter} and Annex~\ref{depr} is a
 \tcode{friend}
 of another class in the \Cpp standard library.
-\indextext{specifier!\tcode{friend}}
+\indextext{specifier!\idxcode{friend}}
 
 \rSec3[derivation]{Derived classes}
 
@@ -2780,11 +2955,11 @@ in such an
 \indextext{pointer!to traceable object}%
 Objects constructed by the standard library that may hold a user-supplied pointer value
 or an integer of type \tcode{std::intptr_t} shall store such values in a traceable
-pointer location~(\ref{basic.stc.dynamic.safety}). \enternote Other libraries are
+pointer location~(\ref{basic.stc.dynamic.safety}). \begin{note} Other libraries are
 strongly encouraged to do the same, since not doing so may result in accidental use of
 pointers that are not safely derived. Libraries that store pointers outside the user's
 address space should make it appear that they are stored and retrieved from a traceable
-pointer location. \exitnote
+pointer location. \end{note}
 
 \rSec3[value.error.codes]{Value of error codes}
 
@@ -2793,16 +2968,16 @@ Certain functions in the \Cpp standard library report errors via a
 \tcode{std::error_code}~(\ref{syserr.errcode.overview}) object. That object's
 \tcode{category()} member shall return \tcode{std::system_category()} for
 errors originating from the operating system, or a reference to an
-\impldef{error_category@\tcode{error_category} for errors originating outside the
+\impldef{\tcode{error_category} for errors originating outside the
 operating system} \tcode{error_category} object for errors originating elsewhere.
 The implementation shall define the possible values of \tcode{value()} for each of these
-error categories. \enterexample For operating systems that are based on POSIX,
+error categories. \begin{example} For operating systems that are based on POSIX,
 implementations are encouraged to define the \tcode{std::system_category()} values as
 identical to the POSIX \tcode{errno} values, with additional values as defined by the
 operating system's documentation. Implementations for operating systems that are not
 based on POSIX are encouraged to define values identical to the operating system's
 values. For errors that do not originate from the operating system, the implementation
-may provide enums for the associated values. \exitexample
+may provide enums for the associated values. \end{example}
 
 \rSec3[lib.types.movedfrom]{Moved-from state of library types}
 
@@ -2811,3 +2986,161 @@ Objects of types defined in the \Cpp standard library may be moved
 from~(\ref{class.copy}). Move operations may be explicitly specified or
 implicitly generated. Unless otherwise specified, such moved-from objects shall
 be placed in a valid but unspecified state.
+
+\rSec1[cstdlib.syn]{Header \tcode{<cstdlib>} synopsis}
+
+\indexlibrary{\idxhdr{cstdlib}}%
+\indexlibrary{\idxcode{EXIT_FAILURE}}%
+\indexlibrary{\idxcode{EXIT_SUCCESS}}%
+\indexlibrary{\idxcode{MB_CUR_MAX}}%
+\indexlibrary{\idxcode{NULL}}%
+\indexlibrary{\idxcode{RAND_MAX}}%
+\indexlibrary{\idxcode{_Exit}}%
+\indexlibrary{\idxcode{abort}}%
+\indexlibrary{\idxcode{abs}}%
+\indexlibrary{\idxcode{aligned_alloc}}%
+\indexlibrary{\idxcode{at_quick_exit}}%
+\indexlibrary{\idxcode{atexit}}%
+\indexlibrary{\idxcode{atof}}%
+\indexlibrary{\idxcode{atoi}}%
+\indexlibrary{\idxcode{atol}}%
+\indexlibrary{\idxcode{atoll}}%
+\indexlibrary{\idxcode{bsearch}}%
+\indexlibrary{\idxcode{calloc}}%
+\indexlibrary{\idxcode{div}}%
+\indexlibrary{\idxcode{div_t}}%
+\indexlibrary{\idxcode{exit}}%
+\indexlibrary{\idxcode{free}}%
+\indexlibrary{\idxcode{getenv}}%
+\indexlibrary{\idxcode{labs}}%
+\indexlibrary{\idxcode{ldiv}}%
+\indexlibrary{\idxcode{ldiv_t}}%
+\indexlibrary{\idxcode{llabs}}%
+\indexlibrary{\idxcode{lldiv}}%
+\indexlibrary{\idxcode{lldiv_t}}%
+\indexlibrary{\idxcode{malloc}}%
+\indexlibrary{\idxcode{mblen}}%
+\indexlibrary{\idxcode{mbstowcs}}%
+\indexlibrary{\idxcode{mbtowc}}%
+\indexlibrary{\idxcode{qsort}}%
+\indexlibrary{\idxcode{quick_exit}}%
+\indexlibrary{\idxcode{rand}}%
+\indexlibrary{\idxcode{realloc}}%
+\indexlibrary{\idxcode{size_t}}%
+\indexlibrary{\idxcode{srand}}%
+\indexlibrary{\idxcode{strtod}}%
+\indexlibrary{\idxcode{strtof}}%
+\indexlibrary{\idxcode{strtol}}%
+\indexlibrary{\idxcode{strtold}}%
+\indexlibrary{\idxcode{strtoll}}%
+\indexlibrary{\idxcode{strtoul}}%
+\indexlibrary{\idxcode{strtoull}}%
+\indexlibrary{\idxcode{system}}%
+\indexlibrary{\idxcode{wcstombs}}%
+\indexlibrary{\idxcode{wctomb}}%
+\begin{codeblock}
+namespace std {
+  using size_t = @\textit{see \ref{support.types.layout}}@;
+  using div_t = @\seebelow@;
+  using ldiv_t = @\seebelow@;
+  using lldiv_t = @\seebelow@;
+}
+
+#define NULL @\textit{see \ref{support.types.nullptr}}@
+#define EXIT_FAILURE @\seebelow@
+#define EXIT_SUCCESS @\seebelow@
+#define RAND_MAX @\seebelow@
+#define MB_CUR_MAX @\seebelow@
+
+namespace std {
+  // \ref{support.start.term}, start and termination
+  [[noreturn]] void abort();
+  extern "C" int atexit(void (*func)());
+  extern "C++" int atexit(void (*func)());
+  extern "C" int at_quick_exit(void (*func)());
+  extern "C++" int at_quick_exit(void (*func)());
+  [[noreturn]] void exit(int status);
+  [[noreturn]] void _Exit(int status);
+  [[noreturn]] void quick_exit(int status);
+
+  char* getenv(const char* name);
+  int system(const char* string);
+
+  // \ref{c.malloc}, C library memory allocation
+  void* aligned_alloc(size_t alignment, size_t size);
+  void* calloc(size_t nmemb, size_t size);
+  void free(void* ptr);
+  void* malloc(size_t size);
+  void* realloc(void* ptr, size_t size);
+
+  double atof(const char* nptr);
+  int atoi(const char* nptr);
+  long int atol(const char* nptr);
+  long long int atoll(const char* nptr);
+  double strtod(const char* nptr, char** endptr);
+  float strtof(const char* nptr, char** endptr);
+  long double strtold(const char* nptr, char** endptr);
+  long int strtol(const char* nptr, char** endptr, int base);
+  long long int strtoll(const char* nptr, char** endptr, int base);
+  unsigned long int strtoul(const char* nptr, char** endptr, int base);
+  unsigned long long int strtoull(const char* nptr, char** endptr, int base);
+
+  // \ref{c.mb.wcs}, multibyte / wide string and character conversion functions
+  int mblen(const char* s, size_t n);
+  int mbtowc(wchar_t* pwc, const char* s, size_t n);
+  int wctomb(char* s, wchar_t wchar);
+  size_t mbstowcs(wchar_t* pwcs, const char* s, size_t n);
+  size_t wcstombs(char* s, const wchar_t* pwcs, size_t n);
+
+  // \ref{alg.c.library}, C standard library algorithms
+  extern "C" void* bsearch(const void* key, const void* base, size_t nmemb, size_t size,
+                           int (*compar)(const void* , const void*));
+  extern "C++" void* bsearch(const void* key, const void* base, size_t nmemb, size_t size,
+                             int (*compar)(const void* , const void*));
+  extern "C" void qsort(void* base, size_t nmemb, size_t size,
+                        int (*compar)(const void* , const void*));
+  extern "C++" void qsort(void* base, size_t nmemb, size_t size,
+                          int (*compar)(const void* , const void*));
+
+  // \ref{c.math.rand}, low-quality random number generation
+  int rand();
+  void srand(unsigned int seed);
+
+  // \ref{c.math.abs}, absolute values
+  int abs(int j);
+  long int abs(long int j);
+  long long int abs(long long int j);
+  float abs(float j);
+  double abs(double j);
+  long double abs(long double j);
+
+  long int labs(long int j);
+  long long int llabs(long long int j);
+
+  div_t div(int numer, int denom);
+  ldiv_t div(long int numer, long int denom);  // see \ref{library.c}
+  lldiv_t div(long long int numer, long long int denom);  // see \ref{library.c}
+  ldiv_t ldiv(long int numer, long int denom);
+  lldiv_t lldiv(long long int numer, long long int denom);
+}
+\end{codeblock}
+
+\pnum
+The contents and meaning of the header \tcode{<cstdlib>} are the same as
+the C standard library header \tcode{<stdlib.h>},
+except that it does not declare the type \tcode{wchar_t},
+and except as noted in
+\ref{support.types.nullptr},
+\ref{support.types.layout},
+\ref{support.start.term},
+\ref{c.malloc},
+\ref{c.mb.wcs},
+\ref{alg.c.library},
+\ref{c.math.rand}, and
+\ref{c.math.abs}.
+\begin{note}
+Several functions have additional overloads in this International Standard,
+but they have the same behavior as in the C standard library~(\ref{library.c}).
+\end{note}
+
+\xref ISO C 7.22

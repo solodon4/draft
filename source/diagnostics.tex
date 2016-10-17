@@ -48,18 +48,18 @@ The header
 defines several types of predefined exceptions for reporting errors in a \Cpp program.
 These exceptions are related by inheritance.
 
-\synopsis{Header \tcode{<stdexcept>} synopsis}
-
+\rSec2[stdexcept.syn]{Header \tcode{<stdexcept>} synopsis}
 \indexlibrary{\idxhdr{stdexcept}}%
 \indexlibrary{\idxcode{logic_error}}%
 \indexlibrary{\idxcode{domain_error}}%
 \indexlibrary{\idxcode{invalid_argument}}%
 \indexlibrary{\idxcode{length_error}}%
-\indexlibrary{\idxcode{out_of_range_error}}%
+\indexlibrary{\idxcode{out_of_range}}%
 \indexlibrary{\idxcode{runtime_error}}%
 \indexlibrary{\idxcode{range_error}}%
 \indexlibrary{\idxcode{overflow_error}}%
 \indexlibrary{\idxcode{underflow_error}}%
+
 \begin{codeblock}
 namespace std {
   class logic_error;
@@ -95,7 +95,7 @@ exceptions to report errors presumably detectable before
 the program executes, such as violations of logical preconditions or class
 invariants.
 
-\indexlibrary{\idxcode{logic_error}!\tcode{logic_error}}%
+\indexlibrary{\idxcode{logic_error}!constructor}%
 \begin{itemdecl}
 logic_error(const string& what_arg);
 \end{itemdecl}
@@ -111,7 +111,7 @@ Constructs an object of class
 \tcode{strcmp(what(), what_arg.c_str()) == 0}.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{logic_error}!\tcode{logic_error}}%
+\indexlibrary{\idxcode{logic_error}!constructor}%
 \begin{itemdecl}
 logic_error(const char* what_arg);
 \end{itemdecl}
@@ -146,7 +146,7 @@ The class
 defines the type of objects thrown as
 exceptions by the implementation to report domain errors.
 
-\indexlibrary{\idxcode{domain_error}!\tcode{domain_error}}%
+\indexlibrary{\idxcode{domain_error}!constructor}%
 \begin{itemdecl}
 domain_error(const string& what_arg);
 \end{itemdecl}
@@ -162,7 +162,7 @@ Constructs an object of class
 \tcode{strcmp(what(), what_arg.c_str()) == 0}.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{domain_error}!\tcode{domain_error}}%
+\indexlibrary{\idxcode{domain_error}!constructor}%
 \begin{itemdecl}
 domain_error(const char* what_arg);
 \end{itemdecl}
@@ -196,7 +196,7 @@ The class
 \tcode{invalid_argument}
 defines the type of objects thrown as exceptions to report an invalid argument.
 
-\indexlibrary{\idxcode{invalid_argument}!\tcode{invalid_argument}}%
+\indexlibrary{\idxcode{invalid_argument}!constructor}%
 \begin{itemdecl}
 invalid_argument(const string& what_arg);
 \end{itemdecl}
@@ -212,7 +212,7 @@ Constructs an object of class
 \tcode{strcmp(what(), what_arg.c_str()) == 0}.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{invalid_argument}!\tcode{invalid_argument}}%
+\indexlibrary{\idxcode{invalid_argument}!constructor}%
 \begin{itemdecl}
 invalid_argument(const char* what_arg);
 \end{itemdecl}
@@ -248,7 +248,7 @@ defines the type of objects thrown as exceptions
 to report an attempt to produce
 an object whose length exceeds its maximum allowable size.
 
-\indexlibrary{\idxcode{length_error}!\tcode{length_error}}%
+\indexlibrary{\idxcode{length_error}!constructor}%
 \begin{itemdecl}
 length_error(const string& what_arg);
 \end{itemdecl}
@@ -264,7 +264,7 @@ Constructs an object of class
 \tcode{strcmp(what(), what_arg.c_str()) == 0}.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{length_error}!\tcode{length_error}}%
+\indexlibrary{\idxcode{length_error}!constructor}%
 \begin{itemdecl}
 length_error(const char* what_arg);
 \end{itemdecl}
@@ -300,7 +300,7 @@ defines the type of objects thrown as exceptions to report an
 argument value not in its expected range.
 \indextext{argument}
 
-\indexlibrary{\idxcode{out_of_range}!\tcode{out_of_range}}%
+\indexlibrary{\idxcode{out_of_range}!constructor}%
 \begin{itemdecl}
 out_of_range(const string& what_arg);
 \end{itemdecl}
@@ -316,7 +316,7 @@ Constructs an object of class
 \tcode{strcmp(what(), what_arg.c_str()) == 0}.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{out_of_range}!\tcode{out_of_range}}%
+\indexlibrary{\idxcode{out_of_range}!constructor}%
 \begin{itemdecl}
 out_of_range(const char* what_arg);
 \end{itemdecl}
@@ -351,7 +351,7 @@ The class
 defines the type of objects thrown as exceptions to report errors presumably detectable only
 when the program executes.
 
-\indexlibrary{\idxcode{runtime_error}!\tcode{runtime_error}}%
+\indexlibrary{\idxcode{runtime_error}!constructor}%
 \begin{itemdecl}
 runtime_error(const string& what_arg);
 \end{itemdecl}
@@ -367,7 +367,7 @@ Constructs an object of class
 \tcode{strcmp(what(), what_arg.c_str()) == 0}.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{runtime_error}!\tcode{runtime_error}}%
+\indexlibrary{\idxcode{runtime_error}!constructor}%
 \begin{itemdecl}
 runtime_error(const char* what_arg);
 \end{itemdecl}
@@ -402,7 +402,7 @@ The class
 defines the type of objects thrown as exceptions to report range errors
 in internal computations.
 
-\indexlibrary{\idxcode{range_error}!\tcode{range_error}}%
+\indexlibrary{\idxcode{range_error}!constructor}%
 \begin{itemdecl}
 range_error(const string& what_arg);
 \end{itemdecl}
@@ -418,7 +418,7 @@ Constructs an object of class
 \tcode{strcmp(what(), what_arg.c_str()) == 0}.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{range_error}!\tcode{range_error}}%
+\indexlibrary{\idxcode{range_error}!constructor}%
 \begin{itemdecl}
 range_error(const char* what_arg);
 \end{itemdecl}
@@ -452,7 +452,7 @@ The class
 \tcode{overflow_error}
 defines the type of objects thrown as exceptions to report an arithmetic overflow error.
 
-\indexlibrary{\idxcode{overflow_error}!\tcode{overflow_error}}%
+\indexlibrary{\idxcode{overflow_error}!constructor}%
 \begin{itemdecl}
 overflow_error(const string& what_arg);
 \end{itemdecl}
@@ -468,7 +468,7 @@ Constructs an object of class
 \tcode{strcmp(what(), what_arg.c_str()) == 0}.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{overflow_error}!\tcode{overflow_error}}%
+\indexlibrary{\idxcode{overflow_error}!constructor}%
 \begin{itemdecl}
 overflow_error(const char* what_arg);
 \end{itemdecl}
@@ -486,7 +486,7 @@ Constructs an object of class
 
 \rSec2[underflow.error]{Class \tcode{underflow_error}}
 
-\indexlibrary{\idxcode{overflow_error}}%
+\indexlibrary{\idxcode{underflow_error}}%
 \begin{codeblock}
 namespace std {
   class underflow_error : public runtime_error {
@@ -502,7 +502,7 @@ The class
 \tcode{underflow_error}
 defines the type of objects thrown as exceptions to report an arithmetic underflow error.
 
-\indexlibrary{\idxcode{underflow_error}!\tcode{underflow_error}}%
+\indexlibrary{\idxcode{underflow_error}!constructor}%
 \begin{itemdecl}
 underflow_error(const string& what_arg);
 \end{itemdecl}
@@ -518,7 +518,7 @@ Constructs an object of class
 \tcode{strcmp(what(), what_arg.c_str()) == 0}.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{underflow_error}!\tcode{underflow_error}}%
+\indexlibrary{\idxcode{underflow_error}!constructor}%
 \begin{itemdecl}
 underflow_error(const char* what_arg);
 \end{itemdecl}
@@ -538,124 +538,222 @@ Constructs an object of class
 
 \pnum
 The header
-\tcode{<cassert>}, described in
-(Table~\ref{tab:diagnostics.hdr.cassert}),
+\tcode{<cassert>}
 provides a macro for documenting \Cpp program assertions and a mechanism
 for disabling the assertion checks.
 
-\begin{libsyntab2}{cassert}{tab:diagnostics.hdr.cassert}
-\macro  &   \tcode{assert}  \\
-\end{libsyntab2}
+\rSec2[cassert.syn]{Header \tcode{<cassert>} synopsis}
+
+\indextext{\idxhdr{cassert}}%
+\indexlibrary{\idxcode{assert}}%
+\begin{codeblock}
+#define assert(E) @\seebelow@
+\end{codeblock}
 
 \pnum
-The contents are the same as the Standard C library header
-\tcode{<assert.h>}.
+\indextext{\idxhdr{assert.h}}%
+\indextext{static_assert@\tcode{static_assert}!not macro}%
+The contents are the same as the C standard library header
+\tcode{<assert.h>},
+except that a macro named \tcode{static_assert}
+is not defined.
 
-\xref
-ISO C 7.2.
+\xref ISO C~7.2.
+
+\rSec2[assertions.assert]{The \tcode{assert} macro}
+
+\pnum
+An expression \tcode{assert(E)}
+is a constant subexpression~(\ref{defns.const.subexpr}), if
+\begin{itemize}
+\item
+\tcode{NDEBUG} is defined at the point where \tcode{assert}
+is last defined or redefined, or
+\item
+\tcode{E} contextually converted to \tcode{bool}~(Clause~\ref{conv})
+is a constant subexpression that evaluates to the value \tcode{true}.
+\end{itemize}
 
 \rSec1[errno]{Error numbers}
 
 \pnum
-The header \tcode{<cerrno>} is described in Table~\ref{tab:diagnostics.hdr.cerrno}. Its contents are the same as the POSIX header \tcode{<errno.h>}, except that \tcode{errno} shall be defined as a macro. \enternote The intent is to remain in close alignment with the POSIX standard. \exitnote A separate \tcode{errno} value shall be provided for each thread.
+\indextext{\idxhdr{errno.h}}%
+The contents of the header \tcode{<cerrno>} are the same as the POSIX header
+\tcode{<errno.h>}, except that \tcode{errno} shall be defined as a macro.
+\begin{note}
+The intent is to remain in close alignment with the POSIX standard.
+\end{note}
+A separate \tcode{errno} value shall be provided for each thread.
 
-\begin{libsyntab6}{cerrno}{tab:diagnostics.hdr.cerrno}
+\rSec2[cerrno.syn]{Header \tcode{<cerrno>} synopsis}
 
-\macros &
-\tcode{ECONNREFUSED} &
-\tcode{EIO} &
-\tcode{ENODEV} &
-\tcode{ENOTEMPTY} &
-\tcode{ERANGE} \\
+\indextext{\idxhdr{cerrno}}%
+\indexlibrary{\idxcode{errno}}%
+\indexlibrary{\idxcode{E2BIG}}%
+\indexlibrary{\idxcode{EACCES}}%
+\indexlibrary{\idxcode{EADDRINUSE}}%
+\indexlibrary{\idxcode{EADDRNOTAVAIL}}%
+\indexlibrary{\idxcode{EAFNOSUPPORT}}%
+\indexlibrary{\idxcode{EAGAIN}}%
+\indexlibrary{\idxcode{EALREADY}}%
+\indexlibrary{\idxcode{EBADF}}%
+\indexlibrary{\idxcode{EBADMSG}}%
+\indexlibrary{\idxcode{EBUSY}}%
+\indexlibrary{\idxcode{ECANCELED}}%
+\indexlibrary{\idxcode{ECHILD}}%
+\indexlibrary{\idxcode{ECONNABORTED}}%
+\indexlibrary{\idxcode{ECONNREFUSED}}%
+\indexlibrary{\idxcode{ECONNRESET}}%
+\indexlibrary{\idxcode{EDEADLK}}%
+\indexlibrary{\idxcode{EDESTADDRREQ}}%
+\indexlibrary{\idxcode{EDOM}}%
+\indexlibrary{\idxcode{EEXIST}}%
+\indexlibrary{\idxcode{EFAULT}}%
+\indexlibrary{\idxcode{EFBIG}}%
+\indexlibrary{\idxcode{EHOSTUNREACH}}%
+\indexlibrary{\idxcode{EIDRM}}%
+\indexlibrary{\idxcode{EILSEQ}}%
+\indexlibrary{\idxcode{EINPROGRESS}}%
+\indexlibrary{\idxcode{EINTR}}%
+\indexlibrary{\idxcode{EINVAL}}%
+\indexlibrary{\idxcode{EIO}}%
+\indexlibrary{\idxcode{EISCONN}}%
+\indexlibrary{\idxcode{EISDIR}}%
+\indexlibrary{\idxcode{ELOOP}}%
+\indexlibrary{\idxcode{EMFILE}}%
+\indexlibrary{\idxcode{EMLINK}}%
+\indexlibrary{\idxcode{EMSGSIZE}}%
+\indexlibrary{\idxcode{ENAMETOOLONG}}%
+\indexlibrary{\idxcode{ENETDOWN}}%
+\indexlibrary{\idxcode{ENETRESET}}%
+\indexlibrary{\idxcode{ENETUNREACH}}%
+\indexlibrary{\idxcode{ENFILE}}%
+\indexlibrary{\idxcode{ENOBUFS}}%
+\indexlibrary{\idxcode{ENODATA}}%
+\indexlibrary{\idxcode{ENODEV}}%
+\indexlibrary{\idxcode{ENOENT}}%
+\indexlibrary{\idxcode{ENOEXEC}}%
+\indexlibrary{\idxcode{ENOLCK}}%
+\indexlibrary{\idxcode{ENOLINK}}%
+\indexlibrary{\idxcode{ENOMEM}}%
+\indexlibrary{\idxcode{ENOMSG}}%
+\indexlibrary{\idxcode{ENOPROTOOPT}}%
+\indexlibrary{\idxcode{ENOSPC}}%
+\indexlibrary{\idxcode{ENOSR}}%
+\indexlibrary{\idxcode{ENOSTR}}%
+\indexlibrary{\idxcode{ENOSYS}}%
+\indexlibrary{\idxcode{ENOTCONN}}%
+\indexlibrary{\idxcode{ENOTDIR}}%
+\indexlibrary{\idxcode{ENOTEMPTY}}%
+\indexlibrary{\idxcode{ENOTRECOVERABLE}}%
+\indexlibrary{\idxcode{ENOTSOCK}}%
+\indexlibrary{\idxcode{ENOTSUP}}%
+\indexlibrary{\idxcode{ENOTTY}}%
+\indexlibrary{\idxcode{ENXIO}}%
+\indexlibrary{\idxcode{EOPNOTSUPP}}%
+\indexlibrary{\idxcode{EOVERFLOW}}%
+\indexlibrary{\idxcode{EOWNERDEAD}}%
+\indexlibrary{\idxcode{EPERM}}%
+\indexlibrary{\idxcode{EPIPE}}%
+\indexlibrary{\idxcode{EPROTO}}%
+\indexlibrary{\idxcode{EPROTONOSUPPORT}}%
+\indexlibrary{\idxcode{EPROTOTYPE}}%
+\indexlibrary{\idxcode{ERANGE}}%
+\indexlibrary{\idxcode{EROFS}}%
+\indexlibrary{\idxcode{ESPIPE}}%
+\indexlibrary{\idxcode{ESRCH}}%
+\indexlibrary{\idxcode{ETIME}}%
+\indexlibrary{\idxcode{ETIMEDOUT}}%
+\indexlibrary{\idxcode{ETXTBSY}}%
+\indexlibrary{\idxcode{EWOULDBLOCK}}%
+\indexlibrary{\idxcode{EXDEV}}%
+\begin{codeblock}
+#define errno @\seebelow@
 
-\tcode{E2BIG} &
-\tcode{ECONNRESET} &
-\tcode{EISCONN} &
-\tcode{ENOENT} &
-\tcode{ENOTRECOVERABLE} &
-\tcode{EROFS} \\
+#define E2BIG @\seebelow@
+#define EACCES @\seebelow@
+#define EADDRINUSE @\seebelow@
+#define EADDRNOTAVAIL @\seebelow@
+#define EAFNOSUPPORT @\seebelow@
+#define EAGAIN @\seebelow@
+#define EALREADY @\seebelow@
+#define EBADF @\seebelow@
+#define EBADMSG @\seebelow@
+#define EBUSY @\seebelow@
+#define ECANCELED @\seebelow@
+#define ECHILD @\seebelow@
+#define ECONNABORTED @\seebelow@
+#define ECONNREFUSED @\seebelow@
+#define ECONNRESET @\seebelow@
+#define EDEADLK @\seebelow@
+#define EDESTADDRREQ @\seebelow@
+#define EDOM @\seebelow@
+#define EEXIST @\seebelow@
+#define EFAULT @\seebelow@
+#define EFBIG @\seebelow@
+#define EHOSTUNREACH @\seebelow@
+#define EIDRM @\seebelow@
+#define EILSEQ @\seebelow@
+#define EINPROGRESS @\seebelow@
+#define EINTR @\seebelow@
+#define EINVAL @\seebelow@
+#define EIO @\seebelow@
+#define EISCONN @\seebelow@
+#define EISDIR @\seebelow@
+#define ELOOP @\seebelow@
+#define EMFILE @\seebelow@
+#define EMLINK @\seebelow@
+#define EMSGSIZE @\seebelow@
+#define ENAMETOOLONG @\seebelow@
+#define ENETDOWN @\seebelow@
+#define ENETRESET @\seebelow@
+#define ENETUNREACH @\seebelow@
+#define ENFILE @\seebelow@
+#define ENOBUFS @\seebelow@
+#define ENODATA @\seebelow@
+#define ENODEV @\seebelow@
+#define ENOENT @\seebelow@
+#define ENOEXEC @\seebelow@
+#define ENOLCK @\seebelow@
+#define ENOLINK @\seebelow@
+#define ENOMEM @\seebelow@
+#define ENOMSG @\seebelow@
+#define ENOPROTOOPT @\seebelow@
+#define ENOSPC @\seebelow@
+#define ENOSR @\seebelow@
+#define ENOSTR @\seebelow@
+#define ENOSYS @\seebelow@
+#define ENOTCONN @\seebelow@
+#define ENOTDIR @\seebelow@
+#define ENOTEMPTY @\seebelow@
+#define ENOTRECOVERABLE @\seebelow@
+#define ENOTSOCK @\seebelow@
+#define ENOTSUP @\seebelow@
+#define ENOTTY @\seebelow@
+#define ENXIO @\seebelow@
+#define EOPNOTSUPP @\seebelow@
+#define EOVERFLOW @\seebelow@
+#define EOWNERDEAD @\seebelow@
+#define EPERM @\seebelow@
+#define EPIPE @\seebelow@
+#define EPROTO @\seebelow@
+#define EPROTONOSUPPORT @\seebelow@
+#define EPROTOTYPE @\seebelow@
+#define ERANGE @\seebelow@
+#define EROFS @\seebelow@
+#define ESPIPE @\seebelow@
+#define ESRCH @\seebelow@
+#define ETIME @\seebelow@
+#define ETIMEDOUT @\seebelow@
+#define ETXTBSY @\seebelow@
+#define EWOULDBLOCK @\seebelow@
+#define EXDEV @\seebelow@ 
+\end{codeblock}
 
-\tcode{EACCES} &
-\tcode{EDEADLK} &
-\tcode{EISDIR} &
-\tcode{ENOEXEC} &
-\tcode{ENOTSOCK} &
-\tcode{ESPIPE} \\
+\pnum
+The meaning of the macros in this header is defined by the POSIX standard.
 
-\tcode{EADDRINUSE} &
-\tcode{EDESTADDRREQ} &
-\tcode{ELOOP} &
-\tcode{ENOLCK} &
-\tcode{ENOTSUP} &
-\tcode{ESRCH} \\
-
-\tcode{EADDRNOTAVAIL} &
-\tcode{EDOM} &
-\tcode{EMFILE} &
-\tcode{ENOLINK} &
-\tcode{ENOTTY} &
-\tcode{ETIME} \\
-
-\tcode{EAFNOSUPPORT} &
-\tcode{EEXIST} &
-\tcode{EMLINK} &
-\tcode{ENOMEM} &
-\tcode{ENXIO} &
-\tcode{ETIMEDOUT} \\
-
-\tcode{EAGAIN} &
-\tcode{EFAULT} &
-\tcode{EMSGSIZE} &
-\tcode{ENOMSG} &
-\tcode{EOPNOTSUPP} &
-\tcode{ETXTBSY} \\
-
-\tcode{EALREADY} &
-\tcode{EFBIG} &
-\tcode{ENAMETOOLONG} &
-\tcode{ENOPROTOOPT} &
-\tcode{EOVERFLOW} &
-\tcode{EWOULDBLOCK} \\
-
-\tcode{EBADF} &
-\tcode{EHOSTUNREACH} &
-\tcode{ENETDOWN} &
-\tcode{ENOSPC} &
-\tcode{EOWNERDEAD} &
-\tcode{EXDEV} \\
-
-\tcode{EBADMSG} &
-\tcode{EIDRM} &
-\tcode{ENETRESET} &
-\tcode{ENOSR} &
-\tcode{EPERM} &
-\tcode{errno} \\
-
-\tcode{EBUSY} &
-\tcode{EILSEQ} &
-\tcode{ENETUNREACH} &
-\tcode{ENOSTR} &
-\tcode{EPIPE}  & \\
-
-\tcode{ECANCELED} &
-\tcode{EINPROGRESS} &
-\tcode{ENFILE} &
-\tcode{ENOSYS} &
-\tcode{EPROTO} & \\
-
-\tcode{ECHILD} &
-\tcode{EINTR} &
-\tcode{ENOBUFS} &
-\tcode{ENOTCONN} &
-\tcode{EPROTONOSUPPORT} & \\
-
-\tcode{ECONNABORTED} &
-\tcode{EINVAL} &
-\tcode{ENODATA} &
-\tcode{ENOTDIR} &
-\tcode{EPROTOTYPE} & \\
-
-\end{libsyntab6}
+\xref ISO C~7.5.
 
 \rSec1[syserr]{System error support}
 
@@ -670,8 +768,9 @@ Components described in this subclause shall not change the value of
 Implementations should leave the error states provided by other
 libraries unchanged.
 
-\synopsis{Header \tcode{<system_error>} synopsis}
-
+\rSec2[system_error.syn]{Header \tcode{<system_error>} synopsis}
+\indextext{\idxhdr{system_error}}%
+\indexlibrary{\idxhdr{system_error}}%
 \indexlibrary{\idxcode{error_category}}%
 \indexlibrary{\idxcode{error_code}}%
 \indexlibrary{\idxcode{error_condition}}%
@@ -681,6 +780,7 @@ libraries unchanged.
 \indexlibrary{\idxcode{errc}}%
 \indexlibrary{\idxcode{make_error_code}}%
 \indexlibrary{\idxcode{make_error_condition}}%
+
 \begin{codeblock}
 namespace std {
   class error_category;
@@ -778,12 +878,12 @@ namespace std {
     wrong_protocol_type,                // \tcode{EPROTOTYPE}
   };
   
-  template <> struct is_error_condition_enum<errc> : true_type { };
+  template <> struct is_error_condition_enum<errc> : true_type {};
 
   error_code make_error_code(errc e) noexcept;
   error_condition make_error_condition(errc e) noexcept;
 
-  // \ref{syserr.compare} Comparison operators:
+  // \ref{syserr.compare}, comparison operators:
   bool operator==(const error_code& lhs, const error_code& rhs) noexcept;
   bool operator==(const error_code& lhs, const error_condition& rhs) noexcept;
   bool operator==(const error_condition& lhs, const error_code& rhs) noexcept;
@@ -793,10 +893,16 @@ namespace std {
   bool operator!=(const error_condition& lhs, const error_code& rhs) noexcept;
   bool operator!=(const error_condition& lhs, const error_condition& rhs) noexcept;
 
-  // \ref{syserr.hash} Hash support
+  // \ref{syserr.hash}, hash support:
   template <class T> struct hash;
   template <> struct hash<error_code>;
-}  // namespace std
+
+  // \ref{syserr}, system error support:
+  template <class T> constexpr bool is_error_code_enum_v
+    = is_error_code_enum<T>::value;
+  template <class T> constexpr bool is_error_condition_enum_v
+    = is_error_condition_enum<T>::value;
+}
 \end{codeblock}
 
 \pnum The value of each \tcode{enum errc} constant shall be the same as
@@ -821,11 +927,11 @@ Classes may be derived from \tcode{error_category} to support
 categories of errors in addition to those defined in this International
 Standard.
 Such classes shall behave as specified in this
-subclause. \enternote \tcode{error_category} objects are
+subclause. \begin{note} \tcode{error_category} objects are
 passed by reference, and two such objects
 are equal if they have the same address. This means that applications using
 custom \tcode{error_category} types should create a single object of each
-such type. \exitnote
+such type. \end{note}
 
 \indexlibrary{\idxcode{error_category}}%
 \indexlibrary{\idxcode{generic_category}}%
@@ -867,8 +973,7 @@ virtual ~error_category();
 \effects Destroys an object of class \tcode{error_category}.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{name}!\idxcode{error_category}}
-\indexlibrary{\idxcode{error_category}!\idxcode{name}}
+\indexlibrarymember{name}{error_category}%
 \begin{itemdecl}
 virtual const char* name() const noexcept = 0;
 \end{itemdecl}
@@ -878,8 +983,7 @@ virtual const char* name() const noexcept = 0;
 \returns A string naming the error category.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{default_error_condition}!\idxcode{error_category}}
-\indexlibrary{\idxcode{error_category}!\idxcode{default_error_condition}}
+\indexlibrarymember{default_error_condition}{error_category}%
 \begin{itemdecl}
 virtual error_condition default_error_condition(int ev) const noexcept;
 \end{itemdecl}
@@ -890,8 +994,7 @@ virtual error_condition default_error_condition(int ev) const noexcept;
 \tcode{error_condition(ev, *this)}.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{equivalent}!\idxcode{error_category}}
-\indexlibrary{\idxcode{error_category}!\idxcode{equivalent}}
+\indexlibrarymember{equivalent}{error_category}%
 \begin{itemdecl}
 virtual bool equivalent(int code, const error_condition& condition) const noexcept;
 \end{itemdecl}
@@ -901,8 +1004,7 @@ virtual bool equivalent(int code, const error_condition& condition) const noexce
 \returns \tcode{default_error_condition(code) == condition}.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{equivalent}!\idxcode{error_category}}
-\indexlibrary{\idxcode{error_category}!\idxcode{equivalent}}
+\indexlibrarymember{equivalent}{error_category}%
 \begin{itemdecl}
 virtual bool equivalent(const error_code& code, int condition) const noexcept;
 \end{itemdecl}
@@ -912,8 +1014,7 @@ virtual bool equivalent(const error_code& code, int condition) const noexcept;
 \returns \tcode{*this == code.category() \&\& code.value() == condition}.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{message}!\idxcode{error_category}}
-\indexlibrary{\idxcode{error_category}!\idxcode{message}}
+\indexlibrarymember{message}{error_category}%
 \begin{itemdecl}
 virtual string message(int ev) const = 0;
 \end{itemdecl}
@@ -935,8 +1036,7 @@ constexpr error_category() noexcept;
 \effects Constructs an object of class \tcode{error_category}.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{operator==}!\idxcode{error_category}}
-\indexlibrary{\idxcode{error_category}!\idxcode{operator==}}
+\indexlibrarymember{operator==}{error_category}%
 \begin{itemdecl}
 bool operator==(const error_category& rhs) const noexcept;
 \end{itemdecl}
@@ -946,8 +1046,7 @@ bool operator==(const error_category& rhs) const noexcept;
 \returns \tcode{this == \&rhs}.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{operator"!=}!\idxcode{error_category}}
-\indexlibrary{\idxcode{error_category}!\idxcode{operator"!=}}
+\indexlibrarymember{operator"!=}{error_category}%
 \begin{itemdecl}
 bool operator!=(const error_category& rhs) const noexcept;
 \end{itemdecl}
@@ -957,8 +1056,7 @@ bool operator!=(const error_category& rhs) const noexcept;
 \returns \tcode{!(*this == rhs)}.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{operator<}!\idxcode{error_category}}
-\indexlibrary{\idxcode{error_category}!\idxcode{operator<}}
+\indexlibrarymember{operator<}{error_category}%
 \begin{itemdecl}
 bool operator<(const error_category& rhs) const noexcept;
 \end{itemdecl}
@@ -967,13 +1065,12 @@ bool operator<(const error_category& rhs) const noexcept;
 \pnum
 \returns \tcode{less<const error_category*>()(this, \&rhs)}.
 
-\enternote \tcode{less}~(\ref{comparisons}) provides a total ordering for pointers. \exitnote
+\begin{note} \tcode{less}~(\ref{comparisons}) provides a total ordering for pointers. \end{note}
 \end{itemdescr}
 
 \rSec3[syserr.errcat.derived]{Program defined classes derived from \tcode{error_category}}
 
-\indexlibrary{\idxcode{name}!\idxcode{error_category}}
-\indexlibrary{\idxcode{error_category}!\idxcode{name}}
+\indexlibrarymember{name}{error_category}%
 \begin{itemdecl}
 virtual const char* name() const noexcept = 0;
 \end{itemdecl}
@@ -983,8 +1080,7 @@ virtual const char* name() const noexcept = 0;
 \returns A string naming the error category.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{default_error_condition}!\idxcode{error_category}}
-\indexlibrary{\idxcode{error_category}!\idxcode{default_error_condition}}
+\indexlibrarymember{default_error_condition}{error_category}%
 \begin{itemdecl}
 virtual error_condition default_error_condition(int ev) const noexcept;
 \end{itemdecl}
@@ -994,8 +1090,7 @@ virtual error_condition default_error_condition(int ev) const noexcept;
 \returns An object of type \tcode{error_condition} that corresponds to \tcode{ev}.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{equivalent}!\idxcode{error_category}}
-\indexlibrary{\idxcode{error_category}!\idxcode{equivalent}}
+\indexlibrarymember{equivalent}{error_category}%
 \begin{itemdecl}
 virtual bool equivalent(int code, const error_condition& condition) const noexcept;
 \end{itemdecl}
@@ -1005,8 +1100,7 @@ virtual bool equivalent(int code, const error_condition& condition) const noexce
 \returns \tcode{true} if, for the category of error represented by \tcode{*this}, \tcode{code} is considered equivalent to \tcode{condition}; otherwise, \tcode{false}.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{equivalent}!\idxcode{error_category}}
-\indexlibrary{\idxcode{error_category}!\idxcode{equivalent}}
+\indexlibrarymember{equivalent}{error_category}%
 \begin{itemdecl}
 virtual bool equivalent(const error_code& code, int condition) const noexcept;
 \end{itemdecl}
@@ -1018,7 +1112,7 @@ virtual bool equivalent(const error_code& code, int condition) const noexcept;
 
 \rSec3[syserr.errcat.objects]{Error category objects}
 
-\indexlibrary{\idxcode{generic_category}}
+\indexlibrary{\idxcode{generic_category}}%
 \begin{itemdecl}
 const error_category& generic_category() noexcept;
 \end{itemdecl}
@@ -1029,10 +1123,10 @@ const error_category& generic_category() noexcept;
 All calls to this function shall return references to the same object.
 
 \pnum
-\notes The object's \tcode{default_error_condition} and \tcode{equivalent} virtual functions shall behave as specified for the class \tcode{error_category}. The object's \tcode{name} virtual function shall return a pointer to the string \tcode{"generic"}.
+\remarks The object's \tcode{default_error_condition} and \tcode{equivalent} virtual functions shall behave as specified for the class \tcode{error_category}. The object's \tcode{name} virtual function shall return a pointer to the string \tcode{"generic"}.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{system_category}}
+\indexlibrary{\idxcode{system_category}}%
 \begin{itemdecl}
 const error_category& system_category() noexcept;
 \end{itemdecl}
@@ -1043,7 +1137,7 @@ const error_category& system_category() noexcept;
 All calls to this function shall return references to the same object.
 
 \pnum
-\notes The object's \tcode{equivalent} virtual functions shall behave as specified for
+\remarks The object's \tcode{equivalent} virtual functions shall behave as specified for
 class \tcode{error_category}. The object's \tcode{name} virtual function shall return a
 pointer to the string \tcode{"system"}. The object's \tcode{default_error_condition}
 virtual function shall behave as follows:
@@ -1052,9 +1146,9 @@ If the argument \tcode{ev} corresponds to a POSIX \tcode{errno} value \tcode{pos
 function shall return \tcode{error_condition(posv, generic_category())}.
 Otherwise, the function shall return \tcode{error_condition(ev,
 system_category())}. What constitutes correspondence for any given operating
-system is unspecified. \enternote The number of potential system error codes is large
+system is unspecified. \begin{note} The number of potential system error codes is large
 and unbounded, and some may not correspond to any POSIX \tcode{errno} value. Thus
-implementations are given latitude in determining correspondence. \exitnote
+implementations are given latitude in determining correspondence. \end{note}
 \end{itemdescr}
 
 \rSec2[syserr.errcode]{Class \tcode{error_code}}
@@ -1064,8 +1158,8 @@ implementations are given latitude in determining correspondence. \exitnote
 \pnum
 The class \tcode{error_code} describes an object used to hold error code
 values, such as those originating from the operating system or other low-level
-application program interfaces. \enternote Class \tcode{error_code} is an
-adjunct to error reporting by exception. \exitnote
+application program interfaces. \begin{note} Class \tcode{error_code} is an
+adjunct to error reporting by exception. \end{note}
 
 \indexlibrary{\idxcode{error_code}}%
 \begin{codeblock}
@@ -1101,15 +1195,14 @@ namespace std {
   bool operator<(const error_code& lhs, const error_code& rhs) noexcept;
 
   template <class charT, class traits>
-    basic_ostream<charT,traits>&
-      operator<<(basic_ostream<charT,traits>& os, const error_code& ec);
+    basic_ostream<charT, traits>&
+      operator<<(basic_ostream<charT, traits>& os, const error_code& ec);
 }   // namespace std
 \end{codeblock}
 
 \rSec3[syserr.errcode.constructors]{Class \tcode{error_code} constructors}
 
-\indexlibrary{\idxcode{error_code}!\idxcode{error_code}}
-\indexlibrary{\idxcode{error_code}!\idxcode{error_code}}
+\indexlibrary{\idxcode{error_code}!constructor}%
 \begin{itemdecl}
 error_code() noexcept;
 \end{itemdecl}
@@ -1122,8 +1215,7 @@ error_code() noexcept;
 \postconditions \tcode{val_ == 0} and \tcode{cat_ == \&system_category()}.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{error_code}!\idxcode{error_code}}
-\indexlibrary{\idxcode{error_code}!\idxcode{error_code}}
+\indexlibrary{\idxcode{error_code}!constructor}%
 \begin{itemdecl}
 error_code(int val, const error_category& cat) noexcept;
 \end{itemdecl}
@@ -1136,8 +1228,7 @@ error_code(int val, const error_category& cat) noexcept;
 \postconditions \tcode{val_ == val} and \tcode{cat_ == \&cat}.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{error_code}!\idxcode{error_code}}
-\indexlibrary{\idxcode{error_code}!\idxcode{error_code}}
+\indexlibrary{\idxcode{error_code}!constructor}%
 \begin{itemdecl}
 template <class ErrorCodeEnum>
   error_code(ErrorCodeEnum e) noexcept;
@@ -1152,13 +1243,12 @@ template <class ErrorCodeEnum>
 
 \pnum
 \remarks This constructor shall not participate in overload resolution unless\linebreak
-\tcode{is_error_code_enum<ErrorCodeEnum>::value} is \tcode{true}.
+\tcode{is_error_code_enum_v<ErrorCodeEnum>} is \tcode{true}.
 \end{itemdescr}
 
 \rSec3[syserr.errcode.modifiers]{Class \tcode{error_code} modifiers}
 
-\indexlibrary{\idxcode{assign}!\idxcode{error_code}}
-\indexlibrary{\idxcode{error_code}!\idxcode{assign}}
+\indexlibrarymember{assign}{error_code}%
 \begin{itemdecl}
 void assign(int val, const error_category& cat) noexcept;
 \end{itemdecl}
@@ -1168,8 +1258,7 @@ void assign(int val, const error_category& cat) noexcept;
 \postconditions \tcode{val_ == val} and \tcode{cat_ == \&cat}.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{operator=}!\idxcode{error_code}}
-\indexlibrary{\idxcode{error_code}!\idxcode{operator=}}
+\indexlibrarymember{operator=}{error_code}%
 \begin{itemdecl}
 template <class ErrorCodeEnum>
     error_code& operator=(ErrorCodeEnum e) noexcept;
@@ -1184,11 +1273,10 @@ template <class ErrorCodeEnum>
 
 \pnum
 \remarks This operator shall not participate in overload resolution unless\linebreak
-\tcode{is_error_code_enum<ErrorCodeEnum>::value} is \tcode{true}.
+\tcode{is_error_code_enum_v<ErrorCodeEnum>} is \tcode{true}.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{clear}!\idxcode{error_code}}
-\indexlibrary{\idxcode{error_code}!\idxcode{clear}}
+\indexlibrarymember{clear}{error_code}%
 \begin{itemdecl}
 void clear() noexcept;
 \end{itemdecl}
@@ -1201,8 +1289,7 @@ void clear() noexcept;
 
 \rSec3[syserr.errcode.observers]{Class \tcode{error_code} observers}
 
-\indexlibrary{\idxcode{value}!\idxcode{error_code}}
-\indexlibrary{\idxcode{error_code}!\idxcode{value}}
+\indexlibrarymember{value}{error_code}%
 \begin{itemdecl}
 int value() const noexcept;
 \end{itemdecl}
@@ -1212,8 +1299,7 @@ int value() const noexcept;
 \returns \tcode{val_}.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{category}!\idxcode{error_code}}
-\indexlibrary{\idxcode{error_code}!\idxcode{category}}
+\indexlibrarymember{category}{error_code}%
 \begin{itemdecl}
 const error_category& category() const noexcept;
 \end{itemdecl}
@@ -1223,8 +1309,7 @@ const error_category& category() const noexcept;
 \returns \tcode{*cat_}.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{default_error_condition}!\idxcode{error_code}}
-\indexlibrary{\idxcode{error_code}!\idxcode{default_error_condition}}
+\indexlibrarymember{default_error_condition}{error_code}%
 \begin{itemdecl}
 error_condition default_error_condition() const noexcept;
 \end{itemdecl}
@@ -1234,8 +1319,7 @@ error_condition default_error_condition() const noexcept;
 \returns \tcode{category().default_error_condition(value())}.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{message}!\idxcode{error_code}}
-\indexlibrary{\idxcode{error_code}!\idxcode{message}}
+\indexlibrarymember{message}{error_code}%
 \begin{itemdecl}
 string message() const;
 \end{itemdecl}
@@ -1245,8 +1329,7 @@ string message() const;
 \returns \tcode{category().message(value())}.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{operator bool}!\idxcode{error_code}}
-\indexlibrary{\idxcode{error_code}!\idxcode{operator bool}}
+\indexlibrarymember{operator bool}{error_code}%
 \begin{itemdecl}
 explicit operator bool() const noexcept;
 \end{itemdecl}
@@ -1258,7 +1341,7 @@ explicit operator bool() const noexcept;
 
 \rSec3[syserr.errcode.nonmembers]{Class \tcode{error_code} non-member functions}
 
-\indexlibrary{\idxcode{make_error_code}}
+\indexlibrary{\idxcode{make_error_code}}%
 \begin{itemdecl}
 error_code make_error_code(errc e) noexcept;
 \end{itemdecl}
@@ -1268,28 +1351,31 @@ error_code make_error_code(errc e) noexcept;
 \returns \tcode{error_code(static_cast<int>(e), generic_category())}.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{operator<}!\idxcode{error_code}}%
-\indexlibrary{\idxcode{error_code}!\idxcode{operator<}}%
+\indexlibrarymember{operator<}{error_code}%
 \begin{itemdecl}
 bool operator<(const error_code& lhs, const error_code& rhs) noexcept;
 \end{itemdecl}
 
 \begin{itemdescr}
 \pnum
-\returns \tcode{lhs.category() < rhs.category() || lhs.category() == rhs.category() \&\& lhs.value() < rhs.value()}.
+\returns
+\begin{codeblock}
+lhs.category() < rhs.category() ||
+(lhs.category() == rhs.category() && lhs.value() < rhs.value()).
+\end{codeblock}
 \end{itemdescr}
 
-\indexlibrary{\idxcode{operator\shl}!\idxcode{error_code}}%
-\indexlibrary{\idxcode{error_code}!\idxcode{operator\shl}}%
+\indexlibrarymember{operator\shl}{error_code}%
 \begin{itemdecl}
 template <class charT, class traits>
-  basic_ostream<charT,traits>&
-    operator<<(basic_ostream<charT,traits>& os, const error_code& ec);
+  basic_ostream<charT, traits>&
+    operator<<(basic_ostream<charT, traits>& os, const error_code& ec);
 \end{itemdecl}
 
 \begin{itemdescr}
 \pnum
-\effects \tcode{os <{<} ec.category().name() <{<} ':' <{<} ec.value()}.
+\effects
+As if by: \tcode{os << ec.category().name() << ':' << ec.value();}
 \end{itemdescr}
 
 
@@ -1299,10 +1385,10 @@ template <class charT, class traits>
 
 \pnum
 The class \tcode{error_condition} describes an object used to hold values identifying
-error conditions. \enternote \tcode{error_condition} values are portable abstractions,
-while \tcode{error_code} values~(\ref{syserr.errcode}) are implementation specific. \exitnote
+error conditions. \begin{note} \tcode{error_condition} values are portable abstractions,
+while \tcode{error_code} values~(\ref{syserr.errcode}) are implementation specific. \end{note}
 
-\indexlibrary{\idxcode{error_code}}%
+\indexlibrary{\idxcode{error_condition}}%
 \begin{codeblock}
 namespace std {
   class error_condition {
@@ -1315,7 +1401,7 @@ namespace std {
 
     // \ref{syserr.errcondition.modifiers} modifiers:
     void assign(int val, const error_category& cat) noexcept;
-    template<class ErrorConditionEnum>
+    template <class ErrorConditionEnum>
         error_condition& operator=(ErrorConditionEnum e) noexcept;
     void clear() noexcept;
 
@@ -1378,14 +1464,13 @@ template <class ErrorConditionEnum>
 
 \pnum
 \remarks This constructor shall not participate in overload resolution unless\linebreak
-\tcode{is_error_condition_enum<ErrorConditionEnum>::value} is \tcode{true}.
+\tcode{is_error_condition_enum_v<ErrorConditionEnum>} is \tcode{true}.
 \end{itemdescr}
 
 
 \rSec3[syserr.errcondition.modifiers]{Class \tcode{error_condition} modifiers}
 
-\indexlibrary{\idxcode{assign}!\idxcode{error_condition}}
-\indexlibrary{\idxcode{error_condition}!\idxcode{assign}}
+\indexlibrarymember{assign}{error_condition}%
 \begin{itemdecl}
 void assign(int val, const error_category& cat) noexcept;
 \end{itemdecl}
@@ -1395,8 +1480,7 @@ void assign(int val, const error_category& cat) noexcept;
 \postconditions \tcode{val_ == val} and \tcode{cat_ == \&cat}.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{operator=}!\idxcode{error_condition}}
-\indexlibrary{\idxcode{error_condition}!\idxcode{operator=}}
+\indexlibrarymember{operator=}{error_condition}%
 \begin{itemdecl}
 template <class ErrorConditionEnum>
     error_condition& operator=(ErrorConditionEnum e) noexcept;
@@ -1411,11 +1495,10 @@ template <class ErrorConditionEnum>
 
 \pnum
 \remarks This operator shall not participate in overload resolution unless\linebreak
-\tcode{is_error_condition_enum<ErrorConditionEnum>::value} is \tcode{true}.
+\tcode{is_error_condition_enum_v<ErrorConditionEnum>} is \tcode{true}.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{clear}!\idxcode{error_condition}}
-\indexlibrary{\idxcode{error_condition}!\idxcode{clear}}
+\indexlibrarymember{clear}{error_condition}%
 \begin{itemdecl}
 void clear() noexcept;
 \end{itemdecl}
@@ -1426,8 +1509,7 @@ void clear() noexcept;
 
 \rSec3[syserr.errcondition.observers]{Class \tcode{error_condition} observers}
 
-\indexlibrary{\idxcode{value}!\idxcode{error_condition}}
-\indexlibrary{\idxcode{error_condition}!\idxcode{value}}
+\indexlibrarymember{value}{error_condition}%
 \begin{itemdecl}
 int value() const noexcept;
 \end{itemdecl}
@@ -1437,8 +1519,7 @@ int value() const noexcept;
 \returns \tcode{val_}.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{category}!\idxcode{error_condition}}
-\indexlibrary{\idxcode{error_condition}!\idxcode{category}}
+\indexlibrarymember{category}{error_condition}%
 \begin{itemdecl}
 const error_category& category() const noexcept;
 \end{itemdecl}
@@ -1448,8 +1529,7 @@ const error_category& category() const noexcept;
 \returns \tcode{*cat_}.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{message}!\idxcode{error_condition}}
-\indexlibrary{\idxcode{error_condition}!\idxcode{message}}
+\indexlibrarymember{message}{error_condition}%
 \begin{itemdecl}
 string message() const;
 \end{itemdecl}
@@ -1459,8 +1539,7 @@ string message() const;
 \returns \tcode{category().message(value())}.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{operator bool}!\idxcode{error_condition}}
-\indexlibrary{\idxcode{error_condition}!\idxcode{operator bool}}
+\indexlibrarymember{operator bool}{error_condition}%
 \begin{itemdecl}
 explicit operator bool() const noexcept;
 \end{itemdecl}
@@ -1472,7 +1551,7 @@ explicit operator bool() const noexcept;
 
 \rSec3[syserr.errcondition.nonmembers]{Class \tcode{error_condition} non-member functions}
 
-\indexlibrary{\idxcode{make_error_condition}}
+\indexlibrary{\idxcode{make_error_condition}}%
 \begin{itemdecl}
 error_condition make_error_condition(errc e) noexcept;
 \end{itemdecl}
@@ -1481,8 +1560,7 @@ error_condition make_error_condition(errc e) noexcept;
 \returns \tcode{error_condition(static_cast<int>(e), generic_category())}.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{operator<}!\idxcode{error_condition}}%
-\indexlibrary{\idxcode{error_condition}!\idxcode{operator<}}%
+\indexlibrarymember{operator<}{error_condition}%
 \begin{itemdecl}
 bool operator<(const error_condition& lhs, const error_condition& rhs) noexcept;
 \end{itemdecl}
@@ -1495,8 +1573,7 @@ lhs.value() < rhs.value()}.
 
 \rSec2[syserr.compare]{Comparison operators}
 
-\indexlibrary{\idxcode{operator==}!\idxcode{error_code}}%
-\indexlibrary{\idxcode{error_code}!\idxcode{operator==}}%
+\indexlibrarymember{operator==}{error_code}%
 \begin{itemdecl}
 bool operator==(const error_code& lhs, const error_code& rhs) noexcept;
 \end{itemdecl}
@@ -1506,10 +1583,8 @@ bool operator==(const error_code& lhs, const error_code& rhs) noexcept;
 \returns \tcode{lhs.category() == rhs.category() \&\& lhs.value() == rhs.value()}.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{operator==}!\idxcode{error_condition}}%
-\indexlibrary{\idxcode{error_condition}!\idxcode{operator==}}%
-\indexlibrary{\idxcode{operator==}!\idxcode{error_code}}%
-\indexlibrary{\idxcode{error_code}!\idxcode{operator==}}%
+\indexlibrarymember{operator==}{error_condition}%
+\indexlibrarymember{operator==}{error_code}%
 \begin{itemdecl}
 bool operator==(const error_code& lhs, const error_condition& rhs) noexcept;
 \end{itemdecl}
@@ -1520,10 +1595,8 @@ bool operator==(const error_code& lhs, const error_condition& rhs) noexcept;
 rhs.value())}.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{operator==}!\idxcode{error_condition}}%
-\indexlibrary{\idxcode{error_condition}!\idxcode{operator==}}%
-\indexlibrary{\idxcode{operator==}!\idxcode{error_code}}%
-\indexlibrary{\idxcode{error_code}!\idxcode{operator==}}%
+\indexlibrarymember{operator==}{error_condition}%
+\indexlibrarymember{operator==}{error_code}%
 \begin{itemdecl}
 bool operator==(const error_condition& lhs, const error_code& rhs) noexcept;
 \end{itemdecl}
@@ -1533,8 +1606,7 @@ bool operator==(const error_condition& lhs, const error_code& rhs) noexcept;
 \returns \tcode{rhs.category().equivalent(rhs.value(), lhs) || lhs.category().equivalent(rhs, lhs.value())}.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{operator==}!\idxcode{error_condition}}%
-\indexlibrary{\idxcode{error_condition}!\idxcode{operator==}}%
+\indexlibrarymember{operator==}{error_condition}%
 \begin{itemdecl}
 bool operator==(const error_condition& lhs, const error_condition& rhs) noexcept;
 \end{itemdecl}
@@ -1544,10 +1616,8 @@ bool operator==(const error_condition& lhs, const error_condition& rhs) noexcept
 \returns \tcode{lhs.category() == rhs.category() \&\& lhs.value() == rhs.value()}.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{operator"!=}!\idxcode{error_code}}%
-\indexlibrary{\idxcode{error_code}!\idxcode{operator"!=}}%
-\indexlibrary{\idxcode{operator"!=}!\idxcode{error_condition}}%
-\indexlibrary{\idxcode{error_condition}!\idxcode{operator"!=}}%
+\indexlibrarymember{operator"!=}{error_code}%
+\indexlibrarymember{operator"!=}{error_condition}%
 \begin{itemdecl}
 bool operator!=(const error_code& lhs, const error_code& rhs) noexcept;
 bool operator!=(const error_code& lhs, const error_condition& rhs) noexcept;
@@ -1562,7 +1632,7 @@ bool operator!=(const error_condition& lhs, const error_condition& rhs) noexcept
 
 \rSec2[syserr.hash]{System error hash support}
 
-\indexlibrary{\idxcode{hash}}%
+\indexlibrary{\idxcode{hash}!\idxcode{error_code}}%
 \begin{itemdecl}
 template <> struct hash<error_code>;
 \end{itemdecl}
@@ -1583,9 +1653,9 @@ conditions typically originate from the operating system or other low-level
 application program interfaces.
 
 \pnum
-\enternote If an error represents an out-of-memory condition, implementations are
+\begin{note} If an error represents an out-of-memory condition, implementations are
 encouraged to throw an exception object of type \tcode{bad_alloc}~\ref{bad.alloc} rather
-than \tcode{system_error}. \exitnote
+than \tcode{system_error}. \end{note}
 
 \indexlibrary{\idxcode{system_error}}%
 \begin{codeblock}
@@ -1601,15 +1671,14 @@ namespace std {
         const char* what_arg);
     system_error(int ev, const error_category& ecat);
     const error_code& code() const noexcept;
-    const char* what() const noexcept;
+    const char* what() const noexcept override;
   };
 }   // namespace std
 \end{codeblock}
 
 \rSec3[syserr.syserr.members]{Class \tcode{system_error} members}
 
-\indexlibrary{\idxcode{system_error}!\idxcode{system_error}}
-\indexlibrary{\idxcode{system_error}!\idxcode{system_error}}
+\indexlibrary{\idxcode{system_error}!constructor}%
 \begin{itemdecl}
 system_error(error_code ec, const string& what_arg);
 \end{itemdecl}
@@ -1624,8 +1693,7 @@ system_error(error_code ec, const string& what_arg);
 \tcode{string(what()).find(what_arg) != string::npos}.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{system_error}!\idxcode{system_error}}
-\indexlibrary{\idxcode{system_error}!\idxcode{system_error}}
+\indexlibrary{\idxcode{system_error}!constructor}%
 \begin{itemdecl}
 system_error(error_code ec, const char* what_arg);
 \end{itemdecl}
@@ -1640,8 +1708,7 @@ system_error(error_code ec, const char* what_arg);
 \tcode{string(what()).find(what_arg) != string::npos}.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{system_error}!\idxcode{system_error}}
-\indexlibrary{\idxcode{system_error}!\idxcode{system_error}}
+\indexlibrary{\idxcode{system_error}!constructor}%
 \begin{itemdecl}
 system_error(error_code ec);
 \end{itemdecl}
@@ -1654,8 +1721,7 @@ system_error(error_code ec);
 \postconditions \tcode{code() == ec}.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{system_error}!\idxcode{system_error}}
-\indexlibrary{\idxcode{system_error}!\idxcode{system_error}}
+\indexlibrary{\idxcode{system_error}!constructor}%
 \begin{itemdecl}
 system_error(int ev, const error_category& ecat,
   const string& what_arg);
@@ -1671,8 +1737,7 @@ system_error(int ev, const error_category& ecat,
 \tcode{string(what()).find(what_arg) != string::npos}.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{system_error}!\idxcode{system_error}}
-\indexlibrary{\idxcode{system_error}!\idxcode{system_error}}
+\indexlibrary{\idxcode{system_error}!constructor}%
 \begin{itemdecl}
 system_error(int ev, const error_category& ecat,
   const char* what_arg);
@@ -1688,8 +1753,7 @@ system_error(int ev, const error_category& ecat,
 \tcode{string(what()).find(what_arg) != string::npos}.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{system_error}!\idxcode{system_error}}
-\indexlibrary{\idxcode{system_error}!\idxcode{system_error}}
+\indexlibrary{\idxcode{system_error}!constructor}%
 \begin{itemdecl}
 system_error(int ev, const error_category& ecat);
 \end{itemdecl}
@@ -1702,8 +1766,7 @@ system_error(int ev, const error_category& ecat);
 \postconditions \tcode{code() == error_code(ev, ecat)}.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{code}!\idxcode{system_error}}
-\indexlibrary{\idxcode{system_error}!\idxcode{code}}
+\indexlibrarymember{code}{system_error}%
 \begin{itemdecl}
 const error_code& code() const noexcept;
 \end{itemdecl}
@@ -1714,16 +1777,15 @@ const error_code& code() const noexcept;
 as appropriate.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{what}!\idxcode{system_error}}
-\indexlibrary{\idxcode{system_error}!\idxcode{what}}
+\indexlibrarymember{what}{system_error}%
 \begin{itemdecl}
-const char* what() const noexcept;
+const char* what() const noexcept override;
 \end{itemdecl}
 
 \begin{itemdescr}
 \pnum
 \returns An \ntbs incorporating the arguments supplied in the constructor.
 
-\enternote The returned NTBS might be the contents of \tcode{what_arg + ": " +
-code.message()}.\exitnote
+\begin{note} The returned NTBS might be the contents of \tcode{what_arg + ": " +
+code.message()}.\end{note}
 \end{itemdescr}

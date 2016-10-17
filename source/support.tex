@@ -22,7 +22,7 @@ and other runtime support,
 as summarized in Table~\ref{tab:lang.sup.lib.summary}.
 
 \begin{libsumtab}{Language support library summary}{tab:lang.sup.lib.summary}
-\ref{support.types}       & Types                     &   \tcode{<cstddef>}   \\ \rowsep
+\ref{support.types}       & Common definitions        &   \tcode{<cstddef>}   \\ \rowsep
                           &                           &   \tcode{<limits>}    \\
 \ref{support.limits}      & Implementation properties &   \tcode{<climits>}   \\
                           &                           &   \tcode{<cfloat>}    \\ \rowsep
@@ -32,20 +32,17 @@ as summarized in Table~\ref{tab:lang.sup.lib.summary}.
 \ref{support.rtti}        & Type identification       &   \tcode{<typeinfo>}  \\ \rowsep
 \ref{support.exception}   & Exception handling        &   \tcode{<exception>} \\ \rowsep
 \ref{support.initlist}    & Initializer lists & \tcode{<initializer_list>}    \\ \rowsep
-                          &                           &   \tcode{<csignal>}   \\
+\ref{support.runtime}     & Other runtime support     &   \tcode{<csignal>}   \\
                           &                           &   \tcode{<csetjmp>}   \\
                           &                           &   \tcode{<cstdalign>} \\
-\ref{support.runtime}     & Other runtime support     &   \tcode{<cstdarg>}   \\
+                          &                           &   \tcode{<cstdarg>}   \\
                           &                           &   \tcode{<cstdbool>}  \\
                           &                           &   \tcode{<cstdlib>}   \\
-                          &                           &   \tcode{<ctime>}     \\
 \end{libsumtab}
 
-\rSec1[support.types]{Types}
+\rSec1[support.types]{Common definitions}
 
-\pnum
-Table~\ref{tab:support.hdr.cstddef} describes the header
-\tcode{<cstddef>}.
+\rSec2[cstddef.syn]{Header \tcode{<cstddef>} synopsis}
 
 \indexlibrary{\idxcode{NULL}}%
 \indexlibrary{\idxcode{offsetof}}%
@@ -53,46 +50,65 @@ Table~\ref{tab:support.hdr.cstddef} describes the header
 \indexlibrary{\idxcode{size_t}}%
 \indexlibrary{\idxcode{max_align_t}}%
 \indexlibrary{\idxcode{nullptr_t}}%
-\begin{libsyntab3}{cstddef}{tab:support.hdr.cstddef}
-\macros &   \tcode{NULL}        &   \tcode{offsetof}        \\ \rowsep
-\types  &   \tcode{ptrdiff_t}   &   \tcode{size_t}          \\
-        &   \tcode{max_align_t} &  \tcode{nullptr_t}        \\
-\end{libsyntab3}
+\begin{codeblock}
+namespace std {
+  using ptrdiff_t = @\seebelow@;
+  using size_t = @\seebelow@;
+  using max_align_t = @\seebelow@;
+  using nullptr_t = decltype(nullptr);
+}
+
+#define NULL @\seebelow@
+#define offsetof(P, D) @\seebelow@
+\end{codeblock}
+
+\rSec2[support.types.nullptr]{Null pointers}
 
 \pnum
-The contents are the same as the Standard C library header
-\tcode{<stddef.h>},
-with the following changes:
+\indexlibrary{\idxcode{nullptr_t}}%
+The type \tcode{nullptr_t} is a synonym
+for the type of a \tcode{nullptr} expression, and it
+has the characteristics
+described in~\ref{basic.fundamental} and~\ref{conv.ptr}.
+\begin{note}
+Although \tcode{nullptr}'s address cannot be taken, the address of another
+\tcode{nullptr_t} object that is an lvalue can be taken.
+\end{note}
 
 \pnum
 The macro
 \indexlibrary{\idxcode{NULL}}%
 \tcode{NULL}
-is an implementation-defined \Cpp null pointer constant in
-\indextext{implementation-defined}%
-this International Standard (\ref{conv.ptr}).\footnote{Possible definitions include
+is an \impldef{definition of \tcode{NULL}} null pointer constant.%
+\footnote{Possible definitions include
 \tcode{0}
 and
 \tcode{0L},
 but not
 \tcode{(void*)0}.}
 
+\rSec2[support.types.layout]{Sizes, alignments, and offsets}
+
 \pnum
 The macro
 \indexlibrary{\idxcode{offsetof}}%
 \tcode{offsetof}(\textit{type},
-\grammarterm{member-designator}) accepts a restricted set of \textit{type}
-arguments in this International Standard. If \textit{type} is not a
-standard-layout class
-(Clause~\ref{class}), the results are undefined.\footnote{Note that \tcode{offsetof}
+\grammarterm{member-designator})
+has the same semantics as the corresponding macro in
+the C standard library header \tcode{<stddef.h>}, but
+accepts a restricted set of \textit{type}
+arguments in this International Standard.
+Use of the \tcode{offsetof} macro with a \textit{type}
+other than a standard-layout class (Clause~\ref{class})
+is conditionally-supported.\footnote{Note that \tcode{offsetof}
 is required to work as specified even if unary
 \tcode{operator\&}
 is overloaded for any of the types involved.}
 The expression \tcode{offsetof}(\textit{type}, \grammarterm{member-designator})
 is never type-dependent~(\ref{temp.dep.expr}) and it is
 value-dependent~(\ref{temp.dep.constexpr}) if and only if \textit{type} is
-dependent. The result of applying the \tcode{offsetof} macro to a field that
-is a static data member or a function member is undefined.
+dependent. The result of applying the \tcode{offsetof} macro to
+a static data member or a function member is undefined.
 No operation invoked by the \tcode{offsetof} macro shall throw an exception and
 \tcode{noexcept(offsetof(type, member-designator))} shall be \tcode{true}.
 
@@ -109,11 +125,11 @@ unsigned integer type that is large enough
 to contain the size in bytes of any object.
 
 \pnum
-\enternote
+\begin{note}
 It is recommended that implementations choose types for \tcode{ptrdiff_t} and \tcode{size_t}
 whose integer conversion ranks~(\ref{conv.rank}) are no greater than that of
 \tcode{signed long int} unless a larger size is necessary to contain all the possible values.
-\exitnote
+\end{note}
 
 \pnum
 The type
@@ -122,23 +138,8 @@ The type
 is at least as great as that of every scalar type, and whose alignment
 requirement is supported in every context.
 
-\pnum
-\indexlibrary{\idxcode{nullptr_t}}%
-\tcode{nullptr_t} is defined as follows:
-
-\begin{codeblock}
-namespace std {
-  typedef decltype(nullptr) nullptr_t;
-}
-\end{codeblock}
-
-The type for which \tcode{nullptr_t} is a synonym has the characteristics
-described in~\ref{basic.fundamental} and~\ref{conv.ptr}. \enternote Although
-\tcode{nullptr}'s address cannot be taken, the address of another
-\tcode{nullptr_t} object that is an lvalue can be taken. \exitnote
-
 \xref Alignment~(\ref{basic.align}), Sizeof~(\ref{expr.sizeof}), Additive
-operators~(\ref{expr.add}), Free store~(\ref{class.free}), and ISO C~7.1.6.
+operators~(\ref{expr.add}), Free store~(\ref{class.free}), and ISO C~7.19.
 
 \rSec1[support.limits]{Implementation properties}
 
@@ -147,8 +148,8 @@ operators~(\ref{expr.add}), Free store~(\ref{class.free}), and ISO C~7.1.6.
 \pnum
 The headers
 \tcode{<limits>}~(\ref{limits}),
-\tcode{<climits>}, and
-\tcode{<cfloat>}~(\ref{c.limits})
+\tcode{<climits>}~(\ref{climits.syn}), and
+\tcode{<cfloat>}~(\ref{cfloat.syn})
 supply characteristics of implementation-dependent
 arithmetic types~(\ref{basic.fundamental}).
 
@@ -189,13 +190,13 @@ constant expressions.
 Non-arithmetic standard types, such as
 \tcode{complex<T>}~(\ref{complex}), shall not have specializations.
 
+\rSec3[limits.syn]{Header \tcode{<limits>} synopsis}
 \indextext{\idxhdr{limits}}%
 \indexlibrary{\idxhdr{limits}}%
 \indextext{\idxcode{numeric_limits}}%
 \indexlibrary{\idxcode{numeric_limits}}%
 \indexlibrary{\idxcode{float_round_style}}%
 \indexlibrary{\idxcode{float_denorm_style}}%
-\rSec3[limits.syn]{Header \tcode{<limits>} synopsis}
 
 \begin{codeblock}
 namespace std {
@@ -229,7 +230,7 @@ namespace std {
 
 \rSec3[numeric.limits]{Class template \tcode{numeric_limits}}
 
-\indexlibrary{\idxcode{numeric\_limits}}%
+\indexlibrary{\idxcode{numeric_limits}}%
 \begin{codeblock}
 namespace std {
   template<class T> class numeric_limits {
@@ -294,8 +295,7 @@ the specialization on the unqualified type \tcode{T}.
 
 \rSec3[numeric.limits.members]{\tcode{numeric_limits} members}
 
-\indexlibrary{\idxcode{min}!\idxcode{numeric_limits}}
-\indexlibrary{\idxcode{numeric_limits}!\idxcode{min}}
+\indexlibrarymember{min}{numeric_limits}%
 \begin{itemdecl}
 static constexpr T min() noexcept;
 \end{itemdecl}
@@ -316,8 +316,7 @@ or
 \tcode{is_bounded == false \&\& is_signed == false}.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{max}!\idxcode{numeric_limits}}
-\indexlibrary{\idxcode{numeric_limits}!\idxcode{max}}
+\indexlibrarymember{max}{numeric_limits}%
 \begin{itemdecl}
 static constexpr T max() noexcept;
 \end{itemdecl}
@@ -332,8 +331,7 @@ Meaningful for all specializations in which
 \tcode{is_bounded != false}.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{lowest}!\idxcode{numeric_limits}}
-\indexlibrary{\idxcode{numeric_limits}!\idxcode{lowest}}
+\indexlibrarymember{lowest}{numeric_limits}%
 \begin{itemdecl}
 static constexpr T lowest() noexcept;
 \end{itemdecl}
@@ -349,8 +347,7 @@ the negative of the largest (most positive) finite value.}
 Meaningful for all specializations in which \tcode{is_bounded != false}.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{digits}!\idxcode{numeric_limits}}
-\indexlibrary{\idxcode{numeric_limits}!\idxcode{digits}}
+\indexlibrarymember{digits}{numeric_limits}%
 \begin{itemdecl}
 static constexpr int digits;
 \end{itemdecl}
@@ -368,8 +365,7 @@ For integer types, the number of non-sign bits in the representation.
 mantissa.\footnote{Equivalent to \tcode{FLT_MANT_DIG}, \tcode{DBL_MANT_DIG},
 \tcode{LDBL_MANT_DIG}.} \end{itemdescr}
 
-\indexlibrary{\idxcode{digits10}!\idxcode{numeric_limits}}
-\indexlibrary{\idxcode{numeric_limits}!\idxcode{digits10}}
+\indexlibrarymember{digits10}{numeric_limits}%
 \begin{itemdecl}
 static constexpr int digits10;
 \end{itemdecl}
@@ -385,8 +381,7 @@ Meaningful for all specializations in which
 \tcode{is_bounded != false}.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{max_digits10}!\idxcode{numeric_limits}}
-\indexlibrary{\idxcode{numeric_limits}!\idxcode{max_digits10}}
+\indexlibrarymember{max_digits10}{numeric_limits}%
 \begin{itemdecl}
 static constexpr int max_digits10;
 \end{itemdecl}
@@ -400,8 +395,7 @@ differ are always differentiated.
 Meaningful for all floating point types.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{is_signed}!\idxcode{numeric_limits}}
-\indexlibrary{\idxcode{numeric_limits}!\idxcode{is_signed}}
+\indexlibrarymember{is_signed}{numeric_limits}%
 \begin{itemdecl}
 static constexpr bool is_signed;
 \end{itemdecl}
@@ -414,8 +408,7 @@ True if the type is signed.
 Meaningful for all specializations.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{is_integer}!\idxcode{numeric_limits}}
-\indexlibrary{\idxcode{numeric_limits}!\idxcode{is_integer}}
+\indexlibrarymember{is_integer}{numeric_limits}%
 \begin{itemdecl}
 static constexpr bool is_integer;
 \end{itemdecl}
@@ -428,8 +421,7 @@ True if the type is integer.
 Meaningful for all specializations.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{is_exact}!\idxcode{numeric_limits}}
-\indexlibrary{\idxcode{numeric_limits}!\idxcode{is_exact}}
+\indexlibrarymember{is_exact}{numeric_limits}%
 \begin{itemdecl}
 static constexpr bool is_exact;
 \end{itemdecl}
@@ -444,8 +436,7 @@ For example, rational and fixed-exponent representations are exact but not integ
 Meaningful for all specializations.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{radix}!\idxcode{numeric_limits}}
-\indexlibrary{\idxcode{numeric_limits}!\idxcode{radix}}
+\indexlibrarymember{radix}{numeric_limits}%
 \begin{itemdecl}
 static constexpr int radix;
 \end{itemdecl}
@@ -464,8 +455,7 @@ BCD).}
 Meaningful for all specializations.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{epsilon}!\idxcode{numeric_limits}}
-\indexlibrary{\idxcode{numeric_limits}!\idxcode{epsilon}}
+\indexlibrarymember{epsilon}{numeric_limits}%
 \begin{itemdecl}
 static constexpr T epsilon() noexcept;
 \end{itemdecl}
@@ -479,8 +469,7 @@ that is representable.\footnote{Equivalent to \tcode{FLT_EPSILON}, \tcode{DBL_EP
 Meaningful for all floating point types.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{round_error}!\idxcode{numeric_limits}}
-\indexlibrary{\idxcode{numeric_limits}!\idxcode{round_error}}
+\indexlibrarymember{round_error}{numeric_limits}%
 \begin{itemdecl}
 static constexpr T round_error() noexcept;
 \end{itemdecl}
@@ -493,8 +482,7 @@ Section 5.2.8 and
 Annex A Rationale Section A.5.2.8 - Rounding constants.}
 \end{itemdescr}
 
-\indexlibrary{\idxcode{min_exponent}!\idxcode{numeric_limits}}
-\indexlibrary{\idxcode{numeric_limits}!\idxcode{min_exponent}}
+\indexlibrarymember{min_exponent}{numeric_limits}%
 \begin{itemdecl}
 static constexpr int  min_exponent;
 \end{itemdecl}
@@ -511,8 +499,7 @@ point number.\footnote{Equivalent to \tcode{FLT_MIN_EXP}, \tcode{DBL_MIN_EXP},
 Meaningful for all floating point types.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{min_exponent10}!\idxcode{numeric_limits}}
-\indexlibrary{\idxcode{numeric_limits}!\idxcode{min_exponent10}}
+\indexlibrarymember{min_exponent10}{numeric_limits}%
 \begin{itemdecl}
 static constexpr int  min_exponent10;
 \end{itemdecl}
@@ -527,8 +514,7 @@ of normalized floating point numbers.\footnote{Equivalent to
 Meaningful for all floating point types.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{max_exponent}!\idxcode{numeric_limits}}
-\indexlibrary{\idxcode{numeric_limits}!\idxcode{max_exponent}}
+\indexlibrarymember{max_exponent}{numeric_limits}%
 \begin{itemdecl}
 static constexpr int  max_exponent;
 \end{itemdecl}
@@ -545,8 +531,7 @@ floating point number.\footnote{Equivalent to \tcode{FLT_MAX_EXP},
 Meaningful for all floating point types.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{max_exponent10}!\idxcode{numeric_limits}}
-\indexlibrary{\idxcode{numeric_limits}!\idxcode{max_exponent10}}
+\indexlibrarymember{max_exponent10}{numeric_limits}%
 \begin{itemdecl}
 static constexpr int  max_exponent10;
 \end{itemdecl}
@@ -561,8 +546,7 @@ range of representable finite floating point numbers.\footnote{Equivalent to
 Meaningful for all floating point types.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{has_infinity}!\idxcode{numeric_limits}}
-\indexlibrary{\idxcode{numeric_limits}!\idxcode{has_infinity}}
+\indexlibrarymember{has_infinity}{numeric_limits}%
 \begin{itemdecl}
 static constexpr bool has_infinity;
 \end{itemdecl}
@@ -581,8 +565,7 @@ for all specializations in which
 \tcode{is_iec559 != false}.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{has_quiet_NaN}!\idxcode{numeric_limits}}
-\indexlibrary{\idxcode{numeric_limits}!\idxcode{has_quiet_NaN}}
+\indexlibrarymember{has_quiet_NaN}{numeric_limits}%
 \begin{itemdecl}
 static constexpr bool has_quiet_NaN;
 \end{itemdecl}
@@ -602,8 +585,7 @@ for all specializations in which
 \tcode{is_iec559 != false}.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{has_signaling_NaN}!\idxcode{numeric_limits}}
-\indexlibrary{\idxcode{numeric_limits}!\idxcode{has_signaling_NaN}}
+\indexlibrarymember{has_signaling_NaN}{numeric_limits}%
 \begin{itemdecl}
 static constexpr bool has_signaling_NaN;
 \end{itemdecl}
@@ -622,8 +604,7 @@ for all specializations in which
 \tcode{is_iec559 != false}.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{float_denorm_style}!\idxcode{numeric_limits}}
-\indexlibrary{\idxcode{numeric_limits}!\idxcode{float_denorm_style}}
+\indexlibrarymember{float_denorm_style}{numeric_limits}%
 \begin{itemdecl}
 static constexpr float_denorm_style has_denorm;
 \end{itemdecl}
@@ -644,8 +625,7 @@ denormalized values.
 Meaningful for all floating point types.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{has_denorm_loss}!\idxcode{numeric_limits}}
-\indexlibrary{\idxcode{numeric_limits}!\idxcode{has_denorm_loss}}
+\indexlibrarymember{has_denorm_loss}{numeric_limits}%
 \begin{itemdecl}
 static constexpr bool has_denorm_loss;
 \end{itemdecl}
@@ -656,8 +636,7 @@ True if loss of accuracy is detected as a
 denormalization loss, rather than as an inexact result.\footnote{See IEC 559.}
 \end{itemdescr}
 
-\indexlibrary{\idxcode{infinity}!\idxcode{numeric_limits}}
-\indexlibrary{\idxcode{numeric_limits}!\idxcode{infinity}}
+\indexlibrarymember{infinity}{numeric_limits}%
 \begin{itemdecl}
 static constexpr T infinity() noexcept;
 \end{itemdecl}
@@ -673,8 +652,7 @@ Required in specializations for which
 \tcode{is_iec559 != false}.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{quiet_NaN}!\idxcode{numeric_limits}}
-\indexlibrary{\idxcode{numeric_limits}!\idxcode{quiet_NaN}}
+\indexlibrarymember{quiet_NaN}{numeric_limits}%
 \begin{itemdecl}
 static constexpr T quiet_NaN() noexcept;
 \end{itemdecl}
@@ -690,8 +668,7 @@ Required in specializations for which
 \tcode{is_iec559 != false}.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{signaling_NaN}!\idxcode{numeric_limits}}
-\indexlibrary{\idxcode{numeric_limits}!\idxcode{signaling_NaN}}
+\indexlibrarymember{signaling_NaN}{numeric_limits}%
 \begin{itemdecl}
 static constexpr T signaling_NaN() noexcept;
 \end{itemdecl}
@@ -707,8 +684,7 @@ Required in specializations for which
 \tcode{is_iec559 != false}.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{denorm_min}!\idxcode{numeric_limits}}
-\indexlibrary{\idxcode{numeric_limits}!\idxcode{denorm_min}}
+\indexlibrarymember{denorm_min}{numeric_limits}%
 \begin{itemdecl}
 static constexpr T denorm_min() noexcept;
 \end{itemdecl}
@@ -726,8 +702,7 @@ In specializations for which
 returns the minimum positive normalized value.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{is_iec559}!\idxcode{numeric_limits}}
-\indexlibrary{\idxcode{numeric_limits}!\idxcode{is_iec559}}
+\indexlibrarymember{is_iec559}{numeric_limits}%
 \begin{itemdecl}
 static constexpr bool is_iec559;
 \end{itemdecl}
@@ -742,8 +717,7 @@ IEEE 754.}
 Meaningful for all floating point types.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{is_bounded}!\idxcode{numeric_limits}}
-\indexlibrary{\idxcode{numeric_limits}!\idxcode{is_bounded}}
+\indexlibrarymember{is_bounded}{numeric_limits}%
 \begin{itemdecl}
 static constexpr bool is_bounded;
 \end{itemdecl}
@@ -751,15 +725,14 @@ static constexpr bool is_bounded;
 \begin{itemdescr}
 \pnum
 True if the set of values representable by the type is finite.\footnote{Required by LIA-1.}
-\enternote All fundamental types~(\ref{basic.fundamental}) are bounded. This member would be false for arbitrary
-precision types.\exitnote
+\begin{note} All fundamental types~(\ref{basic.fundamental}) are bounded. This member would be false for arbitrary
+precision types.\end{note}
 
 \pnum
 Meaningful for all specializations.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{is_modulo}!\idxcode{numeric_limits}}
-\indexlibrary{\idxcode{numeric_limits}!\idxcode{is_modulo}}
+\indexlibrarymember{is_modulo}{numeric_limits}%
 \begin{itemdecl}
 static constexpr bool is_modulo;
 \end{itemdecl}
@@ -773,20 +746,17 @@ A type is modulo if, for any operation involving \tcode{+}, \tcode{-}, or
 integer multiple of \tcode{max() - min() + 1}.
 
 \pnum
-On most machines, this is
-\tcode{false}
-for floating types,
-\tcode{true}
-for unsigned integers, and
-\tcode{true}
-for signed integers.
+\begin{example}
+\tcode{is_modulo} is \tcode{false} for signed integer types~(\ref{basic.fundamental})
+unless an implementation, as an extension to this International Standard,
+defines signed integer overflow to wrap.
+\end{example}
 
 \pnum
 Meaningful for all specializations.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{traps}!\idxcode{numeric_limits}}
-\indexlibrary{\idxcode{numeric_limits}!\idxcode{traps}}
+\indexlibrarymember{traps}{numeric_limits}%
 \begin{itemdecl}
 static constexpr bool traps;
 \end{itemdecl}
@@ -801,8 +771,7 @@ an arithmetic operation using that value to trap.\footnote{Required by LIA-1.}
 Meaningful for all specializations.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{tinyness_before}!\idxcode{numeric_limits}}
-\indexlibrary{\idxcode{numeric_limits}!\idxcode{tinyness_before}}
+\indexlibrarymember{tinyness_before}{numeric_limits}%
 \begin{itemdecl}
 static constexpr bool tinyness_before;
 \end{itemdecl}
@@ -817,8 +786,7 @@ Required by LIA-1.}
 Meaningful for all floating point types.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{round_style}!\idxcode{numeric_limits}}
-\indexlibrary{\idxcode{numeric_limits}!\idxcode{round_style}}
+\indexlibrarymember{round_style}{numeric_limits}%
 \begin{itemdecl}
 static constexpr float_round_style round_style;
 \end{itemdecl}
@@ -924,7 +892,7 @@ Any value that is not ``meaningful'' shall be set to 0 or
 \tcode{false}.
 
 \pnum
-\enterexample
+\begin{example}
 \begin{codeblock}
 namespace std {
   template<> class numeric_limits<float> {
@@ -973,7 +941,7 @@ namespace std {
   };
 }
 \end{codeblock}
-\exitexample
+\end{example}
 
 \pnum
 The specialization for
@@ -1028,149 +996,152 @@ namespace std {
 
 \rSec2[c.limits]{C library}
 
-\pnum
-Table~\ref{tab:support.hdr.climits} describes the header
-\tcode{<climits>}.
+\rSec3[climits.syn]{Header \tcode{<climits>} synopsis}
 
 \indexlibrary{\idxcode{CHAR_BIT}}%
-\indexlibrary{\idxcode{INT_MAX}}%
-\indexlibrary{\idxcode{LONG_MAX}}%
 \indexlibrary{\idxcode{SCHAR_MIN}}%
-\indexlibrary{\idxcode{SHRT_MIN}}%
-\indexlibrary{\idxcode{ULLONG_MAX}}%
-\indexlibrary{\idxcode{CHAR_MAX}}%
-\indexlibrary{\idxcode{LLONG_MAX}}%
-\indexlibrary{\idxcode{LONG_MAX}}%
 \indexlibrary{\idxcode{SCHAR_MAX}}%
 \indexlibrary{\idxcode{UCHAR_MAX}}%
-\indexlibrary{\idxcode{ULLONG_MAX}}%
+\indexlibrary{\idxcode{CHAR_MIN}}%
 \indexlibrary{\idxcode{CHAR_MAX}}%
-\indexlibrary{\idxcode{LLONG_MIN}}%
 \indexlibrary{\idxcode{MB_LEN_MAX}}%
+\indexlibrary{\idxcode{SHRT_MIN}}%
 \indexlibrary{\idxcode{SHRT_MAX}}%
-\indexlibrary{\idxcode{UINT_MAX}}%
 \indexlibrary{\idxcode{USHRT_MAX}}%
 \indexlibrary{\idxcode{INT_MIN}}%
-\begin{libsyntab6}{climits}{tab:support.hdr.climits}
-\cspan{\values}     \\
-
-\tcode{CHAR_BIT}    &
-\tcode{INT_MAX}     &
-\tcode{LONG_MAX}    &
-\tcode{SCHAR_MIN}   &
-\tcode{SHRT_MIN}    &
-\tcode{ULLONG_MAX}  \\
-
-\tcode{CHAR_MAX}    &
-\tcode{LLONG_MAX}   &
-\tcode{LONG_MIN}    &
-\tcode{SCHAR_MAX}   &
-\tcode{UCHAR_MAX}   &
-\tcode{ULONG_MAX}   \\
-
-\tcode{CHAR_MIN}    &
-\tcode{LLONG_MIN}   &
-\tcode{MB_LEN_MAX}  &
-\tcode{SHRT_MAX}    &
-\tcode{UINT_MAX}    &
-\tcode{USHRT_MAX}   \\
-
-\tcode{INT_MIN} &&&&&\\
-
-\end{libsyntab6}
-
-\pnum
-The contents are the same as the Standard C library header
-\tcode{<limits.h>}. \enternote The types of the
-constants defined by macros in \tcode{<climits>} are not
-required to match the types to which the macros refer.\exitnote
+\indexlibrary{\idxcode{INT_MAX}}%
+\indexlibrary{\idxcode{UINT_MAX}}%
+\indexlibrary{\idxcode{LONG_MIN}}%
+\indexlibrary{\idxcode{LONG_MAX}}%
+\indexlibrary{\idxcode{ULONG_MAX}}%
+\indexlibrary{\idxcode{LLONG_MIN}}%
+\indexlibrary{\idxcode{LLONG_MAX}}%
+\indexlibrary{\idxcode{ULLONG_MAX}}%
+\begin{codeblock}
+#define CHAR_BIT @\seebelow@
+#define SCHAR_MIN @\seebelow@
+#define SCHAR_MAX @\seebelow@
+#define UCHAR_MAX @\seebelow@
+#define CHAR_MIN @\seebelow@
+#define CHAR_MAX @\seebelow@
+#define MB_LEN_MAX @\seebelow@
+#define SHRT_MIN @\seebelow@
+#define SHRT_MAX @\seebelow@
+#define USHRT_MAX @\seebelow@
+#define INT_MIN @\seebelow@
+#define INT_MAX @\seebelow@
+#define UINT_MAX @\seebelow@
+#define LONG_MIN @\seebelow@
+#define LONG_MAX @\seebelow@
+#define ULONG_MAX @\seebelow@
+#define LLONG_MIN @\seebelow@
+#define LLONG_MAX @\seebelow@
+#define ULLONG_MAX @\seebelow@
+\end{codeblock}
 
 \pnum
-Table~\ref{tab:support.hdr.cfloat} describes the header
-\tcode{<cfloat>}.
+The header \tcode{<climits>} defines all macros the same as
+the C standard library header \tcode{<limits.h>}.
+\begin{note}
+The types of the constants defined by macros in \tcode{<climits>} are not
+required to match the types to which the macros refer.
+\end{note}
 
+\xref ISO C 5.2.4.2.1
+
+\rSec3[cfloat.syn]{Header \tcode{<cfloat>} synopsis}
+
+\indexlibrary{\idxcode{DBL_DECIMAL_DIG}}%
 \indexlibrary{\idxcode{DBL_DIG}}%
-\indexlibrary{\idxcode{DBL_MIN_EXP}}%
-\indexlibrary{\idxcode{FLT_MAX_EXP}}%
-\indexlibrary{\idxcode{LDBL_MANT_DIG}}%
 \indexlibrary{\idxcode{DBL_EPSILON}}%
-\indexlibrary{\idxcode{DECIMAL_DIG}}%
-\indexlibrary{\idxcode{FLT_MIN}}%
-\indexlibrary{\idxcode{LDBL_MAX_10_EXP}}%
+\indexlibrary{\idxcode{DBL_HAS_SUBNORM}}%
 \indexlibrary{\idxcode{DBL_MANT_DIG}}%
-\indexlibrary{\idxcode{FLT_DIG}}%
-\indexlibrary{\idxcode{FLT_MIN_10_EXP}}%
-\indexlibrary{\idxcode{LDBL_MAX_EXP}}%
 \indexlibrary{\idxcode{DBL_MAX}}%
-\indexlibrary{\idxcode{FLT_EPSILON}}%
-\indexlibrary{\idxcode{FLT_MIN_EXP}}%
-\indexlibrary{\idxcode{LDBL_MAX}}%
 \indexlibrary{\idxcode{DBL_MAX_10_EXP}}%
-\indexlibrary{\idxcode{FLT_EVAL_METHOD}}%
-\indexlibrary{\idxcode{FLT_RADIX}}%
-\indexlibrary{\idxcode{LDBL_MIN}}%
 \indexlibrary{\idxcode{DBL_MAX_EXP}}%
-\indexlibrary{\idxcode{FLT_MANT_DIG}}%
-\indexlibrary{\idxcode{FLT_ROUNDS}}%
-\indexlibrary{\idxcode{LDBL_MIN_10_EXP}}%
 \indexlibrary{\idxcode{DBL_MIN}}%
-\indexlibrary{\idxcode{FLT_MAX}}%
-\indexlibrary{\idxcode{LDBL_DIG}}%
-\indexlibrary{\idxcode{LDBL_MIN_EXP}}%
 \indexlibrary{\idxcode{DBL_MIN_10_EXP}}%
+\indexlibrary{\idxcode{DBL_MIN_EXP}}%
+\indexlibrary{\idxcode{DBL_TRUE_MIN}}%
+\indexlibrary{\idxcode{DECIMAL_DIG}}%
+\indexlibrary{\idxcode{FLT_DECIMAL_DIG}}%
+\indexlibrary{\idxcode{FLT_DIG}}%
+\indexlibrary{\idxcode{FLT_EPSILON}}%
+\indexlibrary{\idxcode{FLT_EVAL_METHOD}}%
+\indexlibrary{\idxcode{FLT_HAS_SUBNORM}}%
+\indexlibrary{\idxcode{FLT_MANT_DIG}}%
+\indexlibrary{\idxcode{FLT_MAX}}%
 \indexlibrary{\idxcode{FLT_MAX_10_EXP}}%
+\indexlibrary{\idxcode{FLT_MAX_EXP}}%
+\indexlibrary{\idxcode{FLT_MIN}}%
+\indexlibrary{\idxcode{FLT_MIN_10_EXP}}%
+\indexlibrary{\idxcode{FLT_MIN_EXP}}%
+\indexlibrary{\idxcode{FLT_RADIX}}%
+\indexlibrary{\idxcode{FLT_ROUNDS}}%
+\indexlibrary{\idxcode{FLT_TRUE_MIN}}%
+\indexlibrary{\idxcode{LDBL_DECIMAL_DIG}}%
+\indexlibrary{\idxcode{LDBL_DIG}}%
 \indexlibrary{\idxcode{LDBL_EPSILON}}%
-\begin{libsyntab4}{cfloat}{tab:support.hdr.cfloat}
-\cspan{\values}         \\
-
-\tcode{DBL_DIG}         &
-\tcode{DBL_MIN_EXP} &
-\tcode{FLT_MAX_EXP} &
-\tcode{LDBL_MANT_DIG}   \\
-
-\tcode{DBL_EPSILON}     &
-\tcode{DECIMAL_DIG}     &
-\tcode{FLT_MIN}     &
-\tcode{LDBL_MAX_10_EXP}\\
-
-\tcode{DBL_MANT_DIG}    &
-\tcode{FLT_DIG}     &
-\tcode{FLT_MIN_10_EXP}  &
-\tcode{LDBL_MAX_EXP}    \\
-
-\tcode{DBL_MAX} &
-\tcode{FLT_EPSILON} &
-\tcode{FLT_MIN_EXP} &
-\tcode{LDBL_MAX}        \\
-
-\tcode{DBL_MAX_10_EXP}  &
-\tcode{FLT_EVAL_METHOD} &
-\tcode{FLT_RADIX}       &
-\tcode{LDBL_MIN}        \\
-
-\tcode{DBL_MAX_EXP} &
-\tcode{FLT_MANT_DIG}    &
-\tcode{FLT_ROUNDS}      &
-\tcode{LDBL_MIN_10_EXP}\\
-
-\tcode{DBL_MIN}         &
-\tcode{FLT_MAX}     &
-\tcode{LDBL_DIG}        &
-\tcode{LDBL_MIN_EXP}    \\
-
-\tcode{DBL_MIN_10_EXP}  &
-\tcode{FLT_MAX_10_EXP}  &
-\tcode{LDBL_EPSILON}    &   \\
-
-\end{libsyntab4}
+\indexlibrary{\idxcode{LDBL_HAS_SUBNORM}}%
+\indexlibrary{\idxcode{LDBL_MANT_DIG}}%
+\indexlibrary{\idxcode{LDBL_MAX}}%
+\indexlibrary{\idxcode{LDBL_MAX_10_EXP}}%
+\indexlibrary{\idxcode{LDBL_MAX_EXP}}%
+\indexlibrary{\idxcode{LDBL_MIN}}%
+\indexlibrary{\idxcode{LDBL_MIN_10_EXP}}%
+\indexlibrary{\idxcode{LDBL_MIN_EXP}}%
+\indexlibrary{\idxcode{LDBL_TRUE_MIN}}%
+\begin{codeblock}
+#define FLT_ROUNDS @\seebelow@
+#define FLT_EVAL_METHOD @\seebelow@
+#define FLT_HAS_SUBNORM @\seebelow@
+#define DBL_HAS_SUBNORM @\seebelow@
+#define LDBL_HAS_SUBNORM @\seebelow@
+#define FLT_RADIX @\seebelow@
+#define FLT_MANT_DIG @\seebelow@
+#define DBL_MANT_DIG @\seebelow@
+#define LDBL_MANT_DIG @\seebelow@
+#define FLT_DECIMAL_DIG @\seebelow@
+#define DBL_DECIMAL_DIG @\seebelow@
+#define LDBL_DECIMAL_DIG @\seebelow@
+#define DECIMAL_DIG @\seebelow@
+#define FLT_DIG @\seebelow@
+#define DBL_DIG @\seebelow@
+#define LDBL_DIG @\seebelow@
+#define FLT_MIN_EXP @\seebelow@
+#define DBL_MIN_EXP @\seebelow@
+#define LDBL_MIN_EXP @\seebelow@
+#define FLT_MIN_10_EXP @\seebelow@
+#define DBL_MIN_10_EXP @\seebelow@
+#define LDBL_MIN_10_EXP @\seebelow@
+#define FLT_MAX_EXP @\seebelow@
+#define DBL_MAX_EXP @\seebelow@
+#define LDBL_MAX_EXP @\seebelow@
+#define FLT_MAX_10_EXP @\seebelow@
+#define DBL_MAX_10_EXP @\seebelow@
+#define LDBL_MAX_10_EXP @\seebelow@
+#define FLT_MAX @\seebelow@
+#define DBL_MAX @\seebelow@
+#define LDBL_MAX @\seebelow@
+#define FLT_EPSILON @\seebelow@
+#define DBL_EPSILON @\seebelow@
+#define LDBL_EPSILON @\seebelow@
+#define FLT_MIN @\seebelow@
+#define DBL_MIN @\seebelow@
+#define LDBL_MIN @\seebelow@
+#define FLT_TRUE_MIN @\seebelow@
+#define DBL_TRUE_MIN @\seebelow@
+#define LDBL_TRUE_MIN @\seebelow@
+\end{codeblock}
 
 \pnum
-The contents are the same as the Standard C library header
-\tcode{<float.h>}.
+The header \tcode{<cfloat>} defines all macros the same as
+the C standard library header \tcode{<float.h>}.
 
-\xref ISO C~7.1.5, 5.2.4.2.2, 5.2.4.2.1.
+\xref ISO C 5.2.4.2.2
 
 \rSec1[cstdint]{Integer types}
+
 \rSec2[cstdint.syn]{Header \tcode{<cstdint>} synopsis}
 \indextext{\idxhdr{cstdint}}%
 \indexlibrary{\idxhdr{cstdint}}%
@@ -1202,43 +1173,44 @@ The contents are the same as the Standard C library header
 \indexlibrary{\idxcode{uint_least64_t}}%
 \indexlibrary{\idxcode{uintmax_t}}%
 \indexlibrary{\idxcode{uintptr_t}}%
+
 \begin{codeblock}
 namespace std {
-  typedef @\textit{signed integer type}@ int8_t;   // optional
-  typedef @\textit{signed integer type}@ int16_t;  // optional
-  typedef @\textit{signed integer type}@ int32_t;  // optional
-  typedef @\textit{signed integer type}@ int64_t;  // optional
+  using int8_t         = @\textit{signed integer type}@;  // optional
+  using int16_t        = @\textit{signed integer type}@;  // optional
+  using int32_t        = @\textit{signed integer type}@;  // optional
+  using int64_t        = @\textit{signed integer type}@;  // optional
 
-  typedef @\textit{signed integer type}@ int_fast8_t;
-  typedef @\textit{signed integer type}@ int_fast16_t;
-  typedef @\textit{signed integer type}@ int_fast32_t;
-  typedef @\textit{signed integer type}@ int_fast64_t;
+  using int_fast8_t    = @\textit{signed integer type}@;
+  using int_fast16_t   = @\textit{signed integer type}@;
+  using int_fast32_t   = @\textit{signed integer type}@;
+  using int_fast64_t   = @\textit{signed integer type}@;
 
-  typedef @\textit{signed integer type}@ int_least8_t;
-  typedef @\textit{signed integer type}@ int_least16_t;
-  typedef @\textit{signed integer type}@ int_least32_t;
-  typedef @\textit{signed integer type}@ int_least64_t;
+  using int_least8_t   = @\textit{signed integer type}@;
+  using int_least16_t  = @\textit{signed integer type}@;
+  using int_least32_t  = @\textit{signed integer type}@;
+  using int_least64_t  = @\textit{signed integer type}@;
 
-  typedef @\textit{signed integer type}@ intmax_t;
-  typedef @\textit{signed integer type}@ intptr_t;         // optional
+  using intmax_t       = @\textit{signed integer type}@;
+  using intptr_t       = @\textit{signed integer type}@;   // optional
 
-  typedef @\textit{unsigned integer type}@ uint8_t;        // optional
-  typedef @\textit{unsigned integer type}@ uint16_t;       // optional
-  typedef @\textit{unsigned integer type}@ uint32_t;       // optional
-  typedef @\textit{unsigned integer type}@ uint64_t;       // optional
+  using uint8_t        = @\textit{unsigned integer type}@; // optional
+  using uint16_t       = @\textit{unsigned integer type}@; // optional
+  using uint32_t       = @\textit{unsigned integer type}@; // optional
+  using uint64_t       = @\textit{unsigned integer type}@; // optional
 
-  typedef @\textit{unsigned integer type}@ uint_fast8_t;
-  typedef @\textit{unsigned integer type}@ uint_fast16_t;
-  typedef @\textit{unsigned integer type}@ uint_fast32_t;
-  typedef @\textit{unsigned integer type}@ uint_fast64_t;
+  using uint_fast8_t   = @\textit{unsigned integer type}@;
+  using uint_fast16_t  = @\textit{unsigned integer type}@;
+  using uint_fast32_t  = @\textit{unsigned integer type}@;
+  using uint_fast64_t  = @\textit{unsigned integer type}@;
 
-  typedef @\textit{unsigned integer type}@ uint_least8_t;
-  typedef @\textit{unsigned integer type}@ uint_least16_t;
-  typedef @\textit{unsigned integer type}@ uint_least32_t;
-  typedef @\textit{unsigned integer type}@ uint_least64_t;
+  using uint_least8_t  = @\textit{unsigned integer type}@;
+  using uint_least16_t = @\textit{unsigned integer type}@;
+  using uint_least32_t = @\textit{unsigned integer type}@;
+  using uint_least64_t = @\textit{unsigned integer type}@;
 
-  typedef @\textit{unsigned integer type}@ uintmax_t;
-  typedef @\textit{unsigned integer type}@ uintptr_t;      // optional
+  using uintmax_t      = @\textit{unsigned integer type}@;
+  using uintptr_t      = @\textit{unsigned integer type}@; // optional
 } // namespace std
 \end{codeblock}
 
@@ -1261,44 +1233,17 @@ plus function macros of the form:
 \end{codeblock}
 
 \pnum
-The header defines all functions, types, and macros the same as
-7.18 in the C standard. \enternote The macros defined
-by \tcode{<cstdint>} are provided unconditionally. In
-particular, the symbols
-\tcode{__STDC_LIMIT_MACROS}
-and
-\tcode{__STDC_CONSTANT_MACROS}
-(mentioned in footnotes
-219, 220, and 222 in the C standard) play no role in \Cpp. \exitnote
+The header defines all types and macros the same as
+the C standard library header \tcode{<stdint.h>}.
 
 \rSec1[support.start.term]{Start and termination}
 
 \pnum
-Table~\ref{tab:support.hdr.cstdlib} describes some of the contents of the header \tcode{<cstdlib>}.
-
-\indexlibrary{\idxcode{EXIT_FAILURE}}%
-\indexlibrary{\idxcode{EXIT_SUCCESS}}%
-\indexlibrary{\idxcode{_Exit}}%
-\indexlibrary{\idxcode{abort}}%
-\indexlibrary{\idxcode{atexit}}%
-\indexlibrary{\idxcode{at_quick_exit}}%
-\indexlibrary{\idxcode{exit}}%
-\indexlibrary{\idxcode{quick_exit}}%
-\begin{libsyntab4}{cstdlib}{tab:support.hdr.cstdlib}
-\macros     &   \tcode{EXIT_FAILURE}    &   \tcode{EXIT_SUCCESS}    &             \\ \rowsep
-\functions
-&   \tcode{_Exit}
-&   \tcode{abort}
-&   \tcode{atexit}  \\
-&   \tcode{at_quick_exit}
-&   \tcode{exit}
-&   \tcode{quick_exit}  \\
-\end{libsyntab4}
-
-\pnum
-The contents are the same as the Standard C library header
-\tcode{<stdlib.h>},
-with the following changes:
+\indextext{\idxhdr{cstdlib}}%
+\begin{note}
+The header \tcode{<cstdlib>}~(\ref{cstdlib.syn})
+declares the functions described in this subclause.
+\end{note}
 
 \indexlibrary{\idxcode{_Exit}}%
 \begin{itemdecl}
@@ -1307,43 +1252,40 @@ with the following changes:
 
 \begin{itemdescr}
 \pnum
-The function \tcode{_Exit(int status)} has additional behavior in this
-International Standard:
+\effects
+This function has the semantics specified in the C standard library.
 
-\begin{itemize}
-\item
+\pnum
+\remarks
 The program is terminated without executing destructors for objects of automatic,
 thread, or static storage duration and without calling functions passed to
 \tcode{atexit()}~(\ref{basic.start.term}).
-\end{itemize}
 \end{itemdescr}
 
 \indexlibrary{\idxcode{abort}}%
 \begin{itemdecl}
-[[noreturn]] void abort(void) noexcept;
+[[noreturn]] void abort() noexcept;
 \end{itemdecl}
 
 \begin{itemdescr}
 \pnum
-The function
-\tcode{abort()}
-has additional behavior in this International Standard:
+\effects
+This function has the semantics specified in the C standard library.
 
-\begin{itemize}
-\item
+\pnum
+\remarks
 The program is terminated without executing destructors for objects of
 automatic, thread, or static storage
 duration and without calling functions passed to
 \tcode{atexit()}~(\ref{basic.start.term}).
 %
 \indexlibrary{\idxcode{atexit}}%
-\end{itemize}
 \end{itemdescr}
 
-\indexlibrary{\idxcode{atexit}}
+\indexlibrary{\idxcode{atexit}}%
 \begin{itemdecl}
-extern "C" int atexit(void (*f)(void)) noexcept;
-extern "C++" int atexit(void (*f)(void)) noexcept;
+extern "C" int atexit(void (*f)()) noexcept;
+extern "C++" int atexit(void (*f)()) noexcept;
 \end{itemdecl}
 
 \begin{itemdescr}
@@ -1355,8 +1297,8 @@ functions register the function pointed to by \tcode{f}
 to be called without arguments at normal program termination.
 It is unspecified whether a call to \tcode{atexit()} that does not
 happen before~(\ref{intro.multithread}) a call to \tcode{exit()} will succeed.
-\enternote The \tcode{atexit()} functions do not introduce a data
-race~(\ref{res.on.data.races}). \exitnote
+\begin{note} The \tcode{atexit()} functions do not introduce a data
+race~(\ref{res.on.data.races}). \end{note}
 
 \pnum
 \implimits
@@ -1377,10 +1319,7 @@ non-zero if it fails.
 
 \begin{itemdescr}
 \pnum
-The function
-\tcode{exit()}
-has additional behavior in this International Standard:
-
+\effects
 \begin{itemize}
 \item
 First, objects with thread storage duration and associated with the current thread
@@ -1402,7 +1341,7 @@ by throwing an exception that is caught in
 
 If control leaves a registered function called by \tcode{exit} because the function does
 not provide a handler for a thrown exception, \tcode{std::terminate()} shall be called~(\ref{except.terminate}).%
-\indexlibrary{\idxcode{terminate}}
+\indexlibrary{\idxcode{terminate}}%
 
 \item
 Next, all open C streams (as mediated by the function
@@ -1421,28 +1360,24 @@ an \impldef{exit status}
 form of the status
 \term{successful termination}
 is returned.
-\indextext{implementation-defined}%
 If \tcode{status} is
 \tcode{EXIT_FAILURE},
 an \impldef{exit status} form of the status
 \term{unsuccessful termination}
 is returned.
-\indextext{implementation-defined}%
-Otherwise the status returned is \impldef{exit status}.%
-\indextext{implementation-defined}\footnote{The macros
+Otherwise the status returned is \impldef{exit status}.\footnote{The macros
 \tcode{EXIT_FAILURE}
 and
 \tcode{EXIT_SUCCESS}
 are defined in
 \tcode{<cstdlib>}.}
 \end{itemize}
-
 \end{itemdescr}
 
-\indexlibrary{\idxcode{at_quick_exit}}
+\indexlibrary{\idxcode{at_quick_exit}}%
 \begin{itemdecl}
-extern "C" int at_quick_exit(void (*f)(void)) noexcept;
-extern "C++" int at_quick_exit(void (*f)(void)) noexcept;
+extern "C" int at_quick_exit(void (*f)()) noexcept;
+extern "C++" int at_quick_exit(void (*f)()) noexcept;
 \end{itemdecl}
 
 \begin{itemdescr}
@@ -1450,17 +1385,17 @@ extern "C++" int at_quick_exit(void (*f)(void)) noexcept;
 \effects The \tcode{at_quick_exit()} functions register the function pointed to by \tcode{f}
 to be called without arguments when \tcode{quick_exit} is called.
 It is unspecified whether a call to \tcode{at_quick_exit()} that does not
-happen before~(\ref{intro.multithread}) all calls to \tcode{quick_exit} will succeed. \enternote The
+happen before~(\ref{intro.multithread}) all calls to \tcode{quick_exit} will succeed. \begin{note} The
 \tcode{at_quick_exit()} functions do not introduce a
-data race~(\ref{res.on.data.races}). \exitnote
-\enternote
+data race~(\ref{res.on.data.races}). \end{note}
+\begin{note}
 The order of registration may be indeterminate if \tcode{at_quick_exit} was called from more
 than one thread.
-\exitnote
-\enternote The
+\end{note}
+\begin{note} The
 \tcode{at_quick_exit} registrations are distinct from the \tcode{atexit} registrations,
 and applications may need to call both registration functions with the same argument.
-\exitnote
+\end{note}
 
 \pnum
 \implimits
@@ -1470,7 +1405,7 @@ The implementation shall support the registration of at least 32 functions.
 \returns Zero if the registration succeeds, non-zero if it fails.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{quick_exit}}
+\indexlibrary{\idxcode{quick_exit}}%
 \begin{itemdecl}
 [[noreturn]] void quick_exit(int status) noexcept;
 \end{itemdecl}
@@ -1483,18 +1418,21 @@ previously registered functions that had already been called at the time it was
 registered. Objects shall not be destroyed as a result of calling \tcode{quick_exit}.
 If control leaves a registered function called by \tcode{quick_exit} because the
 function does not provide a handler for a thrown exception, \tcode{std::terminate()} shall
-be called.%
-\indexlibrary{\idxcode{terminate}}
-\enternote \tcode{at_quick_exit} may call a registered function from a different thread
+be called.\indexlibrary{\idxcode{terminate}}
+\begin{note}
+\tcode{at_quick_exit} may call a registered function from a different thread
 than the one that registered it, so registered functions should not rely on the identity
-of objects with thread storage duration. \exitnote
+of objects with thread storage duration.
+\end{note}
 After calling registered functions, \tcode{quick_exit} shall call \tcode{_Exit(status)}.
-\enternote The standard file buffers are not flushed. \xsee ISO C~7.20.4.4. \exitnote
+\begin{note}
+The standard file buffers are not flushed. \xsee ISO C~7.22.4.5.
+\end{note}
 
 \end{itemdescr}
 
 \xref~\ref{basic.start}, \ref{basic.start.term},
-ISO C~7.10.4.
+ISO C~7.22.4.
 
 \rSec1[support.dynamic]{Dynamic memory management}
 
@@ -1505,31 +1443,55 @@ defines several
 functions that manage the allocation of dynamic storage in a program.
 It also defines components for reporting storage management errors.
 
-\synopsis{Header \tcode{<new>} synopsis}
+\rSec2[new.syn]{Header \tcode{<new>} synopsis}
 \indextext{\idxhdr{new}}%
 \indexlibrary{\idxhdr{new}}%
-
+\indexlibrary{\idxcode{align_val_t}}%
+\indexlibrary{\idxcode{nothrow_t}}%
+\indexlibrary{\idxcode{nothrow}}%
 \begin{codeblock}
 namespace std {
   class bad_alloc;
   class bad_array_new_length;
+  enum class align_val_t : size_t {};
   struct nothrow_t {};
   extern const nothrow_t nothrow;
-  typedef void (*new_handler)();
+  using new_handler = void (*)();
   new_handler get_new_handler() noexcept;
   new_handler set_new_handler(new_handler new_p) noexcept;
+
+  // \ref{ptr.launder}, pointer optimization barrier
+  template <class T> constexpr T* launder(T* p) noexcept;
+
+  // \ref{hardware.interference}, hardware interference size
+  static constexpr size_t hardware_destructive_interference_size = @\impdef{}@;
+  static constexpr size_t hardware_constructive_interference_size = @\impdef{}@;
 }
 
 void* operator new(std::size_t size);
+void* operator new(std::size_t size, std::align_val_t alignment);
 void* operator new(std::size_t size, const std::nothrow_t&) noexcept;
+void* operator new(std::size_t size, std::align_val_t alignment,
+                   const std::nothrow_t&) noexcept;
 void  operator delete(void* ptr) noexcept;
-void  operator delete(void* ptr, const std::nothrow_t&) noexcept;
 void  operator delete(void* ptr, std::size_t size) noexcept;
+void  operator delete(void* ptr, std::align_val_t alignment) noexcept;
+void  operator delete(void* ptr, std::size_t size, std::align_val_t alignment) noexcept;
+void  operator delete(void* ptr, const std::nothrow_t&) noexcept;
+void  operator delete(void* ptr, std::align_val_t alignment,
+                      const std::nothrow_t&) noexcept;
 void* operator new[](std::size_t size);
+void* operator new[](std::size_t size, std::align_val_t alignment);
 void* operator new[](std::size_t size, const std::nothrow_t&) noexcept;
+void* operator new[](std::size_t size, std::align_val_t alignment,
+                     const std::nothrow_t&) noexcept;
 void  operator delete[](void* ptr) noexcept;
-void  operator delete[](void* ptr, const std::nothrow_t&) noexcept;
 void  operator delete[](void* ptr, std::size_t size) noexcept;
+void  operator delete[](void* ptr, std::align_val_t alignment) noexcept;
+void  operator delete[](void* ptr, std::size_t size, std::align_val_t alignment) noexcept;
+void  operator delete[](void* ptr, const std::nothrow_t&) noexcept;
+void  operator delete[](void* ptr, std::align_val_t alignment,
+                        const std::nothrow_t&) noexcept;
 
 void* operator new  (std::size_t size, void* ptr) noexcept;
 void* operator new[](std::size_t size, void* ptr) noexcept;
@@ -1547,30 +1509,45 @@ void  operator delete[](void* ptr, void*) noexcept;
 Except where otherwise specified, the provisions of~(\ref{basic.stc.dynamic})
 apply to the library versions of \tcode{operator new} and \tcode{op\-er\-a\-tor
 delete}.
+If the value of an alignment argument
+passed to any of these functions
+is not a valid alignment value,
+the behavior is undefined.
+
+\newcommand{\replaceabledesc}[1]{%
+A \Cpp program may define functions with #1 of these function signatures,
+and thereby displace the default versions defined by the
+\Cpp standard library.%
+}
 
 \rSec3[new.delete.single]{Single-object forms}
 
-\indexlibrary{\idxcode{new}!\tcode{operator}}%
+\indexlibrary{\idxcode{new}!\idxcode{operator}}%
 \begin{itemdecl}
 void* operator new(std::size_t size);
+void* operator new(std::size_t size, std::align_val_t alignment);
 \end{itemdecl}
 
 \begin{itemdescr}
 \pnum
 \effects
 The
-\term{allocation function}~(\ref{basic.stc.dynamic.allocation})
+allocation functions~(\ref{basic.stc.dynamic.allocation})
 called by a
 \grammarterm{new-expression}~(\ref{expr.new})
 to allocate
-\tcode{size} bytes of storage suitably aligned to represent any object
-of that size.
+\tcode{size} bytes of storage.
+The second form is called for a type with new-extended alignment,
+and allocates storage
+with the specified alignment.
+The first form is called otherwise,
+and allocates storage
+suitably aligned to represent any object of that size
+provided the object's type does not have new-extended alignment.
 
 \pnum
 \replaceable
-a \Cpp program may define a function with this function signature
-that displaces the default version defined by the
-\Cpp standard library.
+\replaceabledesc{either}
 
 \pnum
 \required 
@@ -1579,7 +1556,7 @@ or else throw a
 \tcode{bad_alloc}
 \indexlibrary{\idxcode{bad_alloc}}%
 exception.
-This requirement is binding on a replacement version of this function.
+This requirement is binding on any replacement versions of these functions.
 
 \pnum
 \default
@@ -1588,8 +1565,8 @@ This requirement is binding on a replacement version of this function.
 \item
 Executes a loop:
 Within the loop, the function first attempts to allocate the requested storage.
-Whether the attempt involves a call to the Standard C library function
-\tcode{malloc}
+Whether the attempt involves a call to the C standard library functions
+\tcode{malloc} or \tcode{aligned_alloc}
 is unspecified.
 \indextext{unspecified}%
 \item
@@ -1613,12 +1590,13 @@ function does not return.
 \indexlibrary{\idxcode{new}!\idxcode{operator}}%
 \begin{itemdecl}
 void* operator new(std::size_t size, const std::nothrow_t&) noexcept;
+void* operator new(std::size_t size, std::align_val_t alignment, const std::nothrow_t&) noexcept;
 \end{itemdecl}
 
 \begin{itemdescr}
 \pnum
 \effects
-Same as above, except that it is called by a placement version of a
+Same as above, except that these are called by a placement version of a
 \grammarterm{new-expression}
 when a \Cpp program prefers a null pointer result as an error indication,
 instead of a
@@ -1627,74 +1605,79 @@ exception.
 
 \pnum
 \replaceable
-a \Cpp program may define a function with this function signature
-that displaces the default version defined by the
-\Cpp standard library.
+\replaceabledesc{either}
 
 \pnum
 \required
 Return a non-null pointer to suitably aligned storage~(\ref{basic.stc.dynamic}),
 or else return a null pointer.
-This nothrow version of
+Each of these nothrow versions of
 \tcode{operator new}
-returns a pointer obtained as if acquired from the (possibly replaced)
-ordinary version.
-This requirement is binding on a replacement version of this function.
+returns a pointer obtained as if
+acquired from the (possibly replaced)
+corresponding non-placement function.
+This requirement is binding on any replacement versions of these functions.
 
 \pnum
 \default
-Calls \tcode{operator new(size)}. If the call returns normally,
-returns the result of that call. Otherwise, returns a null pointer.
+Calls \tcode{operator new(size)},
+or \tcode{operator new(size, alignment)},
+respectively.
+If the call returns normally,
+returns the result of that call.
+Otherwise, returns a null pointer.
 
 \pnum
-\enterexample
+\begin{example}
 \begin{codeblock}
 T* p1 = new T;                  // throws \tcode{bad_alloc} if it fails
 T* p2 = new(nothrow) T;         // returns \tcode{nullptr} if it fails
 \end{codeblock}
-\exitexample
+\end{example}
 \end{itemdescr}
 
 \indexlibrary{\idxcode{delete}!\idxcode{operator}}%
 \begin{itemdecl}
 void operator delete(void* ptr) noexcept;
 void operator delete(void* ptr, std::size_t size) noexcept;
+void operator delete(void* ptr, std::align_val_t alignment) noexcept;
+void operator delete(void* ptr, std::size_t size, std::align_val_t alignment) noexcept;
 \end{itemdecl}
 
 \begin{itemdescr}
 \pnum
 \effects
 The
-\term{deallocation function}~(\ref{basic.stc.dynamic.deallocation})
+deallocation functions~(\ref{basic.stc.dynamic.deallocation})
 called by a
 \grammarterm{delete-expression}
 to render the value of \tcode{ptr} invalid.
 
 \pnum
 \replaceable
-a \Cpp program may define a function with signature
-\tcode{void operator delete(void* ptr) noexcept}
-that displaces the default version defined by the
-\Cpp standard library. If this function (without \tcode{size} parameter) is defined,
+\replaceabledesc{any}
+If a function without a \tcode{size} parameter is defined,
 the program should also define
-\tcode{void operator delete(void* ptr, std::size_t size) noexcept}.
-If this function with \tcode{size} parameter is defined, the program shall also
-define the version without the \tcode{size} parameter.
-\enternote The default behavior below may change in the future, which will require
+the corresponding function with a \tcode{size} parameter.
+If a function with a \tcode{size} parameter is defined,
+the program shall also define
+the corresponding version without the \tcode{size} parameter.
+\begin{note}
+The default behavior below may change in the future, which will require
 replacing both deallocation functions when replacing the allocation function.
-\exitnote
+\end{note}
 
 \pnum
 \requires
-\textit{ptr} shall be a null pointer or
-its value shall be a value returned by an
-earlier call to the (possibly replaced)
+\tcode{ptr} shall be a null pointer or
+its value shall represent the address of
+a block of memory allocated by
+an earlier call to a (possibly replaced)
 \tcode{operator new(std\colcol{}size_t)}
 or
-\tcode{operator new(std::size_t,const std::nothrow_t\&)}
+\tcode{operator new(std\colcol{}size_t, std\colcol{}align_val_t)}
 which has not been invalidated by an intervening call to
-\tcode{operator delete(void*)} or
-\tcode{operator delete(void*, std::size_t)}.
+\tcode{operator delete}.
 
 \pnum
 \requires
@@ -1702,20 +1685,35 @@ If an implementation has strict pointer safety~(\ref{basic.stc.dynamic.safety})
 then \tcode{ptr} shall be a safely-derived pointer.
 
 \pnum
-\requires If present, the \tcode{std::size_t size} argument shall equal the size
-argument passed to the allocation function that returned \tcode{ptr}.
+\requires
+If the \tcode{alignment} parameter is not present,
+\tcode{ptr} shall have been returned by an allocation function
+without an \tcode{alignment} parameter.
+If present, the \tcode{alignment} argument
+shall equal the \tcode{alignment} argument
+passed to the allocation function that returned \tcode{ptr}.
+If present, the \tcode{size} argument
+shall equal the \tcode{size} argument
+passed to the allocation function that returned \tcode{ptr}.
 
 \pnum
-\required Calls to \tcode{operator delete(void* ptr, std::size_t size)} may be changed
-to calls to \tcode{operator delete(void* ptr)} without affecting memory allocation.
-\enternote A conforming implementation is for
+\required
+A call to an \tcode{operator delete}
+with a \tcode{size} parameter
+may be changed to
+a call to the corresponding \tcode{operator delete}
+without a \tcode{size} parameter,
+without affecting memory allocation.
+\begin{note} A conforming implementation is for
 \tcode{operator delete(void* ptr, std::size_t size)} to simply call
-\tcode{operator delete(ptr)}. \exitnote
+\tcode{operator delete(ptr)}. \end{note}
 
 \pnum
-\default the function \tcode{operator delete(void* ptr, std::size_t size)} calls
-\tcode{operator delete(ptr)}.
-\enternote See the note in the above \textit{Replaceable} paragraph. \exitnote
+\default
+The functions that have a \tcode{size} parameter
+forward their other parameters
+to the corresponding function without a \tcode{size} parameter.
+\begin{note} See the note in the above \textit{Replaceable} paragraph. \end{note}
 
 \pnum
 \default
@@ -1723,13 +1721,14 @@ If \tcode{ptr} is null, does nothing. Otherwise, reclaims the
 storage allocated by the earlier call to \tcode{operator new}.
 
 \pnum
-\notes
+\remarks
 It is unspecified under what conditions part or all of such
 \indextext{unspecified}%
 reclaimed storage will be allocated by subsequent
 calls to
 \tcode{operator new}
 or any of
+\tcode{aligned_alloc},
 \tcode{calloc},
 \tcode{malloc},
 or
@@ -1741,13 +1740,14 @@ declared in
 \indexlibrary{\idxcode{delete}!\idxcode{operator}}%
 \begin{itemdecl}
 void operator delete(void* ptr, const std::nothrow_t&) noexcept;
+void operator delete(void* ptr, std::align_val_t alignment, const std::nothrow_t&) noexcept;
 \end{itemdecl}
 
 \begin{itemdescr}
 \pnum
 \effects
 The
-\term{deallocation function}~(\ref{basic.stc.dynamic.deallocation})
+deallocation functions~(\ref{basic.stc.dynamic.deallocation})
 called by the implementation
 to render the value of \tcode{ptr} invalid
 when the constructor invoked from a nothrow
@@ -1755,10 +1755,19 @@ placement version of the \grammarterm{new-expression} throws an exception.
 
 \pnum
 \replaceable
-a \Cpp program may define a function with signature
-\tcode{void operator delete(void* ptr, const std::nothrow_t\&) noexcept}
-that displaces the default version defined by the
-\Cpp standard library.
+\replaceabledesc{either}
+
+\pnum
+\requires
+\tcode{ptr} shall be a null pointer or
+its value shall represent the address of
+a block of memory allocated by
+an earlier call to a (possibly replaced)
+\tcode{operator new(std::size_t)}
+or
+\tcode{operator new(std::size_t, std::align_val_t)}
+which has not been invalidated by an intervening call to
+\tcode{operator delete}.
 
 \pnum
 \requires
@@ -1766,9 +1775,19 @@ If an implementation has strict pointer safety~(\ref{basic.stc.dynamic.safety})
 then \tcode{ptr} shall be a safely-derived pointer.
 
 \pnum
+\requires
+If the \tcode{alignment} parameter is not present,
+\tcode{ptr} shall have been returned by an allocation function
+without an \tcode{alignment} parameter.
+If present, the \tcode{alignment} argument
+shall equal the \tcode{alignment} argument
+passed to the allocation function that returned \tcode{ptr}.
+
+\pnum
 \default
-\tcode{operator delete(void* ptr, const std::nothrow_t\&)} calls
-\tcode{operator delete(ptr)}.
+Calls \tcode{operator delete(ptr)},
+or \tcode{operator delete(ptr, alignment)},
+respectively.
 \end{itemdescr}
 
 \rSec3[new.delete.array]{Array forms}
@@ -1776,20 +1795,29 @@ then \tcode{ptr} shall be a safely-derived pointer.
 \indexlibrary{\idxcode{new}!\idxcode{operator}}%
 \begin{itemdecl}
 void* operator new[](std::size_t size);
+void* operator new[](std::size_t size, std::align_val_t alignment);
 \end{itemdecl}
 
 \begin{itemdescr}
 \pnum
 \effects
 The
-\term{allocation function}~(\ref{basic.stc.dynamic.allocation})
+allocation functions~(\ref{basic.stc.dynamic.allocation})
 called by the array form of a
 \grammarterm{new-expression}~(\ref{expr.new})
-to allocate \tcode{size} bytes of storage suitably aligned to represent any array
-object of that size or smaller.\footnote{It is not the direct responsibility of
-\tcode{operator new[](std::size_t)}
+to allocate
+\tcode{size} bytes of storage.
+The second form is called for a type with new-extended alignment,
+and allocates storage
+with the specified alignment.
+The first form is called otherwise,
+and allocates storage
+suitably aligned to represent any array object of that size or smaller,
+provided the object's type does not have new-extended alignment.%
+\footnote{It is not the direct responsibility of
+\tcode{operator new[]}
 or
-\tcode{operator delete[](void*)}
+\tcode{operator delete[]}
 to note the repetition count or element size of the array.
 Those operations are performed elsewhere in the array
 \tcode{new}
@@ -1799,36 +1827,38 @@ expressions.
 The array
 \tcode{new}
 expression, may, however, increase the \tcode{size} argument to
-\tcode{operator new[](std::size_t)}
+\tcode{operator new[]}
 to obtain space to store supplemental information.}
 
 \pnum
 \replaceable
-a \Cpp program can define a
-function with this function signature that displaces the default version
-defined by the \Cpp standard library.
+\replaceabledesc{either}
 
 \pnum
 \required
 Same as for
-\tcode{operator new(std::size_t)}.
-This requirement is binding on a replacement version of this function.
+the corresponding single-object forms.
+This requirement is binding on any replacement versions of these functions.
 
 \pnum
 \default
 Returns
-\tcode{operator new(size)}.
+\tcode{operator new(size)},
+or
+\tcode{operator new(size, alignment)},
+respectively.
 \end{itemdescr}
 
 \indexlibrary{\idxcode{new}!\idxcode{operator}}%
 \begin{itemdecl}
 void* operator new[](std::size_t size, const std::nothrow_t&) noexcept;
+void* operator new[](std::size_t size, std::align_val_t alignment, const std::nothrow_t&) noexcept;
 \end{itemdecl}
 
 \begin{itemdescr}
 \pnum
 \effects
-Same as above, except that it is called by a placement version of a
+Same as above, except that these are called by a placement version of a
 \grammarterm{new-expression}
 when a \Cpp program prefers a null pointer result as an error indication,
 instead of a
@@ -1837,72 +1867,71 @@ exception.
 
 \pnum
 \replaceable
-a \Cpp program can define a
-function with this function signature that displaces the default version
-defined by the \Cpp standard library.
+\replaceabledesc{either}
 
 \pnum
 \required
 Return a non-null pointer to suitably aligned storage~(\ref{basic.stc.dynamic}),
 or else return a null pointer.
-This nothrow version of \tcode{operator new[]} returns a pointer obtained as if
-acquired from the (possibly replaced) \tcode{operator new[](std::size_t)} function.
-This requirement is binding on a replacement version of this function.
+Each of these nothrow versions of
+\tcode{operator new[]}
+returns a pointer obtained as if
+acquired from the (possibly replaced)
+corresponding non-placement function.
+This requirement is binding on any replacement versions of these functions.
 
 \pnum
 \default
-Calls \tcode{operator new[](size)}. If the call returns normally,
-returns the result of that call. Otherwise, returns a null pointer.
+Calls \tcode{operator new[](size)},
+or \tcode{operator new[](size, alignment)},
+respectively.
+If the call returns normally,
+returns the result of that call.
+Otherwise, returns a null pointer.
 \end{itemdescr}
 
 \indexlibrary{\idxcode{delete}!\idxcode{operator}}%
 \begin{itemdecl}
 void operator delete[](void* ptr) noexcept;
 void operator delete[](void* ptr, std::size_t size) noexcept;
+void operator delete[](void* ptr, std::align_val_t alignment) noexcept;
+void operator delete[](void* ptr, std::size_t size, std::align_val_t alignment) noexcept;
 \end{itemdecl}
 
 \begin{itemdescr}
 \pnum
 \effects
 The
-\term{deallocation function}~(\ref{basic.stc.dynamic.deallocation})
+deallocation functions~(\ref{basic.stc.dynamic.deallocation})
 called by the array form of a
 \grammarterm{delete-expression}
 to render the value of \tcode{ptr} invalid.
 
 \pnum
 \replaceable
-a \Cpp program can define a function with signature
-\tcode{void operator delete[](void* ptr) noexcept} that displaces the default
-version defined by the \Cpp standard library. If this function (without \tcode{size}
-parameter) is defined, the program should also define
-\tcode{void operator delete[](void* ptr, std::size_t size) noexcept}. If this function
-with \tcode{size} parameter is defined, the program shall also define the version
-without the \tcode{size} parameter.
-\enternote The default behavior below may change in the future, which will require
-replacing both deallocation functions when replacing the allocation function. \exitnote
+\replaceabledesc{any}
+If a function without a \tcode{size} parameter is defined,
+the program should also define
+the corresponding function with a \tcode{size} parameter.
+If a function with a \tcode{size} parameter is defined,
+the program shall also define
+the corresponding version without the \tcode{size} parameter.
+\begin{note}
+The default behavior below may change in the future, which will require
+replacing both deallocation functions when replacing the allocation function.
+\end{note}
 
 \pnum
 \requires
-\textit{ptr} shall be a null pointer or its value shall be
-the value returned by an earlier call to
-\tcode{operator new[](\brk{}std::size_t)}
+\tcode{ptr} shall be a null pointer or
+its value shall represent the address of
+a block of memory allocated by
+an earlier call to a (possibly replaced)
+\tcode{operator new[](std\colcol{}size_t)}
 or
-\tcode{operator new[](std::size_t,const std::nothrow_t\&)}
+\tcode{operator new[](std\colcol{}size_t, std\colcol{}align_val_t)}
 which has not been invalidated by an intervening call to
-\tcode{operator delete[](void*)} or
-\tcode{operator delete[](void*, std::size_t)}.
-
-\pnum
-\requires If present, the \tcode{std::size_t size} argument must equal the size
-argument passed to the allocation function that returned \tcode{ptr}.
-
-\pnum
-\required Calls to \tcode{operator delete[](void* ptr, std::size_t size)} may be changed
-to calls to \tcode{operator delete[](void* ptr)} without affecting memory allocation.
-\enternote A conforming implementation is for
-\tcode{operator delete[](void* ptr, std::size_t size)} to simply call
-\tcode{operator delete[](void* ptr)}. \exitnote
+\tcode{operator delete[]}.
 
 \pnum
 \requires
@@ -1910,23 +1939,50 @@ If an implementation has strict pointer safety~(\ref{basic.stc.dynamic.safety})
 then \tcode{ptr} shall be a safely-derived pointer.
 
 \pnum
+\requires
+If the \tcode{alignment} parameter is not present,
+\tcode{ptr} shall have been returned by an allocation function
+without an \tcode{alignment} parameter.
+If present, the \tcode{alignment} argument
+shall equal the \tcode{alignment} argument
+passed to the allocation function that returned \tcode{ptr}.
+If present, the \tcode{size} argument
+shall equal the \tcode{size} argument
+passed to the allocation function that returned \tcode{ptr}.
+
+\pnum
+\required
+A call to an \tcode{operator delete[]}
+with a \tcode{size} parameter
+may be changed to
+a call to the corresponding \tcode{operator delete[]}
+without a \tcode{size} parameter,
+without affecting memory allocation.
+\begin{note} A conforming implementation is for
+\tcode{operator delete[](void* ptr, std::size_t size)} to simply call
+\tcode{operator delete[](ptr)}. \end{note}
+
+\pnum
 \default
-\tcode{operator delete[](void* ptr, std::size_t size)} calls
-\tcode{operator delete[](ptr)}, and
-\tcode{operator delete[](void* ptr)} calls
-\tcode{operator delete(ptr)}.
+The functions that have a \tcode{size} parameter
+forward their other parameters
+to the corresponding function without a \tcode{size} parameter.
+The functions that do not have a \tcode{size} parameter
+forward their parameters
+to the corresponding \tcode{operator delete} (single-object) function.
 \end{itemdescr}
 
 \indexlibrary{\idxcode{delete}!\idxcode{operator}}%
 \begin{itemdecl}
 void operator delete[](void* ptr, const std::nothrow_t&) noexcept;
+void operator delete[](void* ptr, std::align_val_t alignment, const std::nothrow_t&) noexcept;
 \end{itemdecl}
 
 \begin{itemdescr}
 \pnum
 \effects
 The
-\term{deallocation function}~(\ref{basic.stc.dynamic.deallocation})
+deallocation functions~(\ref{basic.stc.dynamic.deallocation})
 called by the implementation
 to render the value of \tcode{ptr} invalid
 when the constructor invoked from a nothrow
@@ -1934,10 +1990,19 @@ placement version of the array \grammarterm{new-expression} throws an exception.
 
 \pnum
 \replaceable
-a \Cpp program may define a function with signature
-\tcode{void operator delete[](void* ptr, const std::nothrow_t\&) noexcept}
-that displaces the default version defined by the
-\Cpp standard library.
+\replaceabledesc{either}
+
+\pnum
+\requires
+\tcode{ptr} shall be a null pointer or
+its value shall represent the address of
+a block of memory allocated by
+an earlier call to a (possibly replaced)
+\tcode{operator new[](std::size_t)}
+or
+\tcode{operator new[](std::size_t, std::align_val_t)}
+which has not been invalidated by an intervening call to
+\tcode{operator delete[]}.
 
 \pnum
 \requires
@@ -1945,12 +2010,22 @@ If an implementation has strict pointer safety~(\ref{basic.stc.dynamic.safety})
 then \tcode{ptr} shall be a safely-derived pointer.
 
 \pnum
+\requires
+If the \tcode{alignment} parameter is not present,
+\tcode{ptr} shall have been returned by an allocation function
+without an \tcode{alignment} parameter.
+If present, the \tcode{alignment} argument
+shall equal the \tcode{alignment} argument
+passed to the allocation function that returned \tcode{ptr}.
+
+\pnum
 \default
-\tcode{operator delete[](void* ptr, const std::nothrow_t\&)} calls
-\tcode{operator delete[](ptr)}.
+Calls \tcode{operator delete[](ptr)},
+or \tcode{operator delete[](ptr, alignment)},
+respectively.
 \end{itemdescr}
 
-\rSec3[new.delete.placement]{Placement forms}
+\rSec3[new.delete.placement]{Non-allocating forms}
 
 \pnum
 These functions are reserved, a \Cpp program may not define functions that displace
@@ -1969,18 +2044,18 @@ void* operator new(std::size_t size, void* ptr) noexcept;
 \tcode{ptr}.
 
 \pnum
-\notes
+\remarks
 Intentionally performs no other action.
 
 \pnum
-\enterexample
+\begin{example}
 This can be useful for constructing an object at a known address:
 
 \begin{codeblock}
 void* place = operator new(sizeof(Something));
 Something* p = new (place) Something();
 \end{codeblock}
-\exitexample
+\end{example}
 \end{itemdescr}
 
 \indexlibrary{\idxcode{new}!\idxcode{operator}}%
@@ -1994,11 +2069,11 @@ void* operator new[](std::size_t size, void* ptr) noexcept;
 \tcode{ptr}.
 
 \pnum
-\notes
+\remarks
 Intentionally performs no other action.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{new}!\tcode{operator}}%
+\indexlibrary{\idxcode{delete}!\idxcode{operator}}%
 \begin{itemdecl}
 void operator delete(void* ptr, void*) noexcept;
 \end{itemdecl}
@@ -2014,14 +2089,14 @@ If an implementation has strict pointer safety~(\ref{basic.stc.dynamic.safety})
 then \tcode{ptr} shall be a safely-derived pointer.
 
 \pnum
-\notes
+\remarks
 Default function called when any part of the initialization in a
 placement \grammarterm{new-expression} that invokes the library's
 non-array placement operator new
 terminates by throwing an exception~(\ref{expr.new}).
 \end{itemdescr}
 
-\indexlibrary{\idxcode{new}!\idxcode{operator}}%
+\indexlibrary{\idxcode{delete}!\idxcode{operator}}%
 \begin{itemdecl}
 void operator delete[](void* ptr, void*) noexcept;
 \end{itemdecl}
@@ -2037,7 +2112,7 @@ If an implementation has strict pointer safety~(\ref{basic.stc.dynamic.safety})
 then \tcode{ptr} shall be a safely-derived pointer.
 
 \pnum
-\notes
+\remarks
 Default function called when any part of the initialization in a
 placement \grammarterm{new-expression} that invokes the library's
 array placement operator new
@@ -2049,7 +2124,9 @@ terminates by throwing an exception~(\ref{expr.new}).
 \pnum
 For purposes of determining the existence of data races, the library versions
 of \tcode{operator new}, user replacement versions of global \tcode{operator new},
-the C standard library functions \tcode{calloc} and \tcode{malloc}, the library
+the C standard library functions
+\tcode{aligned_alloc}, \tcode{calloc}, and \tcode{malloc},
+the library
 versions of \tcode{operator delete}, user replacement
 versions of \tcode{operator delete}, the C standard library function
 \tcode{free}, and the C standard library function \tcode{realloc} shall not
@@ -2071,7 +2148,7 @@ namespace std {
     bad_alloc() noexcept;
     bad_alloc(const bad_alloc&) noexcept;
     bad_alloc& operator=(const bad_alloc&) noexcept;
-    virtual const char* what() const noexcept;
+    const char* what() const noexcept override;
   };
 }
 \end{codeblock}
@@ -2082,7 +2159,7 @@ The class
 defines the type of objects thrown as
 exceptions by the implementation to report a failure to allocate storage.
 
-\indexlibrary{\idxcode{bad_alloc}!\idxcode{bad_alloc}}%
+\indexlibrary{\idxcode{bad_alloc}!constructor}%
 \begin{itemdecl}
 bad_alloc() noexcept;
 \end{itemdecl}
@@ -2094,9 +2171,8 @@ Constructs an object of class
 \tcode{bad_alloc}.
 \end{itemdescr}
 
-\indextext{implementation-defined}%
-\indexlibrary{\idxcode{bad_alloc}!\idxcode{bad_alloc}}%
-\indexlibrary{\idxcode{operator=}!\tcode{bad_alloc}}%
+\indexlibrary{\idxcode{bad_alloc}!constructor}%
+\indexlibrarymember{operator=}{bad_alloc}%
 \begin{itemdecl}
 bad_alloc(const bad_alloc&) noexcept;
 bad_alloc& operator=(const bad_alloc&) noexcept;
@@ -2109,15 +2185,14 @@ Copies an object of class
 \tcode{bad_alloc}.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{what}!\tcode{bad_alloc}}%
+\indexlibrarymember{what}{bad_alloc}%
 \begin{itemdecl}
-virtual const char* what() const noexcept;
+const char* what() const noexcept override;
 \end{itemdecl}
 
 \begin{itemdescr}
 \pnum
 \returns
-\indexlibrary{\idxcode{bad_alloc}!\idxcode{bad_alloc::what}!implementation-defined}%
 An \impldef{return value of \tcode{bad_alloc::what}} \ntbs.
 
 \pnum
@@ -2135,7 +2210,7 @@ namespace std {
   class bad_array_new_length : public bad_alloc {
   public:
     bad_array_new_length() noexcept;
-    virtual const char* what() const noexcept;
+    const char* what() const noexcept override;
   };
 }
 \end{codeblock}
@@ -2144,9 +2219,9 @@ namespace std {
 The class \tcode{bad_array_new_length} defines the type of objects thrown as
 exceptions by the implementation to report an attempt to allocate an array of size
 less than zero or
-greater than an implementation-defined limit~(\ref{expr.new}).
+greater than an \impldef{maximum size of an allocated object} limit~(\ref{expr.new}).
 
-\indexlibrary{\idxcode{bad_array_new_length}!\idxcode{bad_array_new_length}}%
+\indexlibrary{\idxcode{bad_array_new_length}!constructor}%
 \begin{itemdecl}
 bad_array_new_length() noexcept;
 \end{itemdecl}
@@ -2156,15 +2231,14 @@ bad_array_new_length() noexcept;
 \effects constructs an object of class \tcode{bad_array_new_length}.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{what}!\tcode{bad_array_new_length}}%
+\indexlibrarymember{what}{bad_array_new_length}%
 \begin{itemdecl}
-virtual const char* what() const noexcept;
+const char* what() const noexcept override;
 \end{itemdecl}
 
 \begin{itemdescr}
 \pnum
 \returns
-\indexlibrary{\idxcode{bad_array_new_length}!\idxcode{bad_array_new_length::what}!implementation-defined}%
 An \impldef{return value of \tcode{bad_array_new_length::what}} \ntbs.
 
 \pnum
@@ -2178,7 +2252,7 @@ suitable for conversion and display as a
 
 \indexlibrary{\idxcode{new_handler}}%
 \begin{itemdecl}
-typedef void (*new_handler)();
+using new_handler = void (*)();
 \end{itemdecl}
 
 \begin{itemdescr}
@@ -2234,6 +2308,7 @@ The initial \tcode{new_handler} is a null pointer.
 
 \rSec3[get.new.handler]{\tcode{get_new_handler}}
 
+\indexlibrary{\idxcode{get_new_handler}}%
 \begin{itemdecl}
 new_handler get_new_handler() noexcept;
 \end{itemdecl}
@@ -2241,8 +2316,120 @@ new_handler get_new_handler() noexcept;
 \begin{itemdescr}
 \pnum
 \returns The current \tcode{new_handler}.
-\enternote This may be a null pointer value. \exitnote
+\begin{note} This may be a null pointer value. \end{note}
 \end{itemdescr}
+
+\rSec2[ptr.launder]{Pointer optimization barrier}
+
+\indexlibrary{\idxcode{launder}}%
+\begin{itemdecl}
+template <class T> constexpr T* launder(T* p) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\requires
+\tcode{p} represents the address \placeholder{A} of a byte in memory.
+An object \placeholder{X} that is within its lifetime~(\ref{basic.life})
+and whose type is similar~(\ref{conv.qual}) to \tcode{T}
+is located at the address \placeholder{A}.
+All bytes of storage that would be reachable through the result
+are reachable through \tcode{p} (see below).
+
+\pnum
+\returns
+A value of type \tcode{T *} that points to \tcode{X}.
+
+\pnum
+\remarks
+An invocation of this function
+may be used in a core constant expression
+whenever the value of its argument
+may be used in a core constant expression.
+A byte of storage is
+reachable through a pointer value
+that points to an object \placeholder{Y}
+if it is within the storage occupied by
+\placeholder{Y},
+an object that is pointer-interconvertible with \placeholder{Y}, or
+the immediately-enclosing array object if \placeholder{Y} is an array element.
+The program is ill-formed if \tcode{T} is a function type
+or (possibly cv-qualified) \tcode{void}.
+
+\pnum
+\realnotes
+If a new object is created
+in storage occupied by an existing object of the same type,
+a pointer to the original object
+can be used to refer to the new object
+unless the type contains \tcode{const} or reference members;
+in the latter cases,
+this function can be used to obtain a usable pointer to the new object.
+See~\ref{basic.life}.
+
+\pnum
+\begin{example}
+\begin{codeblock}
+struct X { const int n; };
+X *p = new X{3};
+const int a = p->n;
+new (p) X{5};                     // \tcode{p} does not point to new object (\ref{basic.life})
+                                  // because \tcode{X::n} is \tcode{const}
+const int b = p->n;               // undefined behavior
+const int c = std::launder(p)->n; // OK
+\end{codeblock}
+\end{example}
+\end{itemdescr}
+
+\rSec2[hardware.interference]{Hardware interference size}
+
+\indexlibrary{\idxcode{hardware_destructive_interference_size}}%
+\begin{itemdecl}
+constexpr size_t hardware_destructive_interference_size = @\impdef{}@;
+\end{itemdecl}
+
+\pnum
+This number is the minimum recommended offset
+between two concurrently-accessed objects
+to avoid additional performance degradation due to contention
+introduced by the implementation.
+It shall be at least \tcode{alignof(max_align_t)}.
+
+\indextext{cats!interfering with canines}%
+\begin{example}
+\begin{codeblock}
+struct keep_apart {
+  alignas(hardware_destructive_interference_size) atomic<int> cat;
+  alignas(hardware_destructive_interference_size) atomic<int> dog;
+};
+\end{codeblock}
+\end{example}
+
+\indexlibrary{\idxcode{hardware_constructive_interference_size}}%
+\begin{itemdecl}
+constexpr size_t hardware_constructive_interference_size = @\impdef{}@;
+\end{itemdecl}
+
+\pnum
+This number is the maximum recommended size of contiguous memory
+occupied by two objects accessed with temporal locality by concurrent threads.
+It shall be at least \tcode{alignof(max_align_t)}.
+
+\indextext{dogs!obliviousness to interference}%
+\begin{example}
+\begin{codeblock}
+struct together {
+  atomic<int> dog;
+  int puppy;
+};
+struct kennel {
+  // Other data members...
+  alignas(sizeof(together)) together pack;
+  // Other data members...
+};
+static_assert(sizeof(together) <= hardware_constructive_interference_size);
+\end{codeblock}
+\end{example}
 
 \rSec1[support.rtti]{Type identification}
 
@@ -2253,13 +2440,13 @@ defines a
 type associated with type information generated by the implementation.
 It also defines two types for reporting dynamic type identification errors.
 
+\rSec2[typeinfo.syn]{Header \tcode{<typeinfo>} synopsis}
 \indextext{\idxhdr{typeinfo}}%
 \indexlibrary{\idxhdr{typeinfo}}%
-\synopsis{Header \tcode{<typeinfo>} synopsis}
-
 \indexlibrary{\idxcode{type_info}}%
 \indexlibrary{\idxcode{bad_cast}}%
 \indexlibrary{\idxcode{bad_typeid}}%
+
 \begin{codeblock}
 namespace std {
   class type_info;
@@ -2300,7 +2487,7 @@ The names, encoding rule, and collating sequence for types are all unspecified
 \indextext{unspecified}%
 and may differ between programs.
 
-\indexlibrary{\idxcode{operator==}!\tcode{type_info}}%
+\indexlibrarymember{operator==}{type_info}%
 \begin{itemdecl}
 bool operator==(const type_info& rhs) const noexcept;
 \end{itemdecl}
@@ -2316,7 +2503,7 @@ Compares the current object with \tcode{rhs}.
 if the two values describe the same type.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{operator"!=}!\tcode{type_info}}%
+\indexlibrarymember{operator"!=}{type_info}%
 \begin{itemdecl}
 bool operator!=(const type_info& rhs) const noexcept;
 \end{itemdecl}
@@ -2327,7 +2514,7 @@ bool operator!=(const type_info& rhs) const noexcept;
 \tcode{!(*this == rhs)}.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{before}!\tcode{type_info}}%
+\indexlibrarymember{before}{type_info}%
 \begin{itemdecl}
 bool before(const type_info& rhs) const noexcept;
 \end{itemdecl}
@@ -2345,7 +2532,7 @@ if
 precedes \tcode{rhs} in the implementation's collation order.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{hash_code}!\tcode{type_info}}%
+\indexlibrarymember{hash_code}{type_info}%
 \begin{itemdecl}
 size_t hash_code() const noexcept;
 \end{itemdecl}
@@ -2362,7 +2549,7 @@ objects which compare equal.
 \end{itemdescr}
 
 
-\indexlibrary{\idxcode{name}!\tcode{type_info}}%
+\indexlibrarymember{name}{type_info}%
 \begin{itemdecl}
 const char* name() const noexcept;
 \end{itemdecl}
@@ -2371,10 +2558,9 @@ const char* name() const noexcept;
 \pnum
 \returns
 An \impldef{return value of \tcode{type_info::name()}} \ntbs.
-\indexlibrary{\idxcode{type_info::name}!implementation-defined}
 
 \pnum
-\notes
+\remarks
 The message may be a null-terminated multibyte string~(\ref{multibyte.strings}),
 suitable for conversion and display as a
 \tcode{wstring}~(\ref{string.classes}, \ref{locale.codecvt})
@@ -2390,7 +2576,7 @@ namespace std {
     bad_cast() noexcept;
     bad_cast(const bad_cast&) noexcept;
     bad_cast& operator=(const bad_cast&) noexcept;
-    virtual const char* what() const noexcept;
+    const char* what() const noexcept override;
   };
 }
 \end{codeblock}
@@ -2400,11 +2586,11 @@ The class
 \tcode{bad_cast}
 defines the type of objects thrown
 as exceptions by the implementation to report the execution of an invalid
+\indextext{cast!dynamic}%
 \grammarterm{dynamic-cast}
 expression~(\ref{expr.dynamic.cast}).
 
-\indextext{cast!dynamic}%
-\indexlibrary{\idxcode{bad_cast}!\tcode{bad_cast}}%
+\indexlibrary{\idxcode{bad_cast}!constructor}%
 \begin{itemdecl}
 bad_cast() noexcept;
 \end{itemdecl}
@@ -2416,8 +2602,8 @@ Constructs an object of class
 \tcode{bad_cast}.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{bad_cast}!\tcode{bad_cast}}%
-\indexlibrary{\idxcode{operator=}!\tcode{bad_cast}}%
+\indexlibrary{\idxcode{bad_cast}!constructor}%
+\indexlibrarymember{operator=}{bad_cast}%
 \begin{itemdecl}
 bad_cast(const bad_cast&) noexcept;
 bad_cast& operator=(const bad_cast&) noexcept;
@@ -2430,19 +2616,18 @@ Copies an object of class
 \tcode{bad_cast}.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{what}!\tcode{bad_cast}}%
+\indexlibrarymember{what}{bad_cast}%
 \begin{itemdecl}
-virtual const char* what() const noexcept;
+const char* what() const noexcept override;
 \end{itemdecl}
 
 \begin{itemdescr}
 \pnum
 \returns
-An \impldef{return value of \tcode{bad_cast::what}} \ntbs.%
-\indexlibrary{\idxcode{bad_cast::what}!implementation-defined}
+An \impldef{return value of \tcode{bad_cast::what}} \ntbs.
 
 \pnum
-\notes
+\remarks
 The message may be a null-terminated multibyte string~(\ref{multibyte.strings}),
 suitable for conversion and display as a
 \tcode{wstring}~(\ref{string.classes}, \ref{locale.codecvt})
@@ -2458,7 +2643,7 @@ namespace std {
     bad_typeid() noexcept;
     bad_typeid(const bad_typeid&) noexcept;
     bad_typeid& operator=(const bad_typeid&) noexcept;
-    virtual const char* what() const noexcept;
+    const char* what() const noexcept override;
   };
 }
 \end{codeblock}
@@ -2472,7 +2657,7 @@ in a
 \grammarterm{typeid}
 expression~(\ref{expr.typeid}).
 
-\indexlibrary{\idxcode{bad_typeid}!\tcode{bad_typeid}}%
+\indexlibrary{\idxcode{bad_typeid}!constructor}%
 \begin{itemdecl}
 bad_typeid() noexcept;
 \end{itemdecl}
@@ -2484,8 +2669,8 @@ Constructs an object of class
 \tcode{bad_typeid}.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{bad_typeid}!\tcode{bad_typeid}}%
-\indexlibrary{\idxcode{operator=}!\tcode{bad_typeid}}%
+\indexlibrary{\idxcode{bad_typeid}!constructor}%
+\indexlibrarymember{operator=}{bad_typeid}%
 \begin{itemdecl}
 bad_typeid(const bad_typeid&) noexcept;
 bad_typeid& operator=(const bad_typeid&) noexcept;
@@ -2498,19 +2683,18 @@ Copies an object of class
 \tcode{bad_typeid}.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{what}!\tcode{bad_typeid}}%
+\indexlibrarymember{what}{bad_typeid}%
 \begin{itemdecl}
-virtual const char* what() const noexcept;
+const char* what() const noexcept override;
 \end{itemdecl}
 
 \begin{itemdescr}
 \pnum
 \returns
-An \impldef{return value of \tcode{bad_typeid::what}} \ntbs.%
-\indextext{\idxcode{bad_typeid::what}!implementation-defined}
+An \impldef{return value of \tcode{bad_typeid::what}} \ntbs.
 
 \pnum
-\notes
+\remarks
 The message may be a null-terminated multibyte string~(\ref{multibyte.strings}),
 suitable for conversion and display as a
 \tcode{wstring}~(\ref{string.classes}, \ref{locale.codecvt})
@@ -2523,31 +2707,24 @@ The header
 \tcode{<exception>}
 defines several types and functions related to the handling of exceptions in a \Cpp program.
 
-\synopsis{Header \tcode{<exception>} synopsis}
-
+\rSec2[exception.syn]{Header \tcode{<exception>} synopsis}
 \indextext{\idxhdr{exception}}%
 \indexlibrary{\idxhdr{exception}}%
+
 \begin{codeblock}
 namespace std {
   class exception;
   class bad_exception;
   class nested_exception;
 
-  typedef void (*unexpected_handler)();
-  unexpected_handler get_unexpected() noexcept;
-  unexpected_handler set_unexpected(unexpected_handler f) noexcept;
-  [[noreturn]] void unexpected();
-
-  typedef void (*terminate_handler)();
+  using terminate_handler = void (*)();
   terminate_handler get_terminate() noexcept;
   terminate_handler set_terminate(terminate_handler f) noexcept;
   [[noreturn]] void terminate() noexcept;
 
   int uncaught_exceptions() noexcept;
-  // \ref{depr.uncaught}, uncaught_exception (deprecated)
-  bool uncaught_exception() noexcept;
 
-  typedef @\unspec@ exception_ptr;
+  using exception_ptr = @\unspec@;
 
   exception_ptr current_exception() noexcept;
   [[noreturn]] void rethrow_exception(exception_ptr p);
@@ -2604,7 +2781,8 @@ Constructs an object of class
 \tcode{exception}.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{operator=}!\idxcode{exception}}%
+\indexlibrary{\idxcode{exception}!constructor}%
+\indexlibrarymember{operator=}{exception}%
 \begin{itemdecl}
 exception(const exception& rhs) noexcept;
 exception& operator=(const exception& rhs) noexcept;
@@ -2622,7 +2800,6 @@ object.
 then \tcode{strcmp(what(), rhs.what())} shall equal 0.
 \end{itemdescr}
 
-\indextext{implementation-defined}%
 \indexlibrary{\idxcode{exception}!destructor}%
 \begin{itemdecl}
 virtual ~exception();
@@ -2635,7 +2812,7 @@ Destroys an object of class
 \tcode{exception}.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{what}!\tcode{exception}}%
+\indexlibrarymember{what}{exception}%
 \begin{itemdecl}
 virtual const char* what() const noexcept;
 \end{itemdecl}
@@ -2643,11 +2820,10 @@ virtual const char* what() const noexcept;
 \begin{itemdescr}
 \pnum
 \returns
-\indextext{exception::what~message@\tcode{exception::what}~message!implementation-defined}%
-An \impldef{result of \tcode{exception::what}} \ntbs.
+An \impldef{return value of \tcode{exception::what}} \ntbs.
 
 \pnum
-\notes
+\remarks
 The message may be a null-terminated multibyte string~(\ref{multibyte.strings}),
 suitable for conversion and display as a
 \tcode{wstring}~(\ref{string.classes}, \ref{locale.codecvt}).
@@ -2666,7 +2842,7 @@ namespace std {
     bad_exception() noexcept;
     bad_exception(const bad_exception&) noexcept;
     bad_exception& operator=(const bad_exception&) noexcept;
-    virtual const char* what() const noexcept;
+    const char* what() const noexcept override;
   };
 }
 \end{codeblock}
@@ -2677,7 +2853,7 @@ The class
 defines the type of objects thrown as
 described in~(\ref{except.unexpected}).
 
-\indexlibrary{\idxcode{bad_exception}!\tcode{bad_exception}}%
+\indexlibrary{\idxcode{bad_exception}!constructor}%
 \begin{itemdecl}
 bad_exception() noexcept;
 \end{itemdecl}
@@ -2689,8 +2865,8 @@ Constructs an object of class
 \tcode{bad_exception}.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{bad_exception}!\tcode{bad_exception}}%
-\indexlibrary{\idxcode{operator=}!\tcode{bad_exception}}%
+\indexlibrary{\idxcode{bad_exception}!constructor}%
+\indexlibrarymember{operator=}{bad_exception}%
 \begin{itemdecl}
 bad_exception(const bad_exception&) noexcept;
 bad_exception& operator=(const bad_exception&) noexcept;
@@ -2703,19 +2879,18 @@ Copies an object of class
 \tcode{bad_exception}.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{what}!\tcode{bad_exception}}%
+\indexlibrarymember{what}{bad_exception}%
 \begin{itemdecl}
-virtual const char* what() const noexcept;
+const char* what() const noexcept override;
 \end{itemdecl}
 
 \begin{itemdescr}
 \pnum
 \returns
-An \impldef{return value of \tcode{bad_exception::what}} \ntbs.%
-\indexlibrary{\idxcode{bad_exception::what}!implementation-defined}
+An \impldef{return value of \tcode{bad_exception::what}} \ntbs.
 
 \pnum
-\notes
+\remarks
 The message may be a null-terminated multibyte string~(\ref{multibyte.strings}),
 suitable for conversion and display as a
 \tcode{wstring}~(\ref{string.classes}, \ref{locale.codecvt}).
@@ -2727,7 +2902,7 @@ suitable for conversion and display as a
 
 \indexlibrary{\idxcode{terminate_handler}}%
 \begin{itemdecl}
-typedef void (*terminate_handler)();
+using terminate_handler = void (*)();
 \end{itemdecl}
 
 \begin{itemdescr}
@@ -2748,7 +2923,7 @@ terminate execution of the program without returning to the caller.
 \default
 The implementation's default \tcode{terminate_handler} calls
 \tcode{abort()}.%
-\indexlibrary{\idxcode{abort}}
+\indexlibrary{\idxcode{abort}}%
 \end{itemdescr}
 
 \rSec3[set.terminate]{\tcode{set_terminate}}
@@ -2775,6 +2950,7 @@ The previous \tcode{terminate_handler}.
 
 \rSec3[get.terminate]{\tcode{get_terminate}}
 
+\indexlibrary{\idxcode{get_terminate}}%
 \begin{itemdecl}
 terminate_handler get_terminate() noexcept;
 \end{itemdecl}
@@ -2782,7 +2958,7 @@ terminate_handler get_terminate() noexcept;
 \begin{itemdescr}
 \pnum
 \returns The current \tcode{terminate_handler}.
-\enternote This may be a null pointer value. \exitnote
+\begin{note} This may be a null pointer value. \end{note}
 \end{itemdescr}
 
 \rSec3[terminate]{\tcode{terminate}}
@@ -2796,15 +2972,17 @@ terminate_handler get_terminate() noexcept;
 \pnum
 \remarks
 Called by the implementation when exception
-handling must be abandoned for any of several reasons~(\ref{except.terminate}),
-in effect immediately after throwing the exception.
+handling must be abandoned for any of several reasons~(\ref{except.terminate}).
 May also be called directly by the program.
 
 \pnum
 \effects
-Calls the current \tcode{terminate_handler} function. \enternote A
+Calls a \tcode{terminate_handler} function. It is unspecified which
+\tcode{terminate_handler} function will be called if an exception is active
+during a call to \tcode{set_terminate}.
+Otherwise calls the current \tcode{terminate_handler} function. \begin{note} A
 default \tcode{terminate_handler} is always considered a callable handler in
-this context. \exitnote
+this context. \end{note}
 \end{itemdescr}
 
 \rSec2[uncaught.exceptions]{\tcode{uncaught_exceptions}}
@@ -2820,7 +2998,7 @@ int uncaught_exceptions() noexcept;
 The number of uncaught exceptions~(\ref{except.uncaught}).
 
 \pnum
-\notes
+\remarks
 When \tcode{uncaught_exceptions() > 0},
 throwing an exception can result in a call of\\
 \tcode{std::terminate()}~(\ref{except.terminate}).
@@ -2828,14 +3006,14 @@ throwing an exception can result in a call of\\
 
 \rSec2[propagation]{Exception propagation}
 
-\indexlibrary{\idxcode{exception_ptr}}
+\indexlibrary{\idxcode{exception_ptr}}%
 \begin{itemdecl}
-typedef @\unspec@ exception_ptr;
+using exception_ptr = @\unspec@;
 \end{itemdecl}
 
 \begin{itemdescr}
 \pnum
-The type exception_ptr can be used to refer to an exception object.
+The type \tcode{exception_ptr} can be used to refer to an exception object.
 
 \pnum
 \tcode{exception_ptr} shall satisfy the requirements of
@@ -2854,22 +3032,22 @@ type.
 enumeration, or pointer type.
 
 \pnum
-\enternote An implementation might use a reference-counted smart
-pointer as \tcode{exception_ptr}. \exitnote
+\begin{note} An implementation might use a reference-counted smart
+pointer as \tcode{exception_ptr}. \end{note}
 
 \pnum
 For purposes of determining the presence of a data race, operations on
 \tcode{exception_ptr} objects shall access and modify only the
 \tcode{exception_ptr} objects themselves and not the exceptions they refer to.
 Use of \tcode{rethrow_exception} on \tcode{exception_ptr} objects that refer to
-the same exception object shall not introduce a data race. \enternote if
+the same exception object shall not introduce a data race. \begin{note} if
 \tcode{rethrow_exception} rethrows the same exception object (rather than a copy),
 concurrent access to that rethrown exception object may introduce a data race.
 Changes in the number of \tcode{exception_ptr} objects that refer to a
-particular exception do not introduce a data race. \exitnote
+particular exception do not introduce a data race. \end{note}
 \end{itemdescr}
 
-\indexlibrary{\idxcode{current_exception}}
+\indexlibrary{\idxcode{current_exception}}%
 \begin{itemdecl}
 exception_ptr current_exception() noexcept;
 \end{itemdecl}
@@ -2885,17 +3063,17 @@ If the function needs to allocate memory and the attempt fails, it returns an
 \tcode{exception_ptr} object that refers to an instance of \tcode{bad_alloc}.
 It is unspecified whether the return values of two successive calls to
 \tcode{current_exception} refer to the same exception object.
-\enternote That is, it is unspecified whether \tcode{current_exception}
-creates a new copy each time it is called. \exitnote
+\begin{note} That is, it is unspecified whether \tcode{current_exception}
+creates a new copy each time it is called. \end{note}
 If the attempt to copy the current exception object throws an exception, the function
 returns an \tcode{exception_ptr} object that refers to the thrown exception or,
-if this is not possible, to an instance of \tcode{bad_exception}. \enternote The
+if this is not possible, to an instance of \tcode{bad_exception}. \begin{note} The
 copy constructor of the thrown exception may also fail, so the implementation is allowed
 to substitute a \tcode{bad_exception} object to avoid infinite
-recursion.\exitnote
+recursion.\end{note}
 \end{itemdescr}
 
-\indexlibrary{\idxcode{rethrow_exception}}
+\indexlibrary{\idxcode{rethrow_exception}}%
 \begin{itemdecl}
 [[noreturn]] void rethrow_exception(exception_ptr p);
 \end{itemdecl}
@@ -2908,14 +3086,14 @@ recursion.\exitnote
 \throws the exception object to which \tcode{p} refers.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{make_exception_ptr}}
+\indexlibrary{\idxcode{make_exception_ptr}}%
 \begin{itemdecl}
 template<class E> exception_ptr make_exception_ptr(E e) noexcept;
 \end{itemdecl}
 
 \begin{itemdescr}
 \pnum
-\effects Creates an \tcode{exception_ptr} object that refers to a copy of \tcode{e}, as if
+\effects Creates an \tcode{exception_ptr} object that refers to a copy of \tcode{e}, as if:
 \begin{codeblock}
 try {
   throw e;
@@ -2925,8 +3103,8 @@ try {
 \end{codeblock}
 
 \pnum
-\enternote This function is provided for convenience and
-efficiency reasons. \exitnote
+\begin{note} This function is provided for convenience and
+efficiency reasons. \end{note}
 \end{itemdescr}
 
 \rSec2[except.nested]{\tcode{nested_exception}}
@@ -2957,12 +3135,11 @@ multiple inheritance. It captures the currently handled exception and stores it
 for later use.
 
 \pnum
-\enternote \tcode{nested_exception} has a virtual destructor to make it a
+\begin{note} \tcode{nested_exception} has a virtual destructor to make it a
 polymorphic class. Its presence can be tested for with \tcode{dynamic_cast}.
-\exitnote
+\end{note}
 
-\indexlibrary{\idxcode{nested_exception}!\idxcode{nested_exception}}
-\indexlibrary{\idxcode{nested_exception}!\idxcode{nested_exception}}
+\indexlibrary{\idxcode{nested_exception}!constructor}%
 \begin{itemdecl}
 nested_exception() noexcept;
 \end{itemdecl}
@@ -2972,8 +3149,7 @@ nested_exception() noexcept;
 \effects The constructor calls \tcode{current_exception()} and stores the returned value.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{rethrow_nested}!\idxcode{nested_exception}}
-\indexlibrary{\idxcode{nested_exception}!\idxcode{rethrow_nested}}
+\indexlibrarymember{rethrow_nested}{nested_exception}%
 \begin{itemdecl}
 [[noreturn]] void rethrow_nested() const;
 \end{itemdecl}
@@ -2984,8 +3160,7 @@ nested_exception() noexcept;
 Otherwise, it throws the stored exception captured by \tcode{*this}.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{nested_ptr}!\idxcode{nested_exception}}
-\indexlibrary{\idxcode{nested_exception}!\idxcode{nested_ptr}}
+\indexlibrarymember{nested_ptr}{nested_exception}%
 \begin{itemdecl}
 exception_ptr nested_ptr() const noexcept;
 \end{itemdecl}
@@ -2995,8 +3170,7 @@ exception_ptr nested_ptr() const noexcept;
 \returns The stored exception captured by this \tcode{nested_exception} object.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{throw_with_nested}!\idxcode{nested_exception}}
-\indexlibrary{\idxcode{nested_exception}!\idxcode{throw_with_nested}}
+\indexlibrarymember{throw_with_nested}{nested_exception}%
 \begin{itemdecl}
 template <class T> [[noreturn]] void throw_with_nested(T&& t);
 \end{itemdecl}
@@ -3010,15 +3184,15 @@ Let \tcode{U} be \tcode{remove_reference_t<T>}.
 
 \pnum
 \throws
-if \tcode{U} is a non-union class type not derived from
-\tcode{nested_exception}, an exception of unspecified type that is publicly derived from both
+if \tcode{is_class_v<U> \&\& !is_final_v<U> \&\& !is_base_of_v<nested_exception, U>}
+is \tcode{true},
+an exception of unspecified type that is publicly derived from both
 \tcode{U} and \tcode{nested_exception}
 and constructed from \tcode{std::forward<T>(t)}, otherwise
 \tcode{std::forward<T>(t)}.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{rethrow_if_nested}!\idxcode{nested_exception}}
-\indexlibrary{\idxcode{nested_exception}!\idxcode{rethrow_if_nested}}
+\indexlibrarymember{rethrow_if_nested}{nested_exception}%
 \begin{itemdecl}
 template <class E> void rethrow_if_nested(const E& e);
 \end{itemdecl}
@@ -3026,36 +3200,39 @@ template <class E> void rethrow_if_nested(const E& e);
 \begin{itemdescr}
 \pnum
 \effects
-If the dynamic type of \tcode{e} is publicly and unambiguously derived from
-\tcode{nested_exception}, calls
-\tcode{dynamic_cast<const} \tcode{nested_exception\&>(e).rethrow_nested()}.
+If \tcode{E} is not a polymorphic class type, there is no effect.
+Otherwise, if the static type or the dynamic type of \tcode{e}
+is \tcode{nested_exception} or is publicly and unambiguously derived from
+\tcode{nested_exception}, calls:
+\begin{codeblock}
+dynamic_cast<const nested_exception&>(e).rethrow_nested();
+\end{codeblock}
 \end{itemdescr}
-
 
 \rSec1[support.initlist]{Initializer lists}
 
-\indextext{\idxhdr{initializer\_list}}%
+\indextext{\idxhdr{initializer_list}}%
 \indexlibrary{\idxhdr{initializer_list}}%
 \pnum
 The header \tcode{<initializer_list>} defines a class template and several
 support functions related to list-initialization~(see \ref{dcl.init.list}).
 
-\synopsis{Header \tcode{<initializer_list>} synopsis}
-
+\rSec2[initializer_list.syn]{Header \tcode{<initializer_list>} synopsis}
 \indexlibrary{\idxcode{initializer_list}}%
 \indexlibrary{\idxcode{begin}}%
 \indexlibrary{\idxcode{end}}%
+
 \begin{codeblock}
 namespace std {
   template<class E> class initializer_list {
   public:
-    typedef E value_type;
-    typedef const E& reference;
-    typedef const E& const_reference;
-    typedef size_t size_type;
+    using value_type      = E;
+    using reference       = const E&;
+    using const_reference = const E&;
+    using size_type       = size_t;
 
-    typedef const E* iterator;
-    typedef const E* const_iterator;
+    using iterator        = const E*;
+    using const_iterator  = const E*;
 
     constexpr initializer_list() noexcept;
 
@@ -3072,11 +3249,11 @@ namespace std {
 
 \pnum
 An object of type \tcode{initializer_list<E>} provides access to an array of
-objects of type \tcode{const E}. \enternote A pair of pointers or a pointer plus
+objects of type \tcode{const E}. \begin{note} A pair of pointers or a pointer plus
 a length would be obvious representations for \tcode{initializer_list}.
 \tcode{initializer_list} is used to implement initializer lists as specified
 in~\ref{dcl.init.list}. Copying an initializer list does not copy the underlying
-elements. \exitnote
+elements. \end{note}
 
 \pnum
 If an explicit specialization or partial specialization of
@@ -3084,8 +3261,7 @@ If an explicit specialization or partial specialization of
 
 \rSec2[support.initlist.cons]{Initializer list constructors}
 
-\indexlibrary{\idxcode{initializer_list}!\idxcode{initializer_list}}
-\indexlibrary{\idxcode{initializer_list}!\idxcode{initializer_list}}
+\indexlibrary{\idxcode{initializer_list}!constructor}%
 \begin{itemdecl}
 constexpr initializer_list() noexcept;
 \end{itemdecl}
@@ -3100,8 +3276,7 @@ constexpr initializer_list() noexcept;
 
 \rSec2[support.initlist.access]{Initializer list access}
 
-\indexlibrary{\idxcode{begin}!\idxcode{initializer_list}}
-\indexlibrary{\idxcode{initializer_list}!\idxcode{begin}}
+\indexlibrarymember{begin}{initializer_list}%
 \begin{itemdecl}
 constexpr const E* begin() const noexcept;
 \end{itemdecl}
@@ -3113,8 +3288,7 @@ values of \tcode{begin()} and \tcode{end()} are unspecified but they shall be
 identical.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{end}!\idxcode{initializer_list}}
-\indexlibrary{\idxcode{initializer_list}!\idxcode{end}}
+\indexlibrarymember{end}{initializer_list}%
 \begin{itemdecl}
 constexpr const E* end() const noexcept;
 \end{itemdecl}
@@ -3124,8 +3298,7 @@ constexpr const E* end() const noexcept;
 \returns \tcode{begin() + size()}
 \end{itemdescr}
 
-\indexlibrary{\idxcode{size}!\idxcode{initializer_list}}
-\indexlibrary{\idxcode{initializer_list}!\idxcode{size}}
+\indexlibrarymember{size}{initializer_list}%
 \begin{itemdecl}
 constexpr size_t size() const noexcept;
 \end{itemdecl}
@@ -3140,7 +3313,7 @@ constexpr size_t size() const noexcept;
 
 \rSec2[support.initlist.range]{Initializer list range access}
 
-\indexlibrary{\idxcode{begin(initializer_list<E>)}}
+\indexlibrary{\idxcode{begin(initializer_list<E>)}}%
 \begin{itemdecl}
 template<class E> constexpr const E* begin(initializer_list<E> il) noexcept;
 \end{itemdecl}
@@ -3150,7 +3323,7 @@ template<class E> constexpr const E* begin(initializer_list<E> il) noexcept;
 \returns \tcode{il.begin()}.
 \end{itemdescr}
 
-\indexlibrary{\idxcode{end(initializer_list<E>)}}
+\indexlibrary{\idxcode{end(initializer_list<E>)}}%
 \begin{itemdecl}
 template<class E> constexpr const E* end(initializer_list<E> il) noexcept;
 \end{itemdecl}
@@ -3169,8 +3342,6 @@ template<class E> constexpr const E* end(initializer_list<E> il) noexcept;
 \indexlibrary{\idxhdr{csignal}}%
 \indexlibrary{\idxhdr{cstdlib}}%
 \indexlibrary{\idxhdr{cstdbool}}%
-\indexlibrary{\idxcode{clock}}%
-\indexlibrary{\idxcode{time}}%
 \indexlibrary{\idxcode{getenv}}%
 \indexlibrary{\idxcode{system}}%
 \indexlibrary{\idxcode{__bool_true_false_are_defined}}%
@@ -3179,35 +3350,59 @@ Headers
 \tcode{<csignal>} (signal handling),
 \tcode{<cstdalign> (alignment),}
 \tcode{<cstdarg>} (variable arguments),
-\tcode{<cstdbool>} (\tcode{\xname{bool_true_false_are_defined}}).
-\tcode{<cstdlib>} (runtime environment \tcode{getenv(), system()}),
+\tcode{<cstdbool>} (\xname{bool_true_false_are_defined}),
 and
-\tcode{<ctime>} (system clock \tcode{clock(), time()})
+\tcode{<cstdlib>} (runtime environment \tcode{getenv(), system()}),
 provide further compatibility with C code.
 
 \pnum
-\indexlibrary{\idxhdr{stdarg.h}}%
-\indexlibrary{\idxhdr{setjmp.h}}%
-\indexlibrary{\idxhdr{time.h}}%
-\indexlibrary{\idxhdr{signal.h}}%
-\indexlibrary{\idxhdr{stdlib.h}}%
-The contents of these headers are the same as the Standard C library headers
-\tcode{<setjmp.h>},
-\tcode{<signal.h>},
-\tcode{<stdalign.h>},
-\tcode{<stdarg.h>},
-\tcode{<stdbool.h>},
-\tcode{<stdlib.h>},
-and
-\tcode{<time.h>},
-respectively, with the following changes:
+Calls to the function
+\indexlibrary{\idxcode{getenv}}%
+\tcode{getenv}~(\ref{cstdlib.syn}) shall not introduce a data
+race~(\ref{res.on.data.races}) provided that nothing modifies the environment.
+\begin{note} Calls to the POSIX functions
+\indexlibrary{\idxcode{setenv}}%
+\tcode{setenv} and
+\indexlibrary{\idxcode{putenv}}%
+\tcode{putenv} modify the
+environment. \end{note}
 
 \pnum
+A call to the \tcode{setlocale} function~(\ref{c.locales})
+may introduce a data race with other
+calls to the \tcode{setlocale} function or with calls to functions that are
+affected by the current C locale. The implementation shall behave as if no
+library function other than \tcode{locale::global()} calls the \tcode{setlocale}
+function.
+
+\rSec2[cstdarg.syn]{Header \tcode{<cstdarg>} synopsis}
+
+\indexlibrary{\idxhdr{cstdarg}}%
+\indexlibrary{\idxcode{va_list}}%
+\indexlibrary{\idxcode{va_start}}%
+\indexlibrary{\idxcode{va_copy}}%
+\indexlibrary{\idxcode{va_end}}%
+\indexlibrary{\idxcode{va_arg}}%
+\begin{codeblock}
+namespace std {
+  using va_list = @\seebelow@;
+}
+
+#define va_arg(V, P) @\seebelow@
+#define va_copy(VDST, VSRC) @\seebelow@
+#define va_end(V) @\seebelow@
+#define va_start(V, P) @\seebelow@
+\end{codeblock}
+
+\pnum
+\indexlibrary{\idxhdr{stdarg.h}}%
+The contents of the header \tcode{<cstdarg>} are the same as the C
+standard library header \tcode{<stdarg.h>}, with the following changes:
 The restrictions that ISO C places on the second parameter to the
 \indexlibrary{\idxcode{va_start}}%
 \tcode{va_start()}
 macro in header
-\indexlibrary{\idxhdr{staarg.h}}%
+\indexlibrary{\idxhdr{stdarg.h}}%
 \tcode{<stdarg.h>}
 are different in this International Standard.
 The parameter
@@ -3226,7 +3421,27 @@ is of a reference type, or of a type that is not compatible with the
 type that results when passing an argument for which there is no
 parameter, the behavior is undefined.
 
-\xref ISO C~4.8.1.1.
+\xref ISO C~7.16.1.1.
+
+\rSec2[csetjmp.syn]{Header \tcode{<csetjmp>} synopsis}
+
+\indexlibrary{\idxhdr{csetjmp}}%
+\indexlibrary{\idxcode{jmp_buf}}%
+\indexlibrary{\idxcode{longjmp}}%
+\indexlibrary{\idxcode{setjmp}}%
+\begin{codeblock}
+namespace std {
+  using jmp_buf = @\seebelow@;
+  [[noreturn]] void longjmp(jmp_buf env, int val);
+}
+
+#define setjmp(env) @\seebelow@
+\end{codeblock}
+
+\pnum
+\indexlibrary{\idxhdr{setjmp.h}}%
+The contents of the header \tcode{<csetjmp>} are the same as the C
+standard library header \tcode{<setjmp.h>}.
 
 \pnum
 The function signature
@@ -3238,38 +3453,81 @@ behavior if replacing the \tcode{setjmp} and \tcode{longjmp}
 by \tcode{catch} and \tcode{throw} would invoke any non-trivial destructors for any automatic
 objects.
 
-\xref ISO C~7.10.4, 7.8, 7.6, 7.12.
+\xref ISO C~7.13.
+
+\rSec2[cstdbool.syn]{Header \tcode{<cstdbool>} synopsis}
+
+\indexlibrary{\idxhdr{cstdbool}}%
+\indexlibrary{\idxcode{__bool_true_false_are_defined}}%
+\begin{codeblock}
+#define @\xname{bool_true_false_are_defined}@ 1
+\end{codeblock}
 
 \pnum
-Calls to the function
-\indexlibrary{\idxcode{getenv}}%
-\tcode{getenv} shall not introduce a data
-race~(\ref{res.on.data.races}) provided that nothing modifies the environment.
-\enternote Calls to the POSIX functions
-\indexlibrary{\idxcode{setenv}}%
-\tcode{setenv} and
-\indexlibrary{\idxcode{putenv}}%
-\tcode{putenv} modify the
-environment. \exitnote
+\indexlibrary{\idxhdr{stdbool.h}}%
+The contents of the header \tcode{<cstdbool>} are the same as the C
+standard library header \tcode{<stdbool.h>}, with the following changes:
+The header \tcode{<cstdbool>} and the header \tcode{<stdbool.h>} shall not
+define macros named \tcode{bool}, \tcode{true}, or \tcode{false}.
 
-\pnum
-A call to the \tcode{setlocale} function may introduce a data race with other
-calls to the \tcode{setlocale} function or with calls to functions that are
-affected by the current C locale. The implementation shall behave as if no
-library function other than \tcode{locale::global()} calls the \tcode{setlocale}
-function.
+\xref ISO C~7.18.
+
+\rSec2[cstdalign.syn]{Header \tcode{<cstdalign>} synopsis}
+
+\indexlibrary{\idxcode{__alignas_is_defined}}%
+\indexlibrary{\idxhdr{cstdalign}}%
+\begin{codeblock}
+#define @\xname{alignas_is_defined}@ 1
+\end{codeblock}
 
 \pnum
 \indexlibrary{\idxhdr{cstdalign}}%
 \indexlibrary{\idxhdr{stdalign.h}}%
+The contents of the header \tcode{<cstdalign>} are the same as the C
+standard library header \tcode{<stdalign.h>}, with the following changes:
 The header \tcode{<cstdalign>} and the header \tcode{<stdalign.h>} shall not
 define a macro named \tcode{alignas}.
 
+\xref ISO C~7.15.
+
+\rSec2[csignal.syn]{Header \tcode{<csignal>} synopsis}
+
+\indexlibrary{\idxhdr{csignal}}%
+\indexlibrary{\idxcode{sig_atomic_t}}%
+\indexlibrary{\idxcode{signal}}%
+\indexlibrary{\idxcode{raise}}%
+\indexlibrary{\idxcode{SIG_IGN}}%
+\indexlibrary{\idxcode{SIGABRT}}%
+\indexlibrary{\idxcode{SIGFPE}}%
+\indexlibrary{\idxcode{SIGILL}}%
+\indexlibrary{\idxcode{SIGINT}}%
+\indexlibrary{\idxcode{SIGSEGV}}%
+\indexlibrary{\idxcode{SIGTERM}}%
+\indexlibrary{\idxcode{SIG_DFL}}%
+\indexlibrary{\idxcode{SIG_ERR}}%
+\begin{codeblock}
+namespace std {
+  using sig_atomic_t = @\seebelow@;
+
+  void (*signal(int sig, void (*func)(int)))(int);
+  int raise(int sig);
+}
+
+#define SIG_DFL @\seebelow@
+#define SIG_ERR @\seebelow@
+#define SIG_IGN @\seebelow@
+#define SIGABRT @\seebelow@
+#define SIGFPE @\seebelow@
+#define SIGILL @\seebelow@
+#define SIGINT @\seebelow@
+#define SIGSEGV @\seebelow@
+#define SIGTERM @\seebelow@
+\end{codeblock}
+
 \pnum
-\indexlibrary{\idxhdr{cstdbool}}%
-\indexlibrary{\idxhdr{stdbool.h}}%
-The header \tcode{<cstdbool>} and the header \tcode{<stdbool.h>} shall not
-define macros named \tcode{bool}, \tcode{true}, or \tcode{false}.
+\indexlibrary{\idxhdr{signal.h}}%
+The contents of the header \tcode{<csignal>} are the same as the C
+standard library header \tcode{<signal.h>}.
 
 \pnum
 A call to the function \tcode{signal} synchronizes with any resulting
@@ -3299,75 +3557,4 @@ have problems. Also, invoking \tcode{std::exit} may cause destruction of objects
 including those of the standard library implementation, which, in general, yields
 undefined behavior in a signal handler (see~\ref{intro.execution}).}
 
-\indexlibrary{\idxhdr{csetjmp}}%
-\indexlibrary{\idxcode{setjmp}}%
-\indexlibrary{\idxcode{jmp_buf}}%
-\indexlibrary{\idxcode{longjmp}}%
-\begin{libsyntabf2}{csetjmp}{tab:support.hdr.csetjmp}
-\macro      &   \tcode{setjmp}  \\ \rowsep
-\type       &   \tcode{jmp_buf} \\ \rowsep
-\function   &   \tcode{longjmp} \\
-\end{libsyntabf2}
-
-\indexlibrary{\idxhdr{csignal}}%
-\indexlibrary{\idxcode{SIG_IGN}}%
-\indexlibrary{\idxcode{SIGABRT}}%
-\indexlibrary{\idxcode{SIGFPE}}%
-\indexlibrary{\idxcode{sig_atomic_t}}%
-\indexlibrary{\idxcode{raise}}%
-\indexlibrary{\idxcode{SIGILL}}%
-\indexlibrary{\idxcode{SIGINT}}%
-\indexlibrary{\idxcode{signal}}%
-\indexlibrary{\idxcode{SIGSEGV}}%
-\indexlibrary{\idxcode{SIGTERM}}%
-\indexlibrary{\idxcode{SIG_DFL}}%
-\indexlibrary{\idxcode{SIG_ERR}}%
-\begin{libsyntabf5}{csignal}{tab:support.hdr.csignal}
-\macros             &   \tcode{SIGABRT} &   \tcode{SIGILL}  &   \tcode{SIGSEGV} &   \tcode{SIG_DFL} \\
-\tcode{SIG_IGN}     &   \tcode{SIGFPE}  &   \tcode{SIGINT}  &   \tcode{SIGTERM} &   \tcode{SIG_ERR} \\ \rowsep
-\type               &   \tcode{sig_atomic_t}    &           &                   &                   \\ \rowsep
-\functions          &   \tcode{raise}   &   \tcode{signal}  &                   &                   \\
-\end{libsyntabf5}
-
-\indexlibrary{\idxhdr{cstdalign}}%
-\indexlibrary{\idxcode{__alignas_is_defined}}%
-\begin{libsyntabf2}{cstdalign}{tab:support.hdr.cstdalign}
-\macro  & \tcode{__alignas_is_defined} \\
-\end{libsyntabf2}
-
-\indexlibrary{\idxhdr{cstdarg}}%
-\indexlibrary{\idxcode{va_arg}}%
-\indexlibrary{\idxcode{va_end}}%
-\indexlibrary{\idxcode{va_start}}%
-\indexlibrary{\idxcode{va_copy}}%
-\indexlibrary{\idxcode{va_list}}%
-\begin{libsyntabf4}{cstdarg}{tab:support.hdr.cstdarg}
-\macros &   \tcode{va_arg}      &   \tcode{va_end}  &   \tcode{va_start}    \\
-\tcode{va_copy} &            &                   &                       \\
-\rowsep
-\type   &   \tcode{va_list}       &                     &                       \\
-\end{libsyntabf4}
-
-\indexlibrary{\idxhdr{cstdbool}}%
-\indexlibrary{\idxcode{__bool_true_false_are_defined}}%
-\begin{libsyntabf2}{cstdbool}{tab:support.hdr.cstdbool}
-\macro  & \tcode{__bool_true_false_are_defined} \\
-\end{libsyntabf2}
-
-\indexlibrary{\idxhdr{cstdlib}}%
-\indexlibrary{\idxcode{getenv}}%
-\indexlibrary{\idxcode{system}}%
-\begin{libsyntabf3}{cstdlib}{tab:support.hdr.cstdlib1}
-\functions  &   \tcode{getenv}  &   \tcode{system}  \\
-\end{libsyntabf3}
-
-\indexlibrary{\idxhdr{ctime}}%
-\indexlibrary{\idxcode{CLOCKS_PER_SEC}}%
-\indexlibrary{\idxcode{clock_t}}%
-\indexlibrary{\idxcode{clock}}%
-\begin{libsyntabf2}{ctime}{tab:support.hdr.ctime}
-\macro      &   \tcode{CLOCKS_PER_SEC}  \\ \rowsep
-\type       &   \tcode{clock_t}         \\ \rowsep
-\function   &   \tcode{clock}           \\
-\end{libsyntabf2}
-\vfill\pagebreak
+\xref ISO C~7.14.

@@ -18,7 +18,7 @@ STDPDF = pdflatex std | grep -v "^Overfull"
 default: rebuild
 
 clean:
-	rm -f *.aux std.pdf *.idx *.ilg *.ind *.log *.lot *.lof *.tmp *.out
+	rm -f *.aux std.pdf std-gram.ext *.idx *.ilg *.ind *.log *.lot *.lof *.tmp *.out *.glo *.gls *.fls *.fdb* *.toc *.xtr
 
 refresh:
 	$(STDPDF)
@@ -28,16 +28,10 @@ rebuild:
 	$(STDPDF)
 	$(STDPDF)
 
-full: $(FIGURES) grammar xrefs reindex
+full: $(FIGURES) reindex
 
 %.pdf: %.dot
 	dot -o $@ -Tpdf $<
-
-grammar:
-	sh ../tools/makegram
-
-xrefs:
-	sh ../tools/makexref
 
 reindex:
 	$(STDPDF)
@@ -47,6 +41,7 @@ reindex:
 	makeindex libraryindex
 	makeindex grammarindex
 	makeindex impldefindex
+	makeindex -s basic.gst -o xrefindex.gls xrefindex.glo
 	$(STDPDF)
 	$(STDPDF)
 

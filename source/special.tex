@@ -1,13 +1,12 @@
 %!TEX root = std.tex
 \rSec0[special]{Special member functions}
 
-%gram: \rSec1[gram.special]{Special member functions}
-%gram:
+\gramSec[gram.special]{Special member functions}
 
 \indextext{special~member~function|see{constructor, destructor, inline function,
 user-defined conversion, virtual function}}%
 \indextext{\idxcode{X(X\&)}|see{copy~constructor}}%
-\indextext{\~@\tcode{\tilde}|see{destructor}}%
+\indextext{~@\tcode{\tilde}|see{destructor}}%
 \indextext{assignment!copy|see{assignment operator, copy}}%
 \indextext{assignment!move|see{assignment operator, move}}%
 \indextext{implicitly-declared~default~constructor|see{constructor, default}}
@@ -23,17 +22,17 @@ copy constructor and copy assignment operator~(\ref{class.copy}),
 move constructor and move assignment operator~(\ref{class.copy}),
 and destructor~(\ref{class.dtor}) are
 \term{special member functions}.
-\enternote The implementation will implicitly declare these member functions for some class
+\begin{note} The implementation will implicitly declare these member functions for some class
 types when the program does not explicitly declare them.
 The implementation will implicitly define them if they are odr-used~(\ref{basic.def.odr}).
-See~\ref{class.ctor}, \ref{class.dtor} and~\ref{class.copy}. \exitnote
+See~\ref{class.ctor}, \ref{class.dtor} and~\ref{class.copy}. \end{note}
 An implicitly-declared special member function is declared at the closing
 \tcode{\}} of the \grammarterm{class-specifier}.
 Programs shall not define implicitly-declared special member functions.
 
 \pnum
 Programs may explicitly refer to implicitly-declared special member functions.
-\enterexample
+\begin{example}
 a program may explicitly call, take the address of or form a pointer to member
 to an implicitly-declared special member function.
 
@@ -47,23 +46,23 @@ B& B::operator=(const B& s) {
   return *this;
 }
 \end{codeblock}
-\exitexample
+\end{example}
 
 \pnum
-\enternote
+\begin{note}
 The special member functions affect the way objects of class type are created,
 copied, moved, and destroyed, and how values can be converted to values of other types.
 Often such special member functions are called implicitly.
-\exitnote
+\end{note}
 
 \pnum
-\indextext{access~control!member~function~and}%
+\indextext{access control!member~function~and}%
 Special member functions obey the usual access rules (Clause~\ref{class.access}).
-\enterexample
+\begin{example}
 declaring a constructor
 \tcode{protected}
 ensures that only derived classes and friends can create objects using it.
-\exitexample
+\end{example}
 
 \pnum
 For a class, its non-static data members, its non-virtual direct base classes,
@@ -111,7 +110,7 @@ The \grammarterm{class-name} shall not be a \grammarterm{typedef-name}. In a con
 declaration, each \grammarterm{decl-specifier} in the optional
 \grammarterm{decl-specifier-seq} shall be \tcode{friend}, \tcode{inline},
 \tcode{explicit}, or \tcode{constexpr}.
-\enterexample
+\begin{example}
 
 \begin{codeblock}
 struct S {
@@ -120,7 +119,7 @@ struct S {
 
 S::S() { }          // defines the constructor
 \end{codeblock}
-\exitexample
+\end{example}
 
 \pnum
 A constructor is used to initialize objects of its class type.
@@ -128,9 +127,9 @@ Because constructors do not have names, they are never found during
 name lookup; however an explicit type conversion using the functional
 notation~(\ref{expr.type.conv}) will cause a constructor to be called to
 initialize an object.
-\enternote
+\begin{note}
 For initialization of objects of class type see~\ref{class.init}.
-\exitnote
+\end{note}
 
 \pnum
 \indextext{\idxcode{const}!constructor~and}%
@@ -174,10 +173,17 @@ member of its class.
 A defaulted default constructor for class \tcode{X} is defined as deleted if:
 
 \begin{itemize}
-\item \tcode{X} is a union-like class that has a variant
-  member with a non-trivial default constructor,
+\item \tcode{X} is a union that has a variant member
+with a non-trivial default constructor and
+no variant member of \tcode{X} has a default member initializer,
+    
+\item \tcode{X} is a non-union class that has a variant member \tcode{M}
+with a non-trivial default constructor and
+no variant member of the anonymous union containing \tcode{M}
+has a default member initializer,
 
-\item any non-static data member with no \grammarterm{brace-or-equal-initializer} is of reference type,
+\item any non-static data member with no default member initializer~(\ref{class.mem}) is
+of reference type,
 
 \item any non-variant non-static data member of const-qualified type (or array
 thereof) with no \grammarterm{brace-or-equal-initializer} does not have a user-provided default constructor,
@@ -210,7 +216,8 @@ if it is not user-provided and if:
 its class has no virtual functions~(\ref{class.virtual}) and no virtual base
 classes~(\ref{class.mi}), and
 
-\item no non-static data member of its class has a \grammarterm{brace-or-equal-initializer}, and
+\item no non-static data member of its class has
+a default member initializer~(\ref{class.mem}), and
 
 \item
 all the direct base classes of its class have trivial default constructors, and
@@ -246,12 +253,12 @@ Before the defaulted default constructor for a class is
 implicitly defined,
 all the non-user-provided default constructors for its base classes and
 its non-static data members shall have been implicitly defined.
-\enternote
+\begin{note}
 An implicitly-declared default constructor has an
 exception specification~(\ref{except.spec}).
 An explicitly-defaulted definition might have an
 implicit exception specification, see~\ref{dcl.fct.def}.
-\exitnote
+\end{note}
 
 \pnum
 \indextext{constructor!implicitly called}%
@@ -269,13 +276,13 @@ A program is ill-formed if the default constructor for an object
 is implicitly used and the constructor is not accessible (Clause~\ref{class.access}).
 
 \pnum
-\enternote
+\begin{note}
 \indextext{order~of~execution!base~class constructor}%
 \indextext{order~of~execution!member constructor}%
 \ref{class.base.init} describes the order in which constructors for base
 classes and non-static data members are called and
 describes how arguments can be specified for the calls to these constructors.
-\exitnote
+\end{note}
 
 \pnum
 \indextext{restriction!constructor}%
@@ -290,33 +297,33 @@ The address of a constructor shall not be taken.
 \indextext{constructor!explicit call}%
 A functional notation type conversion~(\ref{expr.type.conv}) can be used
 to create new objects of its type.
-\enternote
+\begin{note}
 The syntax looks like an explicit call of the constructor.
-\exitnote
-\enterexample
+\end{note}
+\begin{example}
 \indextext{example!constructor}%
 
 \begin{codeblock}
 complex zz = complex(1,2.3);
 cprint( complex(7.8,1.2) );
 \end{codeblock}
-\exitexample
+\end{example}
 
 \pnum
 An object created in this way is unnamed.
-\enternote
+\begin{note}
 \ref{class.temporary} describes the lifetime of temporary objects.
-\exitnote
-\enternote
+\end{note}
+\begin{note}
 Explicit constructor calls do not yield lvalues, see~\ref{basic.lval}.
-\exitnote
+\end{note}
 
 \pnum
-\enternote
+\begin{note}
 \indextext{member function!constructor~and}%
 some language constructs have special semantics when used during construction;
 see~\ref{class.base.init} and~\ref{class.cdtor}.
-\exitnote
+\end{note}
 
 \pnum
 During the construction of a
@@ -326,7 +333,7 @@ accessed through a glvalue that is not obtained, directly or indirectly, from
 the constructor's
 \tcode{this}
 pointer, the value of the object or subobject thus obtained is unspecified.
-\enterexample
+\begin{example}
 
 \begin{codeblock}
 struct C;
@@ -346,7 +353,7 @@ void no_opt(C* cptr) {
        << '\n';
 }
 \end{codeblock}
-\exitexample
+\end{example}
 
 \rSec1[class.temporary]{Temporary objects}
 
@@ -356,30 +363,54 @@ void no_opt(C* cptr) {
 \indextext{optimization~of~temporary|see{elimination~of~temporary}}%
 \indextext{temporary!elimination~of}%
 \indextext{temporary!implementation-defined~generation~of}%
-Temporaries of class type are created in various contexts:
-binding a reference to a prvalue~(\ref{dcl.init.ref}),
-returning a prvalue~(\ref{stmt.return}),
-a conversion that creates a prvalue~(\ref{conv.lval}, \ref{expr.static.cast},
-\ref{expr.const.cast}, \ref{expr.cast}),
-throwing an exception~(\ref{except.throw}), and in some initializations~(\ref{dcl.init}).
-\enternote
+Temporary objects are created
+\begin{itemize}
+\item
+when a prvalue is materialized so that it can be used as a glvalue~(\ref{conv.rval}),
+\item
+when needed by the implementation to pass or return an object of trivially-copyable type (see below),
+and
+\item
+when throwing an exception~(\ref{except.throw}).
+\begin{note}
 The lifetime of exception objects is described in~\ref{except.throw}.
-\exitnote
+\end{note}
+\end{itemize}
 Even when the creation of the temporary object is
-unevaluated (Clause~\ref{expr}) or otherwise
-avoided~(\ref{class.copy}),
+unevaluated (Clause~\ref{expr}),
 all the semantic restrictions shall be respected as if the temporary object
 had been created and later destroyed.
-\enternote
+\begin{note}
 This includes accessibility~(\ref{class.access}) and whether it is deleted,
 for the constructor selected and for the destructor. However, in the special
-case of a function call used as the operand of a
+case of the operand of a
 \grammarterm{decltype-specifier}~(\ref{expr.call}), no temporary is introduced,
-so the foregoing does not apply to the prvalue of any such function call.
-\exitnote
+so the foregoing does not apply to such a prvalue.
+\end{note}
 
 \pnum
-\enterexample Consider the following code:
+The materialization of a temporary object is generally
+delayed as long as possible
+in order to avoid creating unnecessary temporary objects.
+\begin{note}
+Temporary objects are materialized:
+\begin{itemize}
+\item
+when binding a reference to a prvalue~(\ref{dcl.init.ref}, \ref{expr.type.conv},
+\ref{expr.dynamic.cast}, \ref{expr.static.cast}, \ref{expr.const.cast}, \ref{expr.cast}),
+\item
+when performing member access on a class prvalue~(\ref{expr.ref}, \ref{expr.mptr.oper}),
+\item
+when performing an array-to-pointer conversion or subscripting on an array prvalue~(\ref{conv.array}, \ref{expr.sub}),
+\item
+when initializing an object of type \tcode{std::initializer_list<T>} from a \grammarterm{braced-init-list}~(\ref{dcl.init.list}),
+\item
+for certain unevaluated operands~(\ref{expr.typeid}, \ref{expr.sizeof}), and
+\item
+when a prvalue appears as a discarded-value expression (Clause~\ref{expr}).
+\end{itemize}
+\end{note}
+\begin{example} Consider the following code:
 \begin{codeblock}
 class X {
 public:
@@ -409,36 +440,40 @@ void h() {
 
 \indextext{class~object~copy|see{copy~constructor}}%
 \indextext{constructor!copy}%
-An implementation might use a temporary in which to construct
-\tcode{X(2)}
-before passing it to
-\tcode{f()}
-using
-\tcode{X}'s
-copy constructor; alternatively,
-\tcode{X(2)}
-might be constructed in the space used to hold the argument.
-Likewise, an implementation might use a temporary in which to construct
-\tcode{Y(3)} before passing it to \tcode{g()} using \tcode{Y}'s move constructor;
-alternatively, \tcode{Y(3)} might be constructed in the space used to hold the argument.
-Also, a temporary might be used to hold the result of
-\tcode{f(X(2))}
-before copying it to
-\tcode{b}
-using
-\tcode{X}'s
-copy constructor; alternatively,
-\tcode{f()}'s
-result might be constructed in
-\tcode{b}.
-Likewise, a temporary might be used to hold the result of \tcode{g(Y(3))} before
-moving it to \tcode{c} using \tcode{Y}'s move constructor; alternatively, \tcode{g()}'s
-result might be constructed in \tcode{c}.
+\tcode{X(2)} is constructed in the space used to hold \tcode{f()}'s argument and
+\tcode{Y(3)} is constructed in the space used to hold \tcode{g()}'s argument.
+Likewise,
+\tcode{f()}'s result is constructed directly in \tcode{b} and
+\tcode{g()}'s result is constructed directly in \tcode{c}.
 On the other hand, the expression
-\tcode{a=f(a)}
+\tcode{a = f(a)}
 requires a temporary for
-the result of \tcode{f(a)}, which is then assigned to \tcode{a}.
-\exitexample
+the result of \tcode{f(a)},
+which is materialized so that the reference parameter
+of \tcode{A::operator=(const A\&)} can bind to it.
+\end{example}
+
+\pnum
+When an object of class type \tcode{X}
+is passed to or returned from a function,
+if each copy constructor, move constructor, and destructor of \tcode{X}
+is either trivial or deleted,
+and \tcode{X}
+has at least one non-deleted copy or move constructor,
+implementations are permitted
+to create a temporary object
+to hold the function parameter or result object.
+The temporary object is constructed
+from the function argument or return value, respectively,
+and the function's parameter or return object
+is initialized as if by
+using the non-deleted trivial constructor to copy the temporary
+(even if that constructor is inaccessible
+or would not be selected by overload resolution
+to perform a copy or move of the object).
+\begin{note}
+This latitude is granted to allow objects of class type to be passed to or returned from functions in registers.
+\end{note}
 
 \pnum
 \indextext{temporary!constructor~for}%
@@ -466,18 +501,21 @@ subexpression.
 \pnum
 \indextext{initializer!temporary~and declarator}%
 \indextext{temporary!order~of destruction~of}%
-There are two contexts in which temporaries are destroyed at a different
+There are three contexts in which temporaries are destroyed at a different
 point than the end of the full-expression.
-The first context is when a default constructor is called to initialize an
-element of an array. If the constructor has one or more default arguments,
-the destruction of every temporary created in
-a default argument is sequenced before the construction of the next array element, if any.
+The first context is when a default constructor is called to initialize
+an element of an array with no corresponding initializer~(\ref{dcl.init}).
+The second context is when a copy constructor is called to copy an element of
+an array while the entire array is copied~(\ref{expr.prim.lambda},~\ref{class.copy}).
+In either case, if the constructor has one or more default arguments,
+the destruction of every temporary created in a default argument is
+sequenced before the construction of the next array element, if any.
 
 \pnum
-The second context is when a reference is bound to a
+The third context is when a reference is bound to a
 temporary.\footnote{The same rules apply to initialization of an
   \tcode{initializer_list} object~(\ref{dcl.init.list}) with its
-  underlying temporary array}
+  underlying temporary array.}
 The temporary to which the reference is bound or the temporary
 that is the complete object of a subobject to which the reference is bound
 persists for the lifetime of the reference except:
@@ -488,13 +526,13 @@ persists until the completion of the full-expression containing the call.
 
 \item The lifetime of a temporary bound to the returned value in a function return statement~(\ref{stmt.return}) is not extended; the temporary is destroyed at the end of the full-expression in the return statement.
 
-\item A temporary bound to a reference in a \grammarterm{new-initializer}~(\ref{expr.new}) persists until the completion of the full-expression containing the \grammarterm{new-initializer}. \enterexample
+\item A temporary bound to a reference in a \grammarterm{new-initializer}~(\ref{expr.new}) persists until the completion of the full-expression containing the \grammarterm{new-initializer}. \begin{example}
 \begin{codeblock}
 struct S { int mi; const std::pair<int,int>& mp; };
 S a { 1, {2,3} };
 S* p = new S{ 1, {2,3} };   // Creates dangling reference
 \end{codeblock}
-\exitexample \enternote This may introduce a dangling reference, and implementations are encouraged to issue a warning in such a case. \exitnote
+\end{example} \begin{note} This may introduce a dangling reference, and implementations are encouraged to issue a warning in such a case. \end{note}
 \end{itemize}
 
 The destruction of a temporary whose lifetime is not extended by being
@@ -521,7 +559,7 @@ created after the temporary is created
 the temporary shall be destroyed after
 \tcode{obj2}
 is destroyed.
-\enterexample
+\begin{example}
 
 \begin{codeblock}
 struct S {
@@ -600,7 +638,7 @@ and
 \tcode{T3}
 shall be destroyed before
 \tcode{obj1}.
-\exitexample
+\end{example}
 
 \rSec1[class.conv]{Conversions}
 
@@ -624,17 +662,17 @@ Conversions obey the access control rules (Clause~\ref{class.access}).
 Access control is applied after ambiguity resolution~(\ref{basic.lookup}).
 
 \pnum
-\enternote
+\begin{note}
 See~\ref{over.match} for a discussion of the use of conversions in function calls
 as well as examples below.
-\exitnote
+\end{note}
 
 \pnum
 \indextext{conversion!implicit user-defined}%
 At most one user-defined conversion (constructor or conversion function)
 is implicitly applied to a single value.
 
-\enterexample
+\begin{example}
 
 \begin{codeblock}
 struct X {
@@ -650,7 +688,7 @@ int b = a;          // error
                     // \tcode{a.operator X().operator int()} not tried
 int c = X(a);       // OK: \tcode{a.operator X().operator int()}
 \end{codeblock}
-\exitexample
+\end{example}
 
 \pnum
 User-defined conversions are used implicitly only if they are unambiguous.
@@ -659,7 +697,7 @@ A conversion function in a derived class does not hide a conversion function
 in a base class unless the two functions convert to the same type.
 Function overload resolution~(\ref{over.match.best}) selects the best
 conversion function to perform the conversion.
-\enterexample
+\begin{example}
 
 \begin{codeblock}
 struct X {
@@ -676,7 +714,7 @@ void f(Y& a) {
   }
 }
 \end{codeblock}
-\exitexample
+\end{example}
 
 \rSec2[class.conv.ctor]{Conversion by constructor}%
 \indextext{conversion!user-defined}
@@ -686,12 +724,12 @@ A constructor declared without the
 \grammarterm{function-specifier}
 \tcode{explicit}
 specifies a conversion from
-the types of its parameters
+the types of its parameters (if any)
 to the type of its class.
 Such a constructor is called a
 \indexdefn{constructor!converting}%
 \term{converting constructor}.
-\enterexample
+\begin{example}
 
 \indextext{Jessie}%
 \begin{codeblock}
@@ -709,17 +747,17 @@ void f(X arg) {
   f({1, 2});        // \tcode{f(X(1,2))}
 }
 \end{codeblock}
-\exitexample
+\end{example}
 
 \pnum
-\enternote
+\begin{note}
 An explicit constructor constructs objects just like non-explicit
 constructors, but does so only where the direct-initialization syntax~(\ref{dcl.init}) or where casts~(\ref{expr.static.cast}, \ref{expr.cast}) are explicitly
 used; see also~\ref{over.match.copy}.
 A default constructor may be an explicit constructor; such a constructor
 will be used to perform default-initialization
 or value-initialization~(\ref{dcl.init}).
-\enterexample
+\begin{example}
 
 \begin{codeblock}
 struct Z {
@@ -729,6 +767,8 @@ struct Z {
 };
 
 Z a;                            // OK: default-initialization performed
+Z b{};                          // OK: direct initialization syntax used
+Z c = {};                       // error: copy-list-initialization
 Z a1 = 1;                       // error: no implicit conversion
 Z a3 = Z(1);                    // OK: direct initialization syntax used
 Z a2(1);                        // OK: direct initialization syntax used
@@ -737,17 +777,17 @@ Z a4 = (Z)1;                    // OK: explicit cast used
 Z a5 = static_cast<Z>(1);       // OK: explicit cast used
 Z a6 = { 3, 4 };                // error: no implicit conversion
 \end{codeblock}
-\exitexample
-\exitnote
+\end{example}
+\end{note}
 
 \pnum
 A
 non-explicit
 copy/move constructor~(\ref{class.copy}) is a converting constructor.
-\enternote
+\begin{note}
 An implicitly-declared copy/move constructor is not an explicit constructor;
 it may be called for implicit type conversions.
-\exitnote
+\end{note}
 
 \rSec2[class.conv.fct]{Conversion functions}%
 \indextext{function!conversion}%
@@ -777,10 +817,12 @@ specifies a conversion from
 \tcode{X}
 to the type specified by the
 \grammarterm{conversion-type-id}.
-Such functions are called conversion functions.
-No return type can be specified.
+Such functions are called \defn{conversion function}{s}.
+A \grammarterm{decl-specifier} in the \grammarterm{decl-specifier-seq}
+of a conversion function (if any) shall be neither
+a \grammarterm{defining-type-specifier} nor \tcode{static}.
 \indextext{conversion!type~of}%
-If a conversion function is a member function, the type of the conversion function~(\ref{dcl.fct}) is
+The type of the conversion function~(\ref{dcl.fct}) is
 ``function taking no parameter returning
 \grammarterm{conversion-type-id}''.
 A conversion function is never used to convert a (possibly cv-qualified) object
@@ -792,7 +834,7 @@ Even though never directly called to perform a conversion,
 such conversion functions can be declared and can potentially
 be reached through a call to a virtual conversion function in a base class.}
 
-\enterexample
+\begin{example}
 
 \begin{codeblock}
 struct X {
@@ -808,11 +850,11 @@ void f(X a) {
 
 In all three cases the value assigned will be converted by
 \tcode{X::operator int()}.
-\exitexample
+\end{example}
 
 \pnum
 A conversion function may be explicit~(\ref{dcl.fct.spec}), in which case it is only considered as a user-defined conversion for direct-initialization~(\ref{dcl.init}). Otherwise, user-defined conversions are not restricted to use in assignments and initializations.
-\enterexample
+\begin{example}
 
 \begin{codeblock}
 class Y { };
@@ -833,7 +875,7 @@ void g(X a, X b) {
   }
 }
 \end{codeblock}
-\exitexample
+\end{example}
 
 \pnum
 The
@@ -843,12 +885,12 @@ The
 \grammarterm{conversion-type-id}
 in a
 \grammarterm{conversion-function-id}
-is the longest possible sequence of
-\grammarterm{conversion-declarator}{s}.
-\enternote
-This prevents ambiguities between the declarator operator * and its expression
+is the longest sequence of
+tokens that could possibly form a \grammarterm{conversion-type-id}.
+\begin{note}
+This prevents ambiguities between the declarator operator \tcode{*} and its expression
 counterparts.
-\enterexample
+\begin{example}
 
 \begin{codeblock}
 &ac.operator int*i; // syntax error:
@@ -857,8 +899,15 @@ counterparts.
 \end{codeblock}
 
 The \tcode{*} is the pointer declarator and not the multiplication operator.
-\exitexample
-\exitnote
+\end{example}
+
+This rule also prevents ambiguities for attributes. 
+\begin{example}
+\begin{codeblock}
+operator int [[noreturn]] (); // error: \tcode{noreturn} attribute applied to a type
+\end{codeblock}
+\end{example}
+\end{note}
 
 \pnum
 \indextext{conversion!inheritance~of user-defined}%
@@ -867,11 +916,6 @@ Conversion functions are inherited.
 \pnum
 \indextext{conversion!virtual user-defined}%
 Conversion functions can be virtual.
-
-\pnum
-\indextext{conversion!static user-defined}%
-Conversion functions cannot be declared
-\tcode{static}.
 
 \pnum
 \indextext{conversion!deduced~return~type~of user-defined}%
@@ -917,9 +961,9 @@ same class as the \grammarterm{nested-name-specifier}.
 \end{itemize}
 
 The \grammarterm{class-name} shall not be a \grammarterm{typedef-name}. A
-destructor shall take no arguments (\ref{dcl.fct}). In a destructor
-declaration, each \grammarterm{decl-specifier} of the optional
-\grammarterm{decl-specifier-seq} shall be \tcode{friend}, \tcode{inline}, or
+destructor shall take no arguments (\ref{dcl.fct}).
+Each \grammarterm{decl-specifier} of the \grammarterm{decl-specifier-seq}
+of a destructor declaration (if any) shall be \tcode{friend}, \tcode{inline}, or
 \tcode{virtual}.
 
 \pnum
@@ -995,7 +1039,7 @@ A destructor
 that is defaulted and not defined as deleted
 is
 \term{implicitly defined}
-when it is odr-used~(\ref{basic.def.odr}) to destroy an object of its class type~(\ref{basic.stc})
+when it is odr-used~(\ref{basic.def.odr})
 or when it is explicitly defaulted after its first declaration.
 
 \pnum
@@ -1016,7 +1060,7 @@ calls the destructors for
 \tcode{X}'s
 direct non-variant non-static data members, the destructors for
 \tcode{X}'s
-direct base classes and, if
+non-virtual direct base classes and, if
 \tcode{X}
 is the type of the most derived class~(\ref{class.base.init}),
 its destructor calls the destructors for
@@ -1049,11 +1093,11 @@ If a class has a base class with a virtual destructor, its  destructor
 (whether user- or implicitly-declared) is virtual.
 
 \pnum
-\enternote
+\begin{note}
 \indextext{member function!destructor~and}%
 some language constructs have special semantics when used during destruction;
 see~\ref{class.cdtor}.
-\exitnote
+\end{note}
 
 \pnum
 \indextext{destructor!implicit call}%
@@ -1068,7 +1112,7 @@ A destructor is invoked implicitly
 
 \item for a constructed object with automatic storage duration~(\ref{basic.stc.auto}) when the block in which an object is created exits~(\ref{stmt.dcl}),
 
-\item for a constructed temporary object when its lifetime ends~(\ref{class.temporary}).
+\item for a constructed temporary object when its lifetime ends~(\ref{conv.rval}, \ref{class.temporary}).
 \end{itemize}
 
 \indextext{\idxcode{delete}!destructor~and}%
@@ -1078,10 +1122,11 @@ the object. A destructor is also invoked implicitly through use of a
 \grammarterm{delete-expression}~(\ref{expr.delete}) for a constructed object allocated
 by a \grammarterm{new-expression}~(\ref{expr.new}); the context of the invocation is the
 \grammarterm{delete-expression}.
-\enternote An array of class type contains several subobjects for each of which
-the destructor is invoked. \exitnote
+\begin{note} An array of class type contains several subobjects for each of which
+the destructor is invoked. \end{note}
 A destructor can also be invoked explicitly. A destructor is \term{potentially invoked}
-if it is invoked or as specified in~\ref{expr.new} and~\ref{class.base.init}.
+if it is invoked or as specified in~\ref{expr.new}, \ref{class.base.init},
+and~\ref{except.throw}.
 A program is ill-formed if a destructor that is potentially invoked is deleted
 or not accessible from the context of the invocation.
 
@@ -1092,15 +1137,15 @@ determined as if for the expression \tcode{delete this} appearing in a
 non-virtual destructor of the destructor's class (see~\ref{expr.delete}).
 If the lookup fails or if the deallocation function has
 a deleted definition~(\ref{dcl.fct.def}), the program is ill-formed.
-\enternote
+\begin{note}
 This assures that a deallocation function corresponding to the dynamic type of an
 object is available for the
 \grammarterm{delete-expression}~(\ref{class.free}).
-\exitnote
+\end{note}
 
 \pnum
 \indextext{destructor!explicit call}%
-In an explicit destructor call, the destructor name appears as a
+In an explicit destructor call, the destructor is specified by a
 \tcode{\~{}}
 followed by a
 \grammarterm{type-name} or \grammarterm{decltype-specifier}
@@ -1111,9 +1156,9 @@ that is, if the object is not of the destructor's class type and
 not of a class derived from the destructor's class type (including when
 the destructor is invoked via a null pointer value), the program has
 undefined behavior.
-\enternote invoking \tcode{delete} on a null pointer does not call the
-destructor; see \ref{expr.delete}. \exitnote
-\enterexample
+\begin{note} invoking \tcode{delete} on a null pointer does not call the
+destructor; see \ref{expr.delete}. \end{note}
+\begin{example}
 
 \begin{codeblock}
 struct B {
@@ -1135,18 +1180,18 @@ void f() {
   B_ptr->B_alias::~B_alias();   // calls \tcode{B}'s destructor
 }
 \end{codeblock}
-\exitexample
-\enternote
+\end{example}
+\begin{note}
 An explicit destructor call must always be written using
 a member access operator~(\ref{expr.ref}) or a qualified-id~(\ref{expr.prim});
 in particular, the
 \grammarterm{unary-expression}
 \tcode{\~{}X()}
 in a member function is not an explicit destructor call~(\ref{expr.unary.op}).
-\exitnote
+\end{note}
 
 \pnum
-\enternote
+\begin{note}
 \indextext{object!destructor~and placement~of}%
 explicit calls of destructors are rarely needed.
 One use of such calls is for objects placed at specific
@@ -1173,20 +1218,20 @@ void g() {                      // rare, specialized use:
   p->X::~X();                   // cleanup
 }
 \end{codeblock}
-\exitnote
+\end{note}
 
 \pnum
 Once a destructor is invoked for an object, the object no longer exists;
 the behavior is undefined if the destructor is invoked
 for an object whose lifetime has ended~(\ref{basic.life}).
-\enterexample
+\begin{example}
 if the destructor for an automatic object is explicitly invoked,
 and the block is subsequently left in a manner that would ordinarily
 invoke implicit destruction of the object, the behavior is undefined.
-\exitexample
+\end{example}
 
 \pnum
-\enternote
+\begin{note}
 \indextext{fundamental~type!destructor~and}%
 the notation for explicit call of a destructor can be used for any scalar type
 name~(\ref{expr.pseudo}).
@@ -1199,7 +1244,7 @@ typedef int I;
 I* p;
 p->I::~I();
 \end{codeblock}
-\exitnote
+\end{note}
 
 \rSec1[class.free]{Free store}%
 \indextext{free store}%
@@ -1212,7 +1257,7 @@ is a static member (even if not explicitly declared
 \tcode{static}).
 
 \pnum
-\enterexample
+\begin{example}
 
 \begin{codeblock}
 class Arena;
@@ -1229,13 +1274,13 @@ void foo(int i) {
   new D1;           // ill-formed: \tcode{::operator new(std::size_t)} hidden
 }
 \end{codeblock}
-\exitexample
+\end{example}
 
 \pnum
 \indextext{\idxcode{delete}}%
 When an object is deleted with a
 \grammarterm{delete-expression}~(\ref{expr.delete}),
-a \term{deallocation function}
+a deallocation function
 \indextext{function!deallocation}%
 (\tcode{operator delete()}
 \indextext{\idxcode{operator delete}}%
@@ -1276,7 +1321,7 @@ Any deallocation function for a class
 is a static member (even if not explicitly declared
 \tcode{static}).
 \indextext{example!\idxcode{delete}}%
-\enterexample
+\begin{example}
 
 \begin{codeblock}
 class X {
@@ -1289,13 +1334,13 @@ class Y {
   void operator delete[](void*);
 };
 \end{codeblock}
-\exitexample
+\end{example}
 
 \pnum
 Since member allocation and deallocation functions are
 \tcode{static}
 they cannot be virtual.
-\enternote
+\begin{note}
 \indextext{example!destructor~and \tcode{delete}}%
 \indextext{example!scope~of \tcode{delete}}%
 however, when the
@@ -1329,8 +1374,8 @@ Here, storage for the non-array object of class
 is deallocated by
 \tcode{D::operator delete()},
 due to the virtual destructor.
-\exitnote
-\enternote
+\end{note}
+\begin{note}
 Virtual destructors have no effect on the deallocation function actually
 called when the
 \grammarterm{cast-expression}
@@ -1356,26 +1401,26 @@ void f(int i) {
   delete[] bp;      // undefined behavior
 }
 \end{codeblock}
-\exitnote
+\end{note}
 
 \pnum
 Access to the deallocation function is checked statically.
 Hence, even though a different one might actually be executed,
 the statically visible deallocation function is required to be accessible.
-\enterexample
+\begin{example}
 for the call on line //1 above,
 if
 \tcode{B::operator delete()}
 had been
 \tcode{private},
 the delete expression would have been ill-formed.
-\exitexample
+\end{example}
 
 \pnum
-\enternote
+\begin{note}
 If a deallocation function has no explicit \grammarterm{exception-specification}, it
 has a non-throwing exception specification~(\ref{except.spec}).
-\exitnote
+\end{note}
 
 \rSec1[class.init]{Initialization}%
 \indextext{initialization!class~object|(}%
@@ -1399,10 +1444,10 @@ When an array of class objects is initialized
 (either explicitly or implicitly) and the elements are initialized by constructor,
 the constructor shall be called for each element of the array,
 following the subscript order; see~\ref{dcl.array}.
-\enternote
+\begin{note}
 Destructors for the array elements are called in reverse order of their
 construction.
-\exitnote
+\end{note}
 
 \rSec2[class.expl.init]{Explicit initialization}%
 \indextext{initialization!explicit}%
@@ -1425,7 +1470,7 @@ form of initialization.
 Either direct-initialization semantics or copy-initialization semantics apply;
 see~\ref{dcl.init}.
 \indextext{example!constructor~and initialization}%
-\enterexample
+\begin{example}
 
 \begin{codeblock}
 struct complex {
@@ -1452,19 +1497,19 @@ complex f = 3;                  // construct \tcode{complex(3)} using
 complex g = { 1, 2 };           // initialize by a call of
                                 // \tcode{complex(double, double)}
 \end{codeblock}
-\exitexample
-\enternote
+\end{example}
+\begin{note}
 \indextext{initialization!overloaded assignment~and}%
 overloading of the assignment operator~(\ref{over.ass})
 has no effect on initialization.
-\exitnote
+\end{note}
 
 \pnum
 \indextext{initialization!array~of class~objects}%
 \indextext{constructor!array~of class~objects~and}%
 An object of class type can also be initialized by a
 \grammarterm{braced-init-list}. List-initialization semantics apply;
-see~\ref{dcl.init} and~\ref{dcl.init.list}. \enterexample
+see~\ref{dcl.init} and~\ref{dcl.init.list}. \begin{example}
 
 \begin{codeblock}
 complex v[6] = { 1, complex(1,2), complex(), 2 };
@@ -1503,16 +1548,16 @@ is initialized with 88.8, and
 \tcode{complex::complex(double)}
 is called for the initialization of
 \tcode{x.c}.
-\exitexample
-\enternote
+\end{example}
+\begin{note}
 Braces can be elided in the
 \grammarterm{initializer-list}
 for any aggregate, even if the aggregate has members of a class type with
 user-defined type conversions; see~\ref{dcl.init.aggr}.
-\exitnote
+\end{note}
 
 \pnum
-\enternote
+\begin{note}
 If
 \tcode{T}
 is a class type with no default constructor,
@@ -1521,14 +1566,14 @@ any declaration of an object of type
 (or array thereof) is ill-formed if no
 \grammarterm{initializer}
 is explicitly specified (see~\ref{class.init} and~\ref{dcl.init}).
-\exitnote
+\end{note}
 
 \pnum
-\enternote
+\begin{note}
 \indextext{order~of~execution!constructor~and \tcode{static}~objects}%
 the order in which objects with static or thread storage duration
-are initialized is described in~\ref{basic.start.init} and~\ref{stmt.dcl}.
-\exitnote
+are initialized is described in~\ref{basic.start.dynamic} and~\ref{stmt.dcl}.
+\end{note}
 
 \rSec2[class.base.init]{Initializing bases and members}%
 \indextext{initialization!base~class}%
@@ -1554,7 +1599,7 @@ which has the form
 
 \begin{bnf}
 \nontermdef{mem-initializer}\br
-    mem-initializer-id \terminal{(} expression-list\opt \terminal{)}\br
+    mem-initializer-id \terminal{(} expression-list\opt{} \terminal{)}\br
     mem-initializer-id braced-init-list
 \end{bnf}
 
@@ -1569,7 +1614,7 @@ In a \grammarterm{mem-initializer-id} an initial unqualified
 \grammarterm{identifier} is looked up in the scope of the constructor's class
 and, if not found in that scope, it is looked up in the scope containing the
 constructor's definition.
-\enternote
+\begin{note}
 If the constructor's class contains a member with the same name as a direct
 or virtual base class of the class, a
 \grammarterm{mem-initializer-id}
@@ -1578,7 +1623,7 @@ refers to the class member.
 A
 \grammarterm{mem-initializer-id}
 for the hidden base class may be specified using a qualified name.
-\exitnote
+\end{note}
 Unless the
 \grammarterm{mem-initializer-id}
 names the constructor's class,
@@ -1592,16 +1637,16 @@ is ill-formed.
 A
 \grammarterm{mem-initializer-list}
 can initialize a base class using any \grammarterm{class-or-decltype} that denotes that base class type.
-\enterexample
+\begin{example}
 
 \begin{codeblock}
 struct A { A(); };
-  typedef A global_A;
-  struct B { };
-  struct C: public A, public B { C(); };
-  C::C(): global_A() { }        // mem-initializer for base \tcode{A}
+typedef A global_A;
+struct B { };
+struct C: public A, public B { C(); };
+C::C(): global_A() { }        // mem-initializer for base \tcode{A}
 \end{codeblock}
-\exitexample
+\end{example}
 
 \pnum
 If a
@@ -1610,7 +1655,7 @@ is ambiguous because it designates both a direct non-virtual base class and
 an inherited virtual base class, the
 \grammarterm{mem-initializer}
 is ill-formed.
-\enterexample
+\begin{example}
 
 \begin{codeblock}
 struct A { A(); };
@@ -1618,7 +1663,7 @@ struct B: public virtual A { };
 struct C: public A, public B { C(); };
 C::C(): A() { }                 // ill-formed: which \tcode{A}?
 \end{codeblock}
-\exitexample
+\end{example}
 
 \pnum
 A
@@ -1647,7 +1692,7 @@ the construction of an object (that is, not a target constructor for that
 object's construction). The target constructor is selected by overload resolution.
 Once the target constructor returns, the body of the delegating constructor
 is executed. If a constructor delegates to itself directly or indirectly,
-the program is ill-formed; no diagnostic is required. \enterexample
+the program is ill-formed; no diagnostic is required. \begin{example}
 
 \begin{codeblock}
 struct C {
@@ -1657,7 +1702,7 @@ struct C {
   C( double d ) : C('a') { }    // \#4: ill-formed due to recursion with \#3
 };
 \end{codeblock}
-\exitexample
+\end{example}
 
 \pnum
 \indextext{initialization!base~class}%
@@ -1671,7 +1716,7 @@ is used to initialize the
 designated subobject (or, in the case of a delegating constructor, the complete class object)
 according to the initialization rules of~\ref{dcl.init} for direct-initialization.
 
-\enterexample
+\begin{example}
 
 \begin{codeblock}
 struct B1 { B1(int); /* ... */ };
@@ -1686,7 +1731,7 @@ D::D(int a) : B2(a+1), B1(a+2), c(a+3), b(a+4)
   { /* ... */ }
 D d(10);
 \end{codeblock}
-\exitexample
+\end{example}
 The initialization
 performed by each \grammarterm{mem-initializer}
 constitutes a full-expression.
@@ -1701,14 +1746,14 @@ not the most derived class.
 \pnum
 A temporary expression bound to a reference member in a \grammarterm{mem-initializer}
 is ill-formed.
-\enterexample
+\begin{example}
 \begin{codeblock}
 struct A {
   A() : v(42) { }  // error
   const int& v;
 };
 \end{codeblock}
-\exitexample
+\end{example}
 
 \pnum
 In a non-delegating constructor, if
@@ -1721,7 +1766,8 @@ because the constructor has no
 then
 
 \begin{itemize}
-\item if the entity is a non-static data member that has a \grammarterm{brace-or-equal-initializer} and either
+\item if the entity is a non-static data member that has
+a default member initializer~(\ref{class.mem}) and either
 
 \begin{itemize}
 \item the constructor's class is a union~(\ref{class.union}), and no other variant
@@ -1732,21 +1778,22 @@ anonymous union, no other member of that union is designated by a
 \grammarterm{mem-initializer-id},
 \end{itemize}
 
-the entity is initialized as specified in~\ref{dcl.init};
+the entity is initialized from its default member initializer
+as specified in~\ref{dcl.init};
 
-\item otherwise, if the entity is an anonymous union or a variant member~(\ref{class.union}), no initialization is performed;
+\item otherwise, if the entity is an anonymous union or a variant member~(\ref{class.union.anon}), no initialization is performed;
 
 \item otherwise, the entity is default-initialized~(\ref{dcl.init}).
 \end{itemize}
 
-\enternote An abstract class~(\ref{class.abstract}) is never a most derived
+\begin{note} An abstract class~(\ref{class.abstract}) is never a most derived
 class, thus its constructors never initialize virtual base classes, therefore the
-corresponding \grammarterm{mem-initializer}{s} may be omitted. \exitnote
+corresponding \grammarterm{mem-initializer}{s} may be omitted. \end{note}
 An attempt to initialize more than one non-static data member of a union renders the
 program ill-formed.
 \indextext{initialization!const member}%
 \indextext{initialization!reference member}%
-\enternote
+\begin{note}
 After the call to a constructor for class
 \tcode{X}
 for an object with automatic or dynamic storage duration
@@ -1758,8 +1805,8 @@ is neither initialized nor
 given a value
 during execution of the \grammarterm{compound-statement} of the body of the constructor,
 the member has an indeterminate value.
-\exitnote
-\enterexample
+\end{note}
+\begin{example}
 \begin{codeblock}
 struct A {
   A();
@@ -1777,14 +1824,14 @@ struct C {
   int j = 5;              // OK: \tcode{j} has the value \tcode{5}
 };
 \end{codeblock}
-\exitexample
+\end{example}
 
 \pnum
-If a given non-static data member has both a \grammarterm{brace-or-equal-initializer}
+If a given non-static data member has both a default member initializer
 and a \grammarterm{mem-initializer}, the initialization specified by the
 \grammarterm{mem-initializer} is performed, and the non-static data member's 
-\grammarterm{brace-or-equal-initializer} is ignored.
-\enterexample Given
+default member initializer is ignored.
+\begin{example} Given
 \begin{codeblock}
 struct A {
   int i = /* some integer expression with side effects */ ;
@@ -1796,14 +1843,14 @@ struct A {
 the \tcode{A(int)} constructor will simply initialize \tcode{i} to the value of
 \tcode{arg}, and the
 \indextext{side effects}%
-side effects in \tcode{i}'s \grammarterm{brace-or-equal-initializer}
+side effects in \tcode{i}'s default member initializer 
 will not take place.
-\exitexample
+\end{example}
 
 \pnum
 A temporary expression bound to a reference member from a
-\grammarterm{brace-or-equal-initializer} is ill-formed.
-\enterexample
+default member initializer is ill-formed.
+\begin{example}
 \begin{codeblock}
 struct A {
   A() = default;          // OK
@@ -1813,13 +1860,13 @@ struct A {
 A a1;                     // error: ill-formed binding of temporary to reference
 A a2(1);                  // OK, unfortunately
 \end{codeblock}
-\exitexample
+\end{example}
 
 \pnum
 In a non-delegating constructor, the destructor for each potentially constructed
 subobject of class type is potentially invoked~(\ref{class.dtor}).
-\enternote This provision ensures that destructors can be called for fully-constructed
-sub-objects in case an exception is thrown~(\ref{except.ctor}). \exitnote
+\begin{note} This provision ensures that destructors can be called for fully-constructed
+sub-objects in case an exception is thrown~(\ref{except.ctor}). \end{note}
 
 \pnum
 In a non-delegating constructor, initialization
@@ -1853,13 +1900,13 @@ Finally, the \grammarterm{compound-statement} of the constructor
 body  is executed.
 \end{itemize}
 
-\enternote
+\begin{note}
 The declaration order is mandated to ensure that base and member
 subobjects are destroyed in the reverse order of initialization.
-\exitnote
+\end{note}
 
 \pnum
-\enterexample
+\begin{example}
 \begin{codeblock}
 struct V {
   V();
@@ -1890,7 +1937,7 @@ A a(2);             // use \tcode{V(int)}
 B b(3);             // use \tcode{V()}
 C c(4);             // use \tcode{V()}
 \end{codeblock}
-\exitexample
+\end{example}
 
 \pnum
 \indextext{initializer!scope~of member}%
@@ -1902,7 +1949,7 @@ of a
 are evaluated in the scope of the constructor for which the
 \grammarterm{mem-initializer}
 is specified.
-\enterexample
+\begin{example}
 
 \begin{codeblock}
 class X {
@@ -1935,8 +1982,8 @@ with the value of
 this takes place each time an object of class
 \tcode{X}
 is created.
-\exitexample
-\enternote
+\end{example}
+\begin{note}
 Because the
 \grammarterm{mem-initializer}
 are evaluated in the scope of the constructor, the
@@ -1946,7 +1993,7 @@ pointer can be used in the
 of a
 \grammarterm{mem-initializer}
 to refer to the object being initialized.
-\exitnote
+\end{note}
 
 \pnum
 \indextext{initialization!member function call during}%
@@ -1963,7 +2010,7 @@ However, if these operations are performed in a
 before all the
 \grammarterm{mem-initializer}{s}
 for base classes have completed, the result of the operation is undefined.
-\enterexample
+\begin{example}
 
 \begin{codeblock}
 class A {
@@ -1993,10 +2040,10 @@ public:
   i(f()) { }        // well-defined: bases are all initialized
 };
 \end{codeblock}
-\exitexample
+\end{example}
 
 \pnum
-\enternote
+\begin{note}
 \ref{class.cdtor} describes the result of virtual function calls,
 \tcode{typeid}
 and
@@ -2005,14 +2052,14 @@ during construction for the well-defined cases;
 that is, describes the
 \term{polymorphic behavior}
 of an object under construction.
-\exitnote
+\end{note}
 
 \pnum
 \indextext{initializer!pack expansion}%
 A \grammarterm{mem-initializer} followed by an ellipsis is
 a pack expansion~(\ref{temp.variadic}) that initializes the base
 classes specified by a pack expansion in the \grammarterm{base-specifier-list}
-for the class. \enterexample
+for the class. \begin{example}
 
 \begin{codeblock}
 template<class... Mixins>
@@ -2022,8 +2069,114 @@ public:
 };
 \end{codeblock}
 
-\exitexample%
+\end{example}%
 \indextext{initialization!class~object|)}
+
+\rSec2[class.inhctor.init]{Initialization by inherited constructor}%
+\indextext{initialization!by~inherited~constructor}
+
+\pnum
+When a constructor for type \tcode{B} is invoked
+to initialize an object of a different type \tcode{D}
+(that is, when the constructor was inherited~(\ref{namespace.udecl})),
+initialization proceeds as if a defaulted default constructor
+were used to initialize the \tcode{D} object and
+each base class subobject from which the constructor was inherited,
+except that the \tcode{B} subobject is initialized
+by the invocation of the inherited constructor.
+The complete initialization is considered to be a single function call;
+in particular, the initialization of the inherited constructor's parameters
+is sequenced before the initialization of any part of the \tcode{D} object.
+\begin{example}
+\begin{codeblock}
+struct B1 {
+  B1(int, ...) { }
+};
+
+struct B2 {
+  B2(double) { }
+};
+
+int get();
+
+struct D1 : B1 {
+  using B1::B1;  // inherits \tcode{B1(int, ...)}
+  int x;
+  int y = get();
+};
+
+void test() {
+  D1 d(2, 3, 4); // OK: \tcode{B1} is initialized by calling \tcode{B1(2, 3, 4)},
+                 // then \tcode{d.x} is default-initialized (no initialization is performed),
+                 // then \tcode{d.y} is initialized by calling \tcode{get()}
+  D1 e;          // error: \tcode{D1} has a deleted default constructor
+}
+
+struct D2 : B2 {
+  using B2::B2;
+  B1 b;
+};
+
+D2 f(1.0);       // error: \tcode{B1} has a deleted default constructor
+
+struct W { W(int); };
+struct X : virtual W { using W::W; X() = delete; };
+struct Y : X { using X::X; };
+struct Z : Y, virtual W { using Y::Y; };
+Z z(0); // OK: initialization of \tcode{Y} does not invoke default constructor of \tcode{X}
+
+template<class T> struct Log : T {
+  using T::T;    // inherits all constructors from class \tcode{T}
+  ~Log() { std::clog << "Destroying wrapper" << std::endl; }
+};
+\end{codeblock}
+Class template \tcode{Log} wraps any class and forwards all of its constructors,
+while writing a message to the standard log
+whenever an object of class \tcode{Log} is destroyed.
+\end{example}
+
+\pnum
+If the constructor was inherited from multiple base class subobjects
+of type \tcode{B}, the program is ill-formed.
+\begin{example}
+\begin{codeblock}
+struct A { A(int); };
+struct B : A { using A::A; };
+
+struct C1 : B { using B::B; };
+struct C2 : B { using B::B; };
+
+struct D1 : C1, C2 {
+  using C1::C1;
+  using C2::C2;
+};
+
+struct V1 : virtual B { using B::B; };
+struct V2 : virtual B { using B::B; };
+
+struct D2 : V1, V2 {
+  using V1::V1;
+  using V2::V2;
+};
+
+D1 d1(0); // ill-formed: ambiguous
+D2 d2(0); // OK: initializes virtual \tcode{B} base class, which initializes the \tcode{A} base class
+          // then initializes the \tcode{V1} and \tcode{V2} base classes as if by a defaulted default constructor
+
+struct M { M(); M(int); };
+struct N : M { using M::M; };
+struct O : M {};
+struct P : N, O { using N::N; using O::O; };
+P p(0); // OK: use \tcode{M(0)} to initialize \tcode{N}{'s} base class,
+        // use \tcode{M()} to initialize \tcode{O}{'s} base class
+\end{codeblock}
+\end{example}
+
+\pnum
+When an object is initialized by an inheriting constructor,
+the principal constructor~(\ref{class.base.init},~\ref{except.ctor})
+for the object is considered to have completed execution
+when the initialization of all subobjects is complete.
 
 \rSec1[class.cdtor]{Construction and destruction}%
 \indextext{construction|(}%
@@ -2037,7 +2190,7 @@ or base class of the object before the constructor begins execution results in
 undefined behavior. For an object with a non-trivial destructor, referring to
 any non-static member or base class of the object after the destructor finishes
 execution results in undefined behavior.
-\enterexample
+\begin{example}
 
 \begin{codeblock}
 struct X { int i; };
@@ -2071,7 +2224,7 @@ struct Y {
     }
 };
 \end{codeblock}
-\exitexample
+\end{example}
 
 \pnum
 \indextext{construction!pointer to member or base}%
@@ -2098,7 +2251,7 @@ the construction of
 shall have started and its destruction shall not have completed,
 otherwise the computation of the pointer value (or accessing the member
 value) results in undefined behavior.
-\enterexample
+\begin{example}
 
 \begin{codeblock}
 struct A { };
@@ -2120,7 +2273,7 @@ struct E : C, D, X {
   }
 };
 \end{codeblock}
-\exitexample
+\end{example}
 
 \pnum
 \indextext{virtual~function~call!constructor~and}%
@@ -2143,7 +2296,7 @@ and the object expression refers to
 the complete object of \tcode{x} or one of that object's base class subobjects
 but not \tcode{x} or one of its base class subobjects, the behavior
 is undefined.
-\enterexample
+\begin{example}
 
 \begin{codeblock}
 struct V {
@@ -2173,7 +2326,7 @@ B::B(V* v, A* a) {
   a->f();           // undefined behavior, \tcode{a}'s type not a base of \tcode{B}
 }
 \end{codeblock}
-\exitexample
+\end{example}
 
 \pnum
 \indextext{construction!\idxcode{typeid} operator}%
@@ -2186,7 +2339,7 @@ operator~(\ref{expr.typeid}) can be used during construction or destruction~(\re
 When
 \tcode{typeid}
 is used in a constructor (including the
-\grammarterm{mem-initializer} or \grammarterm{brace-or-equal-initializer}
+\grammarterm{mem-initializer} or default member initializer~(\ref{class.mem})
 for a non-static data member)
 or in a destructor, or used in a function called (directly or indirectly) from
 a constructor or destructor, if the operand of
@@ -2213,7 +2366,7 @@ is undefined.
 or destruction~(\ref{class.base.init}). When a
 \tcode{dynamic_cast}
 is used in a constructor (including the
-\grammarterm{mem-initializer} or \grammarterm{brace-or-equal-initializer}
+\grammarterm{mem-initializer} or default member initializer
 for a non-static data member)
 or in a destructor, or used in a function called (directly or indirectly) from
 a constructor or destructor, if the operand of the
@@ -2229,7 +2382,7 @@ own class or one of its bases, the
 \tcode{dynamic_cast}
 results in undefined behavior.
 
-\enterexample
+\begin{example}
 
 \begin{codeblock}
 struct V {
@@ -2257,7 +2410,7 @@ B::B(V* v, A* a) {
                                 // \tcode{a} has type \tcode{A*}, \tcode{A} not a base of \tcode{B}
 }
 \end{codeblock}
-\exitexample%
+\end{example}%
 \indextext{destruction|)}%
 \indextext{construction|)}
 
@@ -2293,7 +2446,7 @@ or
 \tcode{const volatile X\&},
 and either there are no other parameters
 or else all other parameters have default arguments~(\ref{dcl.fct.default}).
-\enterexample
+\begin{example}
 \tcode{X::X(const X\&)}
 and
 \tcode{X::X(X\&,int=1)}
@@ -2308,7 +2461,7 @@ X a(1);             // calls \tcode{X(int);}
 X b(a, 0);          // calls \tcode{X(const X\&, int);}
 X c = b;            // calls \tcode{X(const X\&, int);}
 \end{codeblock}
-\exitexample
+\end{example}
 
 \pnum
 A non-template constructor for class \tcode{X} is a move constructor if its
@@ -2316,7 +2469,7 @@ first parameter is of type \tcode{X\&\&}, \tcode{const X\&\&},
 \tcode{volatile X\&\&}, or \tcode{const volatile X\&\&}, and either there are
 no other parameters or else all other parameters have default 
 arguments~(\ref{dcl.fct.default}).
-\enterexample \tcode{Y::Y(Y\&\&)} is a move constructor.
+\begin{example} \tcode{Y::Y(Y\&\&)} is a move constructor.
 \begin{codeblock}
 struct Y {
   Y(const Y&);
@@ -2326,12 +2479,12 @@ extern Y f(int);
 Y d(f(1));          // calls \tcode{Y(Y\&\&)}
 Y e = d;            // calls \tcode{Y(const Y\&)}
 \end{codeblock}
-\exitexample
+\end{example}
 
 \pnum
-\enternote
+\begin{note}
 All forms of copy/move constructor may be declared for a class.
-\enterexample
+\begin{example}
 
 \begin{codeblock}
 struct X {
@@ -2341,11 +2494,11 @@ struct X {
   X(const X&&);     // OK, but possibly not sensible
 };
 \end{codeblock}
-\exitexample
-\exitnote
+\end{example}
+\end{note}
 
 \pnum
-\enternote
+\begin{note}
 If a class
 \tcode{X}
 only has a copy constructor with a parameter of type
@@ -2360,7 +2513,7 @@ cannot initialize an object of type
 (possibly
 cv-qualified)
 \tcode{X}.
-\enterexample
+\begin{example}
 
 \begin{codeblock}
 struct X {
@@ -2370,8 +2523,8 @@ struct X {
 const X cx;
 X x = cx;           // error: \tcode{X::X(X\&)} cannot copy \tcode{cx} into \tcode{x}
 \end{codeblock}
-\exitexample
-\exitnote
+\end{example}
+\end{note}
 
 \pnum
 A declaration of a constructor for a class
@@ -2382,7 +2535,7 @@ and either there are no other parameters or else all other parameters have
 default arguments.
 A member function template is never instantiated to
 produce such a constructor signature.
-\enterexample
+\begin{example}
 \begin{codeblock}
 struct S {
   template<typename T> S(T);
@@ -2396,7 +2549,7 @@ void h() {
                     // uses the implicitly declared copy constructor
 }
 \end{codeblock}
-\exitexample
+\end{example}
 
 \pnum
 \indextext{constructor!copy!implicitly declared}%
@@ -2458,9 +2611,9 @@ implicitly declared as defaulted if and only if
 \tcode{X} does not have a user-declared destructor.
 \end{itemize}
 
-\enternote When the move constructor is not implicitly declared or explicitly supplied,
+\begin{note} When the move constructor is not implicitly declared or explicitly supplied,
 expressions that otherwise would have invoked the move constructor may instead invoke
-a copy constructor. \exitnote
+a copy constructor. \end{note}
 
 \pnum
 The implicitly-declared move constructor for class \tcode{X} will have the form
@@ -2496,10 +2649,10 @@ A defaulted copy/\brk{}move constructor for a class
 
 A defaulted move constructor that is defined as deleted is ignored by overload
 resolution~(\ref{over.match}, \ref{over.over}).
-\enternote
+\begin{note}
 A deleted move constructor would otherwise interfere with initialization from
 an rvalue which can use the copy constructor instead.
-\exitnote
+\end{note}
 
 \pnum
 \indextext{constructor!copy!trivial}%
@@ -2508,8 +2661,7 @@ A copy/move constructor for class
 \tcode{X}
 is
 trivial
-if it is not user-provided, its parameter-type-list is equivalent to the parameter-type-list
-of an implicit declaration, and if
+if it is not user-provided and if:
 
 \begin{itemize}
 \item
@@ -2542,10 +2694,10 @@ is
 \term{implicitly defined}
 if it is odr-used~(\ref{basic.def.odr})
 or when it is explicitly defaulted after its first declaration.
-\enternote
+\begin{note}
 The copy/move constructor is implicitly defined even if the implementation elided
 its odr-use (\ref{basic.def.odr}, \ref{class.temporary}).
-\exitnote
+\end{note}
 If the implicitly-defined constructor would satisfy the requirements of a
 \tcode{constexpr} constructor~(\ref{dcl.constexpr}), the implicitly-defined
 constructor is \tcode{constexpr}.
@@ -2556,16 +2708,16 @@ implicitly defined,
 all non-user-provided copy/move constructors for its
 potentially constructed subobjects
 shall have been implicitly defined.
-\enternote
+\begin{note}
 An implicitly-declared copy/move constructor has an
 implied exception specification~(\ref{except.spec}).
-\exitnote
+\end{note}
 
 \pnum
 The implicitly-defined copy/move constructor for a non-union class
 \tcode{X}
 performs a memberwise copy/move of its bases and members.
-\enternote \grammarterm{brace-or-equal-initializer}{s} of non-static data members are ignored. See also the example in~\ref{class.base.init}. \exitnote
+\begin{note} Default member initializers of non-static data members are ignored. See also the example in~\ref{class.base.init}. \end{note}
 The order of initialization is the same as the order of initialization of bases
 and members in a user-defined constructor (see~\ref{class.base.init}).
 Let \tcode{x} be either the parameter of the constructor or, for the move constructor, an
@@ -2609,14 +2761,14 @@ operator, the presence of such an assignment operator does not suppress the
 implicit declaration of a copy assignment operator. Such assignment operators
 participate in overload resolution with other assignment operators, including
 copy assignment operators, and, if selected, will be used to assign an object.}
-\enternote
+\begin{note}
 An overloaded assignment operator must be declared to have only one parameter;
 see~\ref{over.ass}.
-\exitnote
-\enternote
+\end{note}
+\begin{note}
 More than one form of copy assignment operator may be declared for a class.
-\exitnote
-\enternote
+\end{note}
+\begin{note}
 If a class
 \tcode{X}
 only has a copy assignment operator with a parameter of type
@@ -2625,7 +2777,7 @@ an expression of type const
 \tcode{X}
 cannot be assigned to an object of type
 \tcode{X}.
-\enterexample
+\begin{example}
 
 \begin{codeblock}
 struct X {
@@ -2638,8 +2790,8 @@ void f() {
   x = cx;           // error: \tcode{X::operator=(X\&)} cannot assign \tcode{cx} into \tcode{x}
 }
 \end{codeblock}
-\exitexample
-\exitnote
+\end{example}
+\end{note}
 
 \pnum
 \indextext{assignment operator!copy!implicitly declared}%
@@ -2706,10 +2858,10 @@ X& X::operator=(X&)
 A user-declared move assignment operator \tcode{X::operator=} is
 a non-static non-template member function of class \tcode{X} with exactly
 one parameter of type \tcode{X\&\&}, \tcode{const X\&\&}, \tcode{volatile X\&\&}, or
-\tcode{const volatile X\&\&}. \enternote An overloaded assignment operator must be
-declared to have only one parameter; see~\ref{over.ass}. \exitnote{}
-\enternote More
-than one form of move assignment operator may be declared for a class. \exitnote
+\tcode{const volatile X\&\&}. \begin{note} An overloaded assignment operator must be
+declared to have only one parameter; see~\ref{over.ass}. \end{note}{}
+\begin{note} More
+than one form of move assignment operator may be declared for a class. \end{note}
 
 \pnum
 \indextext{assignment operator!move!implicitly declared}%
@@ -2731,7 +2883,7 @@ will be implicitly declared as defaulted if and only if
 \tcode{X} does not have a user-declared destructor.
 \end{itemize}
 
-\enterexample The class definition
+\begin{example} The class definition
 \begin{codeblock}
 struct S {
   int a;
@@ -2750,7 +2902,7 @@ struct S {
   S& operator=(S&&) = default;
 };
 \end{codeblock}
-\exitexample
+\end{example}
 
 \pnum
 The implicitly-declared move assignment operator for a class \tcode{X} will have the form
@@ -2782,8 +2934,9 @@ class \tcode{X} is defined as deleted if \tcode{X} has:
 
 \item a non-static data member of reference type, or
 
-\item a potentially constructed subobject of class type \tcode{M}
-  (or array thereof) that cannot be copied/moved because overload resolution
+\item a direct non-static data member of class type \tcode{M}
+  (or array thereof) or a direct base class \tcode{M}
+  that cannot be copied/moved because overload resolution
   (\ref{over.match}), as applied to \tcode{M}'s corresponding
   assignment operator, results in an ambiguity or
   a function that is deleted or inaccessible from the
@@ -2819,8 +2972,7 @@ A copy/move assignment operator for class
 \tcode{X}
 is
 trivial
-if it is not user-provided, its parameter-type-list is equivalent to the parameter-type-list
-of an implicit declaration, and if
+if it is not user-provided and if:
 
 \begin{itemize}
 \item
@@ -2877,10 +3029,10 @@ implicitly defined,
 all non-user-provided copy/move assignment operators for
 its direct base classes and
 its non-static data members shall have been implicitly defined.
-\enternote
+\begin{note}
 An implicitly-declared copy/move assignment operator has an
 implied exception specification~(\ref{except.spec}).
-\exitnote
+\end{note}
 
 \pnum
 The implicitly-defined copy/move assignment operator for a
@@ -2912,7 +3064,7 @@ the built-in assignment operator is used.
 It is unspecified whether subobjects representing virtual base classes
 are assigned more than once by the implicitly-defined copy/move assignment
 operator.
-\enterexample
+\begin{example}
 
 \begin{codeblock}
 struct V { };
@@ -2925,7 +3077,7 @@ It is unspecified whether the virtual base class subobject
 \tcode{V}
 is assigned twice by the implicitly-defined copy/move assignment operator for
 \tcode{C}.
-\exitexample
+\end{example}
 
 \pnum
 The implicitly-defined copy assignment operator for a
@@ -2941,11 +3093,11 @@ union \tcode{X} copies the object representation~(\ref{basic.types}) of \tcode{X
 A program is ill-formed if the copy/move constructor or the copy/move assignment
 operator for an object is implicitly odr-used and the special member function
 is not accessible (Clause~\ref{class.access}).
-\enternote
+\begin{note}
 Copying/moving one object into another using the copy/move constructor or
 the copy/move assignment operator does not change the layout or size of either
 object.
-\exitnote
+\end{note}
 
 \pnum
 \indextext{temporary!elimination~of}%
@@ -2986,7 +3138,7 @@ introduced by the \grammarterm{exception-declaration} of a
 with the same type (ignoring cv-qualification) as
 the function return type, the copy/move operation can be
 omitted by constructing the automatic object directly
-into the function's return value
+into the function call's return object
 
 \item in a \nonterminal{throw-expression}~(\ref{expr.throw}), when the operand
 is the name of a non-volatile automatic object
@@ -2996,11 +3148,6 @@ whose scope does not extend beyond the end of the innermost enclosing
 operand to the exception object~(\ref{except.throw}) can be omitted by
 constructing the automatic object directly into the exception object
 
-\item when a temporary class object that has not been bound to a
-reference~(\ref{class.temporary}) would be copied/moved to a class object with
-the same type (ignoring cv-qualification), the copy/move operation can be omitted by constructing
-the temporary object directly into the target of the omitted copy/move
-
 \item when the \nonterminal{exception-declaration} of an
 exception handler (Clause~\ref{except}) declares an object of the same
 type (except for cv-qualification) as the exception
@@ -3009,11 +3156,20 @@ the \nonterminal{exception-declaration} as an alias for the exception
 object if the meaning of the program will be unchanged except for the execution
 of constructors and destructors for the object declared by the
 \nonterminal{exception-declaration}.
-\enternote There cannot be a move from the exception object because it is
-always an lvalue.  \exitnote
+\begin{note} There cannot be a move from the exception object because it is
+always an lvalue.  \end{note}
 \end{itemize}
+Copy elision is required
+where an expression is evaluated in a context
+requiring a constant expression~(\ref{expr.const})
+and in constant initialization~(\ref{basic.start.static}).
+\begin{note}
+Copy elision might not be performed
+if the same expression
+is evaluated in another context.
+\end{note}
 
-\enterexample
+\begin{example}
 
 \begin{codeblock}
 class Thing {
@@ -3029,17 +3185,32 @@ Thing f() {
 }
 
 Thing t2 = f();
+
+struct A {
+  void *p;
+  constexpr A(): p(this) {}
+};
+
+constexpr A g() {
+  A a;
+  return a;
+}
+
+constexpr A a;        // well-formed, \tcode{a.p} points to \tcode{a}
+constexpr A b = g();  // well-formed, \tcode{b.p} points to \tcode{b}
+
+void g() {
+  A c = g();          // well-formed, \tcode{c.p} may point to \tcode{c} or to an ephemeral temporary
+}
 \end{codeblock}
 
-Here the criteria for elision can be combined to
-eliminate two calls to the copy constructor of class
-\tcode{Thing}:
+Here the criteria for elision can
+eliminate
 the copying of the local automatic object
 \tcode{t}
-into the temporary object for the return value of
-function
-\tcode{f()}
-and the copying of that temporary object into object
+into the result object for the function call
+\tcode{f()},
+which is the global object
 \tcode{t2}.
 Effectively, the construction of the local object
 \tcode{t}
@@ -3049,8 +3220,8 @@ object
 and that object's destruction will occur at program
 exit.
 Adding a move constructor to \tcode{Thing} has the same effect, but it is the
-move construction from the temporary object to \tcode{t2} that is elided.
-\exitexample
+move construction from the local automatic object to \tcode{t2} that is elided.
+\end{example}
 
 \pnum
 When the criteria for elision of a copy/move operation are met,
@@ -3068,12 +3239,12 @@ If the first overload resolution fails or was not performed,
 or if the type of the first parameter of the selected
 constructor is not an rvalue reference to the object's type (possibly cv-qualified),
 overload resolution is performed again, considering the object as an lvalue.
-\enternote This two-stage overload resolution must be performed regardless
+\begin{note} This two-stage overload resolution must be performed regardless
 of whether copy elision will occur. It determines the constructor to be called if
 elision is not performed, and the selected constructor must be accessible even if
-the call is elided. \exitnote
+the call is elided. \end{note}
 
-\enterexample
+\begin{example}
 \begin{codeblock}
 class Thing {
 public:
@@ -3087,225 +3258,21 @@ private:
 Thing f(bool b) {
   Thing t;
   if (b)
-    throw t;                    // OK: \tcode{Thing(Thing\&\&)} used (or elided) to throw t
-  return t;                     // OK: \tcode{Thing(Thing\&\&)} used (or elided) to return t
+    throw t;                    // OK: \tcode{Thing(Thing\&\&)} used (or elided) to throw \tcode{t}
+  return t;                     // OK: \tcode{Thing(Thing\&\&)} used (or elided) to return \tcode{t}
 }
 
-Thing t2 = f(false);            // OK: \tcode{Thing(Thing\&\&)} used (or elided) to construct t2
-\end{codeblock}
-\exitexample
+Thing t2 = f(false);            // OK: no extra copy/move performed, \tcode{t2} constructed by call to \tcode{f}
 
-\rSec1[class.inhctor]{Inheriting constructors}%
-\indextext{constructor!inheriting|(}
-
-\pnum
-A \grammarterm{using-declaration}~(\ref{namespace.udecl}) that names a
-constructor implicitly declares a set of \term{inheriting constructors}.
-The \term{candidate set of inherited constructors} from the class \tcode{X}
-named in the \grammarterm{using-declaration} consists of actual constructors and
-notional constructors that result from the transformation of defaulted
-parameters and ellipsis parameter specifications as follows:
-
-\begin{itemize}
-\item for each non-template constructor of \tcode{X},
-the constructor that results from
-omitting any ellipsis parameter specification, and
-\item for each non-template constructor of \tcode{X}
-that has at least one parameter with a default argument,
-the set of constructors that results from
-omitting any ellipsis parameter specification and
-successively omitting parameters with a default argument
-from the end of the parameter-type-list, and
-\item for each constructor template of \tcode{X},
-the constructor template that results from
-omitting any ellipsis parameter specification, and
-\item for each constructor template of \tcode{X}
-that has at least one parameter with a default argument,
-the set of constructor templates that results from
-omitting any ellipsis parameter specification and
-successively omitting parameters with a default argument
-from the end of the parameter-type-list.
-\end{itemize}
-
-\pnum
-The \term{constructor characteristics} of a constructor or constructor template are
-
-\begin{itemize}
-\item the template parameter list~(\ref{temp.param}), if any,
-\item the parameter-type-list~(\ref{dcl.fct}), and
-\item absence or presence of \tcode{explicit}~(\ref{class.conv.ctor}).
-\end{itemize}
-
-\pnum
-For each non-template constructor in the candidate set of inherited constructors other
-than a constructor having no parameters or a copy/move constructor having a single parameter,
-a constructor is implicitly declared with the same constructor characteristics unless
-there is a user-declared constructor with the same signature in the complete class where the
-\grammarterm{using-declaration} appears or the constructor would be a default, copy, or move
-constructor for that class. Similarly, for each constructor template in the
-candidate set of inherited constructors, a constructor template is implicitly declared
-with the same constructor characteristics unless there is an equivalent user-declared
-constructor template~(\ref{temp.over.link}) in the complete class where the \grammarterm{using-declaration}
-appears. \enternote Default arguments are not inherited. An
-exception specification is implied as specified
-in~\ref{except.spec}.\exitnote
-
-\pnum
-A constructor so declared has the same access as the corresponding constructor
-in \tcode{X}.
-It is \tcode{constexpr} if the user-written constructor (see below)
-would satisfy the requirements of a
-\tcode{constexpr} constructor~(\ref{dcl.constexpr}).
-It is deleted if the corresponding constructor in \tcode{X} is
-deleted~(\ref{dcl.fct.def.delete})
-or if a defaulted default constructor~(\ref{class.ctor}) would be deleted,
-except that the construction of the direct base
-class \tcode{X} is not considered in the determination.
-An inheriting constructor shall not be explicitly
-instantiated~(\ref{temp.explicit}) or explicitly specialized~(\ref{temp.expl.spec}).
-
-\pnum
-\enternote Default and copy/move constructors may be implicitly declared as specified in~\ref{class.ctor} and~\ref{class.copy}. \exitnote
-
-\pnum \enterexample
-
-\begin{codeblock}
-struct B1 {
-  B1(int);
+struct Weird {
+  Weird();
+  Weird(Weird&);
 };
 
-struct B2 {
-  B2(int = 13, int = 42);
-};
-
-struct D1 : B1 {
-  using B1::B1;
-};
-
-struct D2 : B2 {
-  using B2::B2;
-};
-\end{codeblock}
-
-The candidate set of inherited constructors in \tcode{D1} for \tcode{B1} is
-
-\begin{itemize}
-\item \tcode{B1(const B1\&)}
-\item \tcode{B1(B1\&\&)}
-\item \tcode{B1(int)}
-\end{itemize}
-
-The set of constructors present in \tcode{D1} is
-
-\begin{itemize}
-\item \tcode{D1()}, implicitly-declared default constructor, ill-formed if odr-used
-\item \tcode{D1(const D1\&)}, implicitly-declared copy constructor, not inherited
-\item \tcode{D1(D1\&\&)}, implicitly-declared move constructor, not inherited
-\item \tcode{D1(int)}, implicitly-declared inheriting constructor
-\end{itemize}
-
-The candidate set of inherited constructors in \tcode{D2} for \tcode{B2} is
-
-\begin{itemize}
-\item \tcode{B2(const B2\&)}
-\item \tcode{B2(B2\&\&)}
-\item \tcode{B2(int = 13, int = 42)}
-\item \tcode{B2(int = 13)}
-\item \tcode{B2()}
-\end{itemize}
-
-The set of constructors present in \tcode{D2} is
-
-\begin{itemize}
-\item \tcode{D2()}, implicitly-declared default constructor, not inherited
-\item \tcode{D2(const D2\&)}, implicitly-declared copy constructor, not inherited
-\item \tcode{D2(D2\&\&)}, implicitly-declared move constructor, not inherited
-\item \tcode{D2(int, int)}, implicitly-declared inheriting constructor
-\item \tcode{D2(int)}, implicitly-declared inheriting constructor
-\end{itemize}
-\exitexample
-
-\pnum
-\enternote If two \grammarterm{using-declaration}{s} declare inheriting constructors with the same
-signatures, the program is ill-formed~(\ref{class.mem}, \ref{over.load}), because an
-implicitly-declared constructor introduced by the first \grammarterm{using-declaration} is not a
-user-declared constructor and thus does not preclude another declaration of a constructor with the
-same signature by a subsequent \grammarterm{using-declaration}. \enterexample
-
-\begin{codeblock}
-struct B1 {
-  B1(int);
-};
-
-struct B2 {
-  B2(int);
-};
-
-struct D1 : B1, B2 {
-  using B1::B1;
-  using B2::B2;     
-};                  // ill-formed: attempts to declare D1(int) twice
-
-struct D2 : B1, B2 {
-  using B1::B1;
-  using B2::B2;
-  D2(int);          // OK: user declaration supersedes both implicit declarations
-};
-\end{codeblock}
-\exitexample \exitnote
-
-\pnum
-An inheriting constructor for a class is implicitly defined when
-it is odr-used~(\ref{basic.def.odr}) to
-create an object of its class type~(\ref{intro.object}). An implicitly-defined inheriting
-constructor performs the set of initializations of the class that would be performed by a
-user-written \tcode{inline} constructor for that class with a \grammarterm{mem-initializer-list}
-whose only \grammarterm{mem-initializer} has a \grammarterm{mem-initializer-id} that names the base
-class denoted in the \grammarterm{nested-name-specifier} of the
-\grammarterm{using-declaration} and an \grammarterm{expression-list} as specified below, and where
-the \grammarterm{compound-statement} in its function body is empty~(\ref{class.base.init}). If that
-user-written constructor would be ill-formed, the program is ill-formed. Each
-\grammarterm{expression} in the \grammarterm{expression-list} is of the form
-\tcode{static_cast<T\&\&>(p)}, where \tcode{p} is the name of the corresponding constructor
-parameter and \tcode{T} is the declared type of \tcode{p}.
-
-\pnum
-\enterexample
-
-\begin{codeblock}
-struct B1 {
-  B1(int) { }
-};
-
-struct B2 {
-  B2(double) { }
-};
-
-struct D1 : B1 {
-  using B1::B1;     // implicitly declares \tcode{D1(int)}
-  int x;
-};
-
-void test() {
-  D1 d(6);          // OK: \tcode{d.x} is not initialized
-  D1 e;             // error: \tcode{D1} has no default constructor
+Weird g() {
+  Weird w;
+  return w;                     // OK: first overload resolution fails,
+                                // second overload resolution selects \tcode{Weird(Weird\&)}
 }
-
-struct D2 : B2 {
-  using B2::B2;     // OK: implicitly declares \tcode{D2(double)}
-  B1 b;
-};
-
-D2 f(1.0);          // error: B1 has no default constructor
-
-template< class T >
-struct D : T {
-  using T::T;       // declares all constructors from class T
-  ~D() { std::clog << "Destroying wrapper" << std::endl; }
-};
 \end{codeblock}
-
-Class template \tcode{D} wraps any class and forwards all of its constructors,
-while writing a message to the standard log whenever an object of class
-\tcode{D} is destroyed. \exitexample%
-\indextext{constructor!inheriting|)}
+\end{example}

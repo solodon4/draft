@@ -1,8 +1,7 @@
 %!TEX root = std.tex
 \rSec0[lex]{Lexical conventions}
 
-%gram: \rSec1[gram.lex]{Lexical conventions}
-%gram:
+\gramSec[gram.lex]{Lexical conventions}
 
 \indextext{lexical conventions|see{conventions, lexical}}
 \indextext{translation!separate|see{compilation, separate}}
@@ -34,24 +33,24 @@ and source files included~(\ref{cpp.include}) via the preprocessing
 directive \tcode{\#include}, less any source lines skipped by any of the
 conditional inclusion~(\ref{cpp.cond}) preprocessing directives, is
 called a \defn{translation unit}.
-\enternote A \Cpp program need not all be translated at the same time.
-\exitnote
+\begin{note} A \Cpp program need not all be translated at the same time.
+\end{note}
 
 \pnum
-\enternote Previously translated translation units and instantiation
+\begin{note} Previously translated translation units and instantiation
 units can be preserved individually or in libraries. The separate
 translation units of a program communicate~(\ref{basic.link}) by (for
 example) calls to functions whose identifiers have external linkage,
 manipulation of objects whose identifiers have external linkage, or
 manipulation of data files. Translation units can be separately
 translated and then later linked to produce an executable
-program~(\ref{basic.link}). \exitnote%
+program~(\ref{basic.link}). \end{note}%
 \indextext{compilation!separate|)}
 
 \rSec1[lex.phases]{Phases of translation}%
 
 \pnum
-\indextext{translation!phases|(}
+\indextext{translation!phases|(}%
 The precedence among the syntax rules of translation is specified by the
 following phases.\footnote{Implementations must behave as if these separate phases
 occur, although in practice different phases might be folded together.}
@@ -69,13 +68,13 @@ characters}.
 Any
 source file character not in the basic source character
 set~(\ref{lex.charset}) is replaced by the
-\indextext{universal character name}universal-character-name that
-designates that character. (An implementation may use any internal
+\indextext{universal character name}\grammarterm{universal-character-name} that
+designates that character. An implementation may use any internal
 encoding, so long as an actual extended character encountered in the
 source file, and the same extended character expressed in the source
-file as a universal-character-name (e.g., using the \tcode{\textbackslash
+file as a \grammarterm{universal-character-name} (e.g., using the \tcode{\textbackslash
 uXXXX} notation), are handled equivalently
-except where this replacement is reverted in a raw string literal.)
+except where this replacement is reverted~(\ref{lex.pptoken}) in a raw string literal.
 
 \indextext{line splicing}%
 \item Each instance of a backslash character (\textbackslash)
@@ -85,7 +84,7 @@ backslash on any physical source line shall be eligible for being part
 of such a splice.
 Except for splices reverted in a raw string literal, if a splice results in
 a character sequence that matches the
-syntax of a universal-character-name, the behavior is
+syntax of a \grammarterm{universal-character-name}, the behavior is
 undefined. A source file that is not empty and that does not end in a new-line
 character, or that ends in a new-line character immediately preceded by a
 backslash character before any such splicing takes place,
@@ -108,22 +107,22 @@ retained. Whether each nonempty sequence of white-space characters other
 than new-line is retained or replaced by one space character is
 unspecified. The process of dividing a source file's
 characters into preprocessing tokens is context-dependent.
-\enterexample
+\begin{example}
 see the handling of \tcode{<} within a \tcode{\#include} preprocessing
 directive.
-\exitexample
+\end{example}
 
 \item Preprocessing directives are executed, macro invocations are
 expanded, and \tcode{_Pragma} unary operator expressions are executed.
 If a character sequence that matches the syntax of a
-universal-character-name is produced by token
+\grammarterm{universal-character-name} is produced by token
 concatenation~(\ref{cpp.concat}), the behavior is undefined. A
 \tcode{\#include} preprocessing directive causes the named header or
 source file to be processed from phase 1 through phase 4, recursively.
 All preprocessing directives are then deleted.
 
 \item Each source character set member in a character literal or a string
-literal, as well as each escape sequence and universal-character-name in a
+literal, as well as each escape sequence and \grammarterm{universal-character-name} in a
 character literal or a non-raw string literal, is converted to the corresponding
 member of the execution character set~(\ref{lex.ccon}, \ref{lex.string}); if
 there is no corresponding member, it is converted to an \impldef{converting
@@ -136,31 +135,31 @@ non-corresponding source characters to the same execution character.}
 \item White-space characters separating tokens are no longer
 significant. Each preprocessing token is converted into a
 token.~(\ref{lex.token}). The resulting tokens are syntactically and
-semantically analyzed and translated as a translation unit. \enternote
+semantically analyzed and translated as a translation unit. \begin{note}
 The process of analyzing and translating the tokens may occasionally
 result in one token being replaced by a sequence of other
-tokens~(\ref{temp.names}).\exitnote \enternote Source files, translation
+tokens~(\ref{temp.names}).\end{note} \begin{note} Source files, translation
 units and translated translation units need not necessarily be stored as
 files, nor need there be any one-to-one correspondence between these
 entities and any external representation. The description is conceptual
-only, and does not specify any particular implementation. \exitnote
+only, and does not specify any particular implementation. \end{note}
 
 \item Translated translation units and instantiation units are combined
-as follows: \enternote Some or all of these may be supplied from a
-library. \exitnote Each translated translation unit is examined to
-produce a list of required instantiations. \enternote This may include
+as follows: \begin{note} Some or all of these may be supplied from a
+library. \end{note} Each translated translation unit is examined to
+produce a list of required instantiations. \begin{note} This may include
 instantiations which have been explicitly
-requested~(\ref{temp.explicit}). \exitnote The definitions of the
+requested~(\ref{temp.explicit}). \end{note} The definitions of the
 required templates are located. It is \impldef{whether source of translation units must
 be available to locate template definitions} whether the
 source of the translation units containing these definitions is required
-to be available. \enternote An implementation could encode sufficient
+to be available. \begin{note} An implementation could encode sufficient
 information into the translated translation unit so as to ensure the
-source is not required here. \exitnote All the required instantiations
+source is not required here. \end{note} All the required instantiations
 are performed to produce
-\defn{instantiation units}. \enternote These are similar
+\defn{instantiation units}. \begin{note} These are similar
 to translated translation units, but contain no references to
-uninstantiated templates and no template definitions. \exitnote The
+uninstantiated templates and no template definitions. \end{note} The
 program is ill-formed if any instantiation fails.
 
 \item All external entity references are resolved. Library
@@ -182,7 +181,8 @@ new-line, plus the following 91 graphical characters:\footnote{The glyphs for
 the members of the basic source character set are intended to
 identify characters from the subset of ISO/IEC 10646 which corresponds to the ASCII
 character set. However, because the mapping from source file characters to the source
-character set (described in translation phase 1) is specified as implementation-defined,
+character set (described in translation phase 1) is specified as
+\impldef{mapping from physical source file characters to basic source character set},
 an implementation is required to document how the basic source characters are
 represented in source files.}
 
@@ -211,22 +211,22 @@ other characters.
     \terminal{\textbackslash U} hex-quad hex-quad
 \end{bnf}
 
-The character designated by the universal-character-name \tcode{\textbackslash
+The character designated by the \grammarterm{universal-character-name} \tcode{\textbackslash
 UNNNNNNNN} is that character whose character short name in ISO/IEC 10646 is
-\tcode{NNNNNNNN}; the character designated by the universal-character-name
+\tcode{NNNNNNNN}; the character designated by the \grammarterm{universal-character-name}
 \tcode{\textbackslash uNNNN} is that character whose character short name in
 ISO/IEC 10646 is \tcode{0000NNNN}. If the hexadecimal value for a
-universal-character-name corresponds to a surrogate code point (in the
+\grammarterm{universal-character-name} corresponds to a surrogate code point (in the
 range 0xD800--0xDFFF, inclusive), the program is ill-formed. Additionally, if
-the hexadecimal value for a universal-character-name outside
+the hexadecimal value for a \grammarterm{universal-character-name} outside
 the \grammarterm{c-char-sequence}, \grammarterm{s-char-sequence}, or
 \grammarterm{r-char-sequence} of
 a character or
 string literal corresponds to a control character (in either of the
 ranges 0x00--0x1F or 0x7F--0x9F, both inclusive) or to a character in the basic
-source character set, the program is ill-formed.\footnote{A sequence of characters resembling a universal-character-name in an
+source character set, the program is ill-formed.\footnote{A sequence of characters resembling a \grammarterm{universal-character-name} in an
 \grammarterm{r-char-sequence}~(\ref{lex.string}) does not form a
-universal-character-name.}
+\grammarterm{universal-character-name}.}
 
 \pnum
 The \term{basic execution character set} and the \term{basic
@@ -240,8 +240,7 @@ source and execution basic character sets, the value of each character
 after \tcode{0} in the above list of decimal digits shall be one greater
 than the value of the previous. The \term{execution character set}
 and the \term{execution wide-character set} are
-implementation-defined
-\indeximpldef{execution character-set and execution wide-character set}
+\impldef{execution character set and execution wide-character set}
 supersets of the
 basic execution character set and the basic execution wide-character
 set, respectively. The values of the members of the execution character sets
@@ -251,8 +250,8 @@ are locale-specific.%
 
 \rSec1[lex.pptoken]{Preprocessing tokens}
 
-\begin{bnf}
 \indextext{token!preprocessing|(}%
+\begin{bnf}
 \nontermdef{preprocessing-token}\br
     header-name\br
     identifier\br
@@ -296,51 +295,54 @@ If the input stream has been parsed into preprocessing tokens up to a
 given character:
 
 \begin{itemize}
+\indextext{literal!string!raw}%
 \item If the next character begins a sequence of characters that could be the prefix
 and initial double quote of a raw string literal, such as \tcode{R"}, the next preprocessing
 token shall be a raw string literal. Between the initial and final
 double quote characters of the raw string, any transformations performed in phases
-1 and 2 (universal-character-names and line splicing) are reverted; this reversion
+1 and 2 (\grammarterm{universal-character-name}{s} and line splicing) are reverted; this reversion
 shall apply before any \grammarterm{d-char}, \grammarterm{r-char}, or delimiting
 parenthesis is identified. The raw string literal is defined as the shortest sequence
 of characters that matches the raw-string pattern
 
 \begin{ncbnf}
-encoding-prefix\opt \terminal{R} raw-string
+encoding-prefix\opt{} \terminal{R} raw-string
 \end{ncbnf}
 
 \item Otherwise, if the next three characters are \tcode{<::} and the subsequent character
-is neither \tcode{:} nor \tcode{>}, the \tcode{<} is treated as a preprocessor token by
+is neither \tcode{:} nor \tcode{>}, the \tcode{<} is treated as a preprocessing token by
 itself and not as the first character of the alternative token \tcode{<:}.
 
 \item Otherwise,
 the next preprocessing token is the longest sequence of
 characters that could constitute a preprocessing token, even if that
-would cause further lexical analysis to fail.
+would cause further lexical analysis to fail,
+except that a \grammarterm{header-name}~(\ref{lex.header}) is only formed
+within a \tcode{\#include} directive~(\ref{cpp.include}).
 \end{itemize}
 
-\enterexample
+\begin{example}
 \begin{codeblock}
 #define R "x"
 const char* s = R"y";           // ill-formed raw string, not \tcode{"x" "y"}
 \end{codeblock}
-\exitexample
+\end{example}
 
 \pnum
-\enterexample The program fragment \tcode{0xe+foo} is parsed as a
+\begin{example} The program fragment \tcode{0xe+foo} is parsed as a
 preprocessing number token (one that is not a valid floating or integer
 literal token), even though a parse as three preprocessing tokens
 \tcode{0xe}, \tcode{+}, and \tcode{foo} might produce a valid expression (for example,
 if \tcode{foo} were a macro defined as \tcode{1}). Similarly, the
 program fragment \tcode{1E1} is parsed as a preprocessing number (one
 that is a valid floating literal token), whether or not \tcode{E} is a
-macro name. \exitexample
+macro name. \end{example}
 
 \pnum
-\enterexample The program fragment \tcode{x+++++y} is parsed as \tcode{x
+\begin{example} The program fragment \tcode{x+++++y} is parsed as \tcode{x
 ++ ++ + y}, which, if \tcode{x} and \tcode{y} have integral types,
 violates a constraint on increment operators, even though the parse
-\tcode{x ++ + ++ y} might yield a correct expression. \exitexample%
+\tcode{x ++ + ++ y} might yield a correct expression. \end{example}%
 \indextext{token!preprocessing|)}
 
 \rSec1[lex.digraph]{Alternative tokens}
@@ -406,10 +408,10 @@ operators, and other separators.
 \indextext{white~space}%
 Blanks, horizontal and vertical tabs, newlines, formfeeds, and comments
 (collectively, ``white space''), as described below, are ignored except
-as they serve to separate tokens. \enternote Some white space is
+as they serve to separate tokens. \begin{note} Some white space is
 required to separate otherwise adjacent identifiers, keywords, numeric
 literals, and alternative tokens containing alphabetic characters.
-\exitnote%
+\end{note}%
 \indextext{token|)}
 
 \rSec1[lex.comment]{Comments}
@@ -425,11 +427,11 @@ The characters \tcode{//} start a comment, which terminates immediately before t
 next new-line character. If there is a form-feed or a vertical-tab
 character in such a comment, only white-space characters shall appear
 between it and the new-line that terminates the comment; no diagnostic
-is required. \enternote The comment characters \tcode{//}, \tcode{/*},
+is required. \begin{note} The comment characters \tcode{//}, \tcode{/*},
 and \tcode{*/} have no special meaning within a \tcode{//} comment and
 are treated just like other characters. Similarly, the comment
 characters \tcode{//} and \tcode{/*} have no special meaning within a
-\tcode{/*} comment. \exitnote%
+\tcode{/*} comment. \end{note}%
 \indextext{comment|)}
 
 \rSec1[lex.header]{Header names}
@@ -464,9 +466,9 @@ characters \tcode{//} and \tcode{/*} have no special meaning within a
 \end{bnf}
 
 \pnum
-Header name preprocessing tokens shall only appear within a
-\tcode{\#include} preprocessing directive~(\ref{cpp.include}). The
-sequences in both forms of \grammarterm{header-name}{s} are mapped in an
+\begin{note} Header name preprocessing tokens only appear within a
+\tcode{\#include} preprocessing directive (see~\ref{lex.pptoken}). \end{note}
+The sequences in both forms of \grammarterm{header-name}{s} are mapped in an
 \impldef{mapping header name to header or external source file} manner to headers or to
 external source file names as specified in~\ref{cpp.include}.
 
@@ -474,17 +476,18 @@ external source file names as specified in~\ref{cpp.include}.
 The appearance of either of the characters \tcode{'} or \tcode{\textbackslash} or of
 either of the character sequences \tcode{/*} or \tcode{//} in a
 \grammarterm{q-char-sequence} or an \grammarterm{h-char-sequence}
-is conditionally-supported with implementation-defined semantics,
-as is the appearance of the
-character \tcode{"} in an \grammarterm{h-char-sequence}.\footnote{Thus, a
-sequence of characters that resembles an escape sequence might result in an
-error, be interpreted as the character corresponding to the escape sequence, or
-have a completely different meaning, depending on the implementation.}%
+is conditionally-supported with \impldef{meaning of \tcode{'}, \tcode{\textbackslash},
+\tcode{/*}, or \tcode{//} in a \grammarterm{q-char-sequence} or an
+\grammarterm{h-char-sequence}} semantics, as is the appearance of the character
+\tcode{"} in an \grammarterm{h-char-sequence}.\footnote{Thus, a sequence of characters
+that resembles an escape sequence might result in an error, be interpreted as the
+character corresponding to the escape sequence, or have a completely different meaning,
+depending on the implementation.}%
 \indextext{header!name|)}
 
 \rSec1[lex.ppnumber]{Preprocessing numbers}
 
-\index{number!preprocessing|(}%
+\indextext{number!preprocessing|(}%
 \begin{bnf}
 \nontermdef{pp-number}\br
     digit\br
@@ -495,6 +498,8 @@ have a completely different meaning, depending on the implementation.}%
     pp-number \terminal{'} nondigit\br
     pp-number \terminal{e} sign\br
     pp-number \terminal{E} sign\br
+    pp-number \terminal{p} sign\br
+    pp-number \terminal{P} sign\br
     pp-number \terminal{.}
 \end{bnf}
 
@@ -507,7 +512,7 @@ tokens~(\ref{lex.fcon}).
 A preprocessing number does not have a type or a value; it acquires both
 after a successful conversion to an integer literal token or a floating literal
 token.%
-\index{number!preprocessing|)}
+\indextext{number!preprocessing|)}
 
 \rSec1[lex.name]{Identifiers}
 
@@ -542,18 +547,18 @@ token.%
 \indextext{name!length~of}%
 \indextext{name}%
 An identifier is an arbitrarily long sequence of letters and digits.
-Each universal-character-name in an identifier shall designate a
+Each \grammarterm{universal-character-name} in an identifier shall designate a
 character whose encoding in ISO 10646 falls into one of the ranges
 specified in~\ref{charname.allowed}.
-The initial element shall not be a universal-character-name
+The initial element shall not be a \grammarterm{universal-character-name}
 designating a character whose encoding falls into one of the ranges
 specified in~\ref{charname.disallowed}.
 Upper- and lower-case letters are
 different. All characters are significant.\footnote{On systems in which linkers cannot accept extended
-characters, an encoding of the universal-character-name may be used in
+characters, an encoding of the \grammarterm{universal-character-name} may be used in
 forming valid external identifiers. For example, some otherwise unused
 character or sequence of characters may be used to encode the
-\tcode{\textbackslash u} in a universal-character-name. Extended
+\tcode{\textbackslash u} in a \grammarterm{universal-character-name}. Extended
 characters may produce a long external identifier, but \Cpp does not
 place a translation limit on significant characters for external
 identifiers. In \Cpp, upper- and lower-case letters are considered
@@ -605,8 +610,7 @@ reserved to the implementation for use as a name in the global namespace.%
 \indextext{keyword|(}%
 The identifiers shown in Table~\ref{tab:keywords} are reserved for use
 as keywords (that is, they are unconditionally treated as keywords in
-phase 7) except in an \grammarterm{attribute-token}~(\ref{dcl.attr.grammar})
-\enternote The \tcode{export} keyword is unused but is reserved for future use.\exitnote:
+phase 7) except in an \grammarterm{attribute-token}~(\ref{dcl.attr.grammar}):
 
 \begin{floattable}{Keywords}{tab:keywords}
 {lllll}
@@ -701,6 +705,9 @@ phase 7) except in an \grammarterm{attribute-token}~(\ref{dcl.attr.grammar})
 \tcode{throw}             & \\
 
 \end{floattable}
+
+\begin{note} The \tcode{export} and \tcode{register} keywords are unused but
+are reserved for future use.\end{note}
 
 \pnum
 Furthermore, the alternative representations shown in
@@ -800,9 +807,7 @@ ISO C. }
 
 \begin{bnf}
 \nontermdef{hexadecimal-literal}\br
-    \terminal{0x} hexadecimal-digit\br
-    \terminal{0X} hexadecimal-digit\br
-    hexadecimal-literal \terminal{'}\opt hexadecimal-digit
+    hexadecimal-prefix hexadecimal-digit-sequence
 \end{bnf}
 
 \begin{bnf}
@@ -819,6 +824,17 @@ ISO C. }
 \begin{bnf}
 \nontermdef{nonzero-digit} \textnormal{one of}\br
     \terminal{1  2  3  4  5  6  7  8  9}
+\end{bnf}
+
+\begin{bnf}
+\nontermdef{hexadecimal-prefix} \textnormal{one of}\br
+    \terminal{0x  0X}
+\end{bnf}
+
+\begin{bnf}
+\nontermdef{hexadecimal-digit-sequence}\br
+    hexadecimal-digit\br
+    hexadecimal-digit-sequence \terminal{'}\opt hexadecimal-digit
 \end{bnf}
 
 \begin{bnf}
@@ -878,11 +894,11 @@ A \term{hexadecimal} integer literal (base sixteen) begins with
 digits, which include the decimal digits and the letters \tcode{a}
 through \tcode{f} and \tcode{A} through \tcode{F} with decimal values
 ten through fifteen.
-\enterexample The number twelve can be written \tcode{12}, \tcode{014},
+\begin{example} The number twelve can be written \tcode{12}, \tcode{014},
 \tcode{0XC}, or \tcode{0b1100}. The literals \tcode{1048576},
 \tcode{1'048'576}, \tcode{0X100000}, \tcode{0x10'0000}, and
 \tcode{0'004'000'000} all have the same value.
-\exitexample
+\end{example}
 
 \pnum
 \indextext{literal!\idxcode{long}}%
@@ -980,7 +996,7 @@ that cannot be represented by any of the allowed types.
 \indextext{literal!character}%
 \begin{bnf}
 \nontermdef{character-literal}\br
-    encoding-prefix\opt \terminal{'} c-char-sequence \terminal{'}
+    encoding-prefix\opt{} \terminal{'} c-char-sequence \terminal{'}
 \end{bnf}
 
 \begin{bnf}
@@ -1110,16 +1126,16 @@ The value of a wide-character literal containing a single
 of the \grammarterm{c-char} in the execution wide-character set, unless the
 \grammarterm{c-char} has no representation in the execution wide-character set, in which
 case the value is \impldef{value of wide-character literal with single c-char that is
-not in execution wide-character set}. \enternote The type \tcode{wchar_t} is able to
+not in execution wide-character set}. \begin{note} The type \tcode{wchar_t} is able to
 represent all members of the execution wide-character set (see~\ref{basic.fundamental}).
-\exitnote. The value
+\end{note} The value
 of a wide-character literal containing multiple \grammarterm{c-char}{s} is
 \impldef{value of wide-character literal containing multiple characters}.
 
 \pnum
 Certain nongraphic characters, the single quote \tcode{'}, the double quote \tcode{"},
 the question mark \tcode{?},\footnote{Using an escape sequence for a question mark
-is supported for compatibility with ISO C++14 and ISO C.}
+is supported for compatibility with ISO \CppXIV and ISO C.}
 and the backslash
 \indextext{backslash~character}%
 \indextext{\idxcode{\textbackslash}|see{backslash}}%
@@ -1172,47 +1188,71 @@ first character that is not an octal digit or a hexadecimal digit,
 respectively.
 \indextext{literal!implementation-defined value~of \idxcode{char}}%
 The value of a character literal is \impldef{value of character literal outside range of
-corresponding type} if it falls outside of the implementation-defined range defined for
-\tcode{char} (for literals with no prefix) or
+corresponding type} if it falls outside of the \impldef{range defined for character literals}
+range defined for \tcode{char} (for literals with no prefix) or
 \tcode{wchar_t} (for literals prefixed by \tcode{L}).
-\enternote
+\begin{note}
 If the value of a character literal prefixed by
 \tcode{u}, \tcode{u8}, or \tcode{U}
 is outside the range defined for its type,
 the program is ill-formed.
-\exitnote
+\end{note}
 
 \pnum
-A universal-character-name is translated to the encoding, in the appropriate
+A \grammarterm{universal-character-name} is translated to the encoding, in the appropriate
 execution character set, of the character named. If there is no such
-encoding, the universal-character-name is translated to an
+encoding, the \grammarterm{universal-character-name} is translated to an
 \impldef{encoding of universal character name not in execution character set} encoding.
-\enternote In translation phase 1, a universal-character-name is introduced whenever an
+\begin{note} In translation phase 1, a \grammarterm{universal-character-name} is introduced whenever an
 actual extended
 character is encountered in the source text. Therefore, all extended
-characters are described in terms of universal-character-names. However,
+characters are described in terms of \grammarterm{universal-character-name}{s}. However,
 the actual compiler implementation may use its own native character set,
-so long as the same results are obtained. \exitnote
+so long as the same results are obtained. \end{note}
 
 \rSec2[lex.fcon]{Floating literals}
 
 \indextext{literal!floating}%
 \begin{bnf}
 \nontermdef{floating-literal}\br
+    decimal-floating-literal\br
+    hexadecimal-floating-literal
+\end{bnf}
+
+\begin{bnf}
+\nontermdef{decimal-floating-literal}\br
     fractional-constant exponent-part\opt floating-suffix\opt\br
     digit-sequence exponent-part floating-suffix\opt
 \end{bnf}
 
 \begin{bnf}
+\nontermdef{hexadecimal-floating-literal}\br
+    hexadecimal-prefix hexadecimal-fractional-constant binary-exponent-part floating-suffix\opt\br
+    hexadecimal-prefix hexadecimal-digit-sequence binary-exponent-part floating-suffix\opt
+\end{bnf}
+
+\begin{bnf}
 \nontermdef{fractional-constant}\br
-    digit-sequence\opt \terminal{.} digit-sequence\br
+    digit-sequence\opt{} \terminal{.} digit-sequence\br
     digit-sequence \terminal{.}
+\end{bnf}
+
+\begin{bnf}
+\nontermdef{hexadecimal-fractional-constant}\br
+    hexadecimal-digit-sequence\opt{} \terminal{.} hexadecimal-digit-sequence\br
+    hexadecimal-digit-sequence \terminal{.}
 \end{bnf}
 
 \begin{bnf}
 \nontermdef{exponent-part}\br
     \terminal{e} sign\opt digit-sequence\br
     \terminal{E} sign\opt digit-sequence
+\end{bnf}
+
+\begin{bnf}
+\nontermdef{binary-exponent-part}\br
+    \terminal{p} sign\opt digit-sequence\br
+    \terminal{P} sign\opt digit-sequence
 \end{bnf}
 
 \begin{bnf}
@@ -1233,23 +1273,45 @@ so long as the same results are obtained. \exitnote
 
 \pnum
 \indextext{literal!floating}%
-A floating literal consists of an integer part, a decimal point, a
-fraction part, an
+A floating literal consists of
+an optional prefix specifying a base,
+an integer part,
+a radix point,
+a fraction part,
 \indextext{suffix!\idxcode{e}}%
 \indextext{suffix!\idxcode{E}}%
-\tcode{e} or \tcode{E}, an optionally signed integer exponent, and an
-optional type suffix. The integer and fraction parts both consist of a
-sequence of decimal (base ten) digits. Optional separating single quotes in a
-\grammarterm{digit-sequence} are ignored when determining its value.
-\enterexample The literals \tcode{1.602'176'565e-19} and \tcode{1.602176565e-19}
-have the same value. \exitexample
-Either the integer part or the
-fraction part (not both) can be omitted; either the decimal point or the
-letter \tcode{e} (or \tcode{E} ) and the exponent (not both) can be
-omitted. The integer part, the optional decimal point and the optional
-fraction part form the \term{significant part} of the
-floating literal. The exponent, if present, indicates the power of 10 by
-which the significant part is to be scaled. If the scaled value is in
+\indextext{suffix!\idxcode{p}}%
+\indextext{suffix!\idxcode{P}}%
+an \tcode{e}, \tcode{E}, \tcode{p} or \tcode{P},
+an optionally signed integer exponent, and
+an optional type suffix.
+The integer and fraction parts both consist of
+a sequence of decimal (base ten) digits if there is no prefix, or
+hexadecimal (base sixteen) digits if the prefix is \tcode{0x} or \tcode{0X}.
+\indextext{literal!decimal floating}%
+The literal is a \term{decimal floating literal} in the former case and
+\indextext{literal!hexadecimal floating}%
+a \term{hexadecimal floating literal} in the latter case.
+Optional separating single quotes in
+a \grammarterm{digit-sequence} or \grammarterm{hexadecimal-digit-sequence}
+are ignored when determining its value.
+\begin{example} The literals \tcode{1.602'176'565e-19} and \tcode{1.602176565e-19}
+have the same value. \end{example}
+Either the integer part or the fraction part (not both) can be omitted.
+Either the radix point or the letter \tcode{e} or \tcode{E} and
+the exponent (not both) can be omitted from a decimal floating literal.
+The radix point (but not the exponent) can be omitted
+from a hexadecimal floating literal.
+The integer part, the optional radix point, and the optional fraction part,
+form the \defn{significand} of the floating literal.
+In a decimal floating literal, the exponent, if present,
+indicates the power of 10 by which the significand is to be scaled.
+In a hexadecimal floating literal, the exponent
+indicates the power of 2 by which the significand is to be scaled.
+\begin{example}
+The literals \tcode{49.625} and \tcode{0xC.68p+2} have the same value.
+\end{example}
+If the scaled value is in
 the range of representable values for its type, the result is the scaled
 value if representable, else the larger or smaller representable value
 nearest the scaled value, chosen in an \impldef{choice of larger or smaller value of
@@ -1274,8 +1336,8 @@ values for its type, the program is ill-formed.
 \indextext{literal!string}%
 \begin{bnf}
 \nontermdef{string-literal}\br
-    encoding-prefix\opt \terminal{"} s-char-sequence\opt \terminal{"}\br
-    encoding-prefix\opt \terminal{R} raw-string
+    encoding-prefix\opt{} \terminal{"} s-char-sequence\opt{} \terminal{"}\br
+    encoding-prefix\opt{} \terminal{R} raw-string
 \end{bnf}
 
 \begin{bnf}
@@ -1294,7 +1356,7 @@ values for its type, the program is ill-formed.
 
 \begin{bnf}
 \nontermdef{raw-string}\br
-    \terminal{"} d-char-sequence\opt \terminal{(} r-char-sequence\opt \terminal{)} d-char-sequence\opt \terminal{"}
+    \terminal{"} d-char-sequence\opt{} \terminal{(} r-char-sequence\opt{} \terminal{)} d-char-sequence\opt{} \terminal{"}
 \end{bnf}
 
 \begin{bnf}
@@ -1356,6 +1418,7 @@ or \tcode{LR"(...)"},
 respectively.
 
 \pnum
+\indextext{literal!string!raw}%
 A \grammarterm{string-literal} that has an \tcode{R} in the prefix is a \defn{raw string literal}. The
 \grammarterm{d-char-sequence} serves as a delimiter. The terminating
 \grammarterm{d-char-sequence} of a \grammarterm{raw-string} is the same sequence of
@@ -1363,13 +1426,13 @@ characters as the initial \grammarterm{d-char-sequence}. A \grammarterm{d-char-s
 shall consist of at most 16 characters.
 
 \pnum
-\enternote The characters \tcode{'('} and \tcode{')'} are permitted in a
+\begin{note} The characters \tcode{'('} and \tcode{')'} are permitted in a
 \grammarterm{raw-string}. Thus, \tcode{R"delimiter((a|b))delimiter"} is equivalent to
-\tcode{"(a|b)"}. \exitnote
+\tcode{"(a|b)"}. \end{note}
 
 \pnum
-\enternote A source-file new-line in a raw string literal results in a new-line in the
-resulting execution \term{string-literal}. Assuming no
+\begin{note} A source-file new-line in a raw string literal results in a new-line in the
+resulting execution string literal. Assuming no
 whitespace at the beginning of lines in the following example, the assert will succeed:
 
 \begin{codeblock}
@@ -1378,10 +1441,10 @@ b
 c)";
 assert(std::strcmp(p, "a\\\nb\nc") == 0);
 \end{codeblock}
-\exitnote
+\end{note}
 
 \pnum
-\enterexample The raw string
+\begin{example} The raw string
 
 \begin{codeblock}
 R"a(
@@ -1404,7 +1467,7 @@ R"#(
 )#"
 \end{codeblock}
 
-is equivalent to \tcode{"\textbackslash n)\textbackslash?\textbackslash?=\textbackslash"\textbackslash n"}. \exitexample
+is equivalent to \tcode{"\textbackslash n)\textbackslash?\textbackslash?=\textbackslash"\textbackslash n"}. \end{example}
 
 \pnum
 \indextext{string!type~of}%
@@ -1468,13 +1531,13 @@ that \grammarterm{encoding-prefix}. If one \grammarterm{string-literal} has no \
 the same \grammarterm{encoding-prefix} as the other operand. If a UTF-8 string literal token is adjacent to a
 wide string literal token, the program is ill-formed. Any other concatenations are
 conditionally-supported with \impldef{concatenation of some types of string literals}
-behavior. \enternote This
+behavior. \begin{note} This
 concatenation is an interpretation, not a conversion.
 Because the interpretation happens in translation phase 6 (after each character from a
 literal has been translated into a value from the appropriate character set), a
 \grammarterm{string-literal}'s initial rawness has no effect on the interpretation or
 well-formedness of the concatenation.
-\exitnote
+\end{note}
 Table~\ref{tab:lex.string.concat} has some examples of valid concatenations.
 
 \begin{floattable}{String literal concatenations}{tab:lex.string.concat}
@@ -1499,7 +1562,7 @@ Means \\
 
 Characters in concatenated strings are kept distinct.
 
-\enterexample
+\begin{example}
 \begin{codeblock}
 "\xA" "B"
 \end{codeblock}
@@ -1507,7 +1570,7 @@ Characters in concatenated strings are kept distinct.
 contains the two characters \tcode{'\textbackslash xA'} and \tcode{'B'}
 after concatenation (and not the single hexadecimal character
 \tcode{'\textbackslash xAB'}).
-\exitexample
+\end{example}
 
 \pnum
 \indextext{\idxcode{0}|seealso{zero,~null}}%
@@ -1519,30 +1582,30 @@ string literal so that programs that scan a string can find its end.
 
 \pnum
 \indextext{encoding!multibyte}%
-Escape sequences and universal-character-names in non-raw string literals
+Escape sequences and \grammarterm{universal-character-name}{s} in non-raw string literals
 have the same meaning as in character literals~(\ref{lex.ccon}), except that
 the single quote \tcode{'} is representable either by itself or by the escape sequence
 \tcode{\textbackslash'}, and the double quote \tcode{"} shall be preceded by a
 \tcode{\textbackslash},
-and except that a universal-character-name in a
+and except that a \grammarterm{universal-character-name} in a
 \tcode{char16_t} string literal may yield a surrogate pair.
 \indextext{string!\idxcode{sizeof}}%
-In a narrow string literal, a universal-character-name may map to more
+In a narrow string literal, a \grammarterm{universal-character-name} may map to more
 than one \tcode{char} element due to \term{multibyte encoding}. The
 size of a \tcode{char32_t} or wide string literal is the total number of
-escape sequences, universal-character-names, and other characters, plus
+escape sequences, \grammarterm{universal-character-name}{s}, and other characters, plus
 one for the terminating \tcode{U'\textbackslash 0'} or
 \tcode{L'\textbackslash 0'}. The size of a \tcode{char16_t} string
 literal is the total number of escape sequences,
-universal-character-names, and other characters, plus one for each
+\grammarterm{universal-character-name}{s}, and other characters, plus one for each
 character requiring a surrogate pair, plus one for the terminating
-\tcode{u'\textbackslash 0'}. \enternote The size of a \tcode{char16_t}
+\tcode{u'\textbackslash 0'}. \begin{note} The size of a \tcode{char16_t}
 string literal is the number of code units, not the number of
-characters. \exitnote Within \tcode{char32_t} and \tcode{char16_t}
-literals, any universal-character-names shall be within the range
+characters. \end{note} Within \tcode{char32_t} and \tcode{char16_t}
+literals, any \grammarterm{universal-character-name}{s} shall be within the range
 \tcode{0x0} to \tcode{0x10FFFF}. The size of a narrow string literal is
 the total number of escape sequences and other characters, plus at least
-one for the multibyte encoding of each universal-character-name, plus
+one for the multibyte encoding of each \grammarterm{universal-character-name}, plus
 one for the terminating \tcode{'\textbackslash 0'}.
 
 \pnum
@@ -1554,9 +1617,9 @@ Whether all string literals are distinct (that is, are stored in
 nonoverlapping objects) and whether successive evaluations of a
 \grammarterm{string-literal} yield the same or a different object is
 unspecified.
-\enternote
+\begin{note}
 \indextext{literal!string!undefined change~to}%
-The effect of attempting to modify a string literal is undefined. \exitnote
+The effect of attempting to modify a string literal is undefined. \end{note}
 
 \rSec2[lex.bool]{Boolean literals}
 
@@ -1583,12 +1646,12 @@ Such literals are prvalues and have type \tcode{bool}.
 \pnum
 The pointer literal is the keyword \tcode{nullptr}. It is a prvalue of type
 \tcode{std::nullptr_t}.
-\enternote
+\begin{note}
 \tcode{std::nullptr_t} is a distinct type that is neither a pointer type nor a pointer
 to member type; rather, a prvalue of this type is a null pointer constant and can be
 converted to a null pointer value or null member pointer value. See~\ref{conv.ptr}
 and~\ref{conv.mem}.
-\exitnote
+\end{note}
 
 \rSec2[lex.ext]{User-defined literals}
 
@@ -1612,7 +1675,9 @@ and~\ref{conv.mem}.
 \begin{bnf}
 \nontermdef{user-defined-floating-literal}\br
     fractional-constant exponent-part\opt ud-suffix\br
-    digit-sequence exponent-part ud-suffix
+    digit-sequence exponent-part ud-suffix\br
+    hexadecimal-prefix hexadecimal-fractional-constant binary-exponent-part ud-suffix\br
+    hexadecimal-prefix hexadecimal-digit-sequence binary-exponent-part ud-suffix
 \end{bnf}
 
 \begin{bnf}
@@ -1632,9 +1697,9 @@ and~\ref{conv.mem}.
 
 \pnum
 If a token matches both \grammarterm{user-defined-literal} and another literal kind, it
-is treated as the latter. \enterexample \tcode{123_km}
+is treated as the latter. \begin{example} \tcode{123_km}
 is a \grammarterm{user-defined-literal}, but \tcode{12LL} is an
-\grammarterm{integer-literal}. \exitexample
+\grammarterm{integer-literal}. \end{example}
 The syntactic non-terminal preceding the \grammarterm{ud-suffix} in a
 \grammarterm{user-defined-literal} is taken to be the longest sequence of
 characters that could match that non-terminal.
@@ -1674,9 +1739,9 @@ of the form
 operator "" @\term{X}@<'@$c_1$@', '@$c_2$@', ... '@$c_k$@'>()
 \end{codeblock}
 
-where \term{n} is the source character sequence $c_1c_2...c_k$. \enternote The sequence
+where \term{n} is the source character sequence $c_1c_2...c_k$. \begin{note} The sequence
 $c_1c_2...c_k$ can only contain characters from the basic source character set.
-\exitnote
+\end{note}
 
 \pnum
 If \term{L} is a \grammarterm{user-defined-floating-literal}, let \term{f} be the
@@ -1703,9 +1768,9 @@ of the form
 operator "" @\term{X}@<'@$c_1$@', '@$c_2$@', ... '@$c_k$@'>()
 \end{codeblock}
 
-where \term{f} is the source character sequence $c_1c_2...c_k$. \enternote The sequence
+where \term{f} is the source character sequence $c_1c_2...c_k$. \begin{note} The sequence
 $c_1c_2...c_k$ can only contain characters from the basic source character set.
-\exitnote
+\end{note}
 
 \pnum
 If \term{L} is a \grammarterm{user-defined-string-literal}, let \term{str} be the
@@ -1732,7 +1797,7 @@ operator "" @\term{X}@(@\term{ch}{}@)
 \end{codeblock}
 
 \pnum
-\enterexample
+\begin{example}
 
 \begin{codeblock}
 long double operator "" _w(long double);
@@ -1746,7 +1811,7 @@ int main() {
 }
 \end{codeblock}
 
-\exitexample
+\end{example}
 
 \pnum
 In translation phase 6~(\ref{lex.phases}), adjacent string literals are concatenated and
@@ -1759,13 +1824,13 @@ the concatenation process occurs as described in~\ref{lex.string}. At the end of
 and that suffix is applied to the result of the concatenation.
 
 \pnum
-\enterexample
+\begin{example}
 \begin{codeblock}
 int main() {
   L"A" "B" "C"_x; // OK: same as \tcode{L"ABC"_x}
   "P"_x "Q" "R"_y;// error: two different \grammarterm{ud-suffix}{es}
 }
 \end{codeblock}
-\exitexample%
+\end{example}%
 \indextext{literal|)}%
 \indextext{conventions!lexical|)}
